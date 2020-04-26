@@ -5,5 +5,9 @@
   <%= @timeline.name %>
 </p>
 
+<p>
+	<%= link_to 'Add Event', new_timeline_event_path(@timeline) %>
+</p>
+
 <%= link_to 'Edit', edit_timeline_path(@timeline) %> |
 <%= link_to 'Back', timelines_path %>

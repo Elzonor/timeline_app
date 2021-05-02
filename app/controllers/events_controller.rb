@@ -1,15 +1,16 @@
 class EventsController < ApplicationController
-  before_action :set_event, only: [:show, :edit, :update, :destroy]
+	before_action :get_timeline
+	before_action :set_event, only: [:show, :edit, :update, :destroy]
 
   # GET /events
   # GET /events.json
   def index
-    @events = Event.all
+    @events = @timeline.events
   end
 
   # GET /events/1
   # GET /events/1.json
-  def show
+  def show	
   end
 
   # GET /events/new
@@ -24,7 +25,7 @@ class EventsController < ApplicationController
   # POST /events
   # POST /events.json
   def create
-    @event = Event.new(event_params)
+    @event = Event.new
 
     respond_to do |format|
       if @event.save
@@ -62,13 +63,17 @@ class EventsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
+		def get_timeline
+			@timeline = Timeline.find(params[:timeline_id])
+		end
+
+		# Use callbacks to share common setup or constraints between actions.
     def set_event
-      @event = Event.find(params[:id])
+      @event = @timeline.events.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
     def event_params
-      params.require(:event).permit(:name, :description)
+      params.require(:event).permit(:name, :description, :timeline_id)
     end
 end

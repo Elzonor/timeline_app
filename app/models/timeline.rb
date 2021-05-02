@@ -1,3 +1,3 @@
 class Timeline < ApplicationRecord
-	has_many :events
+	has_many :events, dependent: :destroy
 end

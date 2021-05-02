@@ -1,3 +1,3 @@
 class Event < ApplicationRecord
-	belongs_to :timeline, dependent: :destroy
+	belongs_to :timeline
 end

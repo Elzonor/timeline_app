@@ -1,3 +1,4 @@
 {
-  "workspace.name" : "Timeline App"
+  "workspace.name" : "Timeline App",
+  "workspace.preview_root" : "."
 }

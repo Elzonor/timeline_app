@@ -21,13 +21,17 @@
         <% @timeline.events.order(created_at: :desc).each.with_index do |event, index| %>
           <tr>
             <td><%= total_events - index %></td>
-            <td><%= event.name %></td>
+            <td><%= link_to event.name, timeline_event_path(@timeline, event) %></td>
             <td><%= event.description %></td>
-            <td><%= link_to 'Show', timeline_event_path(@timeline, event) %></td>
-            <td><%= link_to 'Edit', edit_timeline_event_path(@timeline, event) %></td>
-            <td><%= link_to 'Delete', timeline_event_path(@timeline, event), 
-                    method: :delete, 
-                    data: { confirm: 'Are you sure?' } %></td>
+            <td><%= link_to edit_timeline_event_path(@timeline, event), class: 'icon-link icon-edit' do %>
+              <i class="fas fa-edit"></i>
+            <% end %></td>
+            <td><%= link_to timeline_event_path(@timeline, event), 
+                    method: :delete,
+                    class: 'icon-link icon-delete',
+                    data: { confirm: 'Are you sure?' } do %>
+              <i class="fas fa-trash"></i>
+            <% end %></td>
           </tr>
         <% end %>
       </tbody>
@@ -43,5 +47,7 @@
 
 <div class="actions">
   <%= link_to 'Edit Timeline', edit_timeline_path(@timeline) %> |
-  <%= link_to 'Back', timelines_path %>
+  <%= link_to timelines_path, class: 'icon-link' do %>
+    <i class="fas fa-arrow-left"></i> Back to Timelines
+  <% end %>
 </div>

@@ -13,3 +13,45 @@
  *= require_tree .
  *= require_self
  */
+
+/* Stili base per tutti i link */
+a {
+  background: transparent;
+  color: #666;
+  text-decoration: none;
+}
+
+a:hover {
+  background: transparent;
+  color: #666;
+}
+
+/* Link con solo icone */
+.icon-link:not(:has(i + *)) {
+  text-decoration: none !important;
+}
+
+/* Link con testo (con o senza icone) */
+a:not(.icon-link), .icon-link:has(i + *) {
+  text-decoration: none;
+}
+
+a:not(.icon-link):hover, .icon-link:has(i + *):hover {
+  text-decoration: underline;
+  color: #666;
+}
+
+/* Stili specifici per le icone */
+.icon-link {
+  padding: 5px;
+  transition: color 0.2s ease;
+}
+
+/* Colori specifici solo per le icone senza testo */
+.icon-link:not(:has(i + *)).icon-edit:hover {
+  color: #007bff;
+}
+
+.icon-link:not(:has(i + *)).icon-delete:hover {
+  color: #dc3545;
+}

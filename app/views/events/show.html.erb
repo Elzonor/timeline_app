@@ -1,0 +1,12 @@
+<p>
+  <strong>Name:</strong>
+  <%= @event.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @event.description %>
+</p>
+
+<%= link_to 'Edit', edit_timeline_event_path(@timeline, @event) %> |
+<%= link_to 'Back', timeline_path(@timeline) %> 

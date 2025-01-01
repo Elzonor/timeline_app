@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>HierarchyData</key>
+	<array>
+		<string>EC476E29-FDD7-432A-AA9D-B3E6E04DCB28</string>
+	</array>
+	<key>ProjectItems</key>
+	<dict>
+		<key>EC476E29-FDD7-432A-AA9D-B3E6E04DCB28</key>
+		<dict>
+			<key>ItemData</key>
+			<dict>
+				<key>BookmarkData</key>
+				<data>
+				Ym9vaxQDAAAAAAQQMAAAAMNo78Lww+HneVbQwAQSgB8j
+				8kyFm2hygjRilF/ajE4NEAIAAAQAAAADAwAAAAgAKAUA
+				AAABAQAAVXNlcnMAAAAHAAAAAQEAAEVsem9NYWMABwAA
+				AAEBAABEcm9wYm94AAUAAAABAQAAUmFpbHMAAAAQAAAA
+				AQEAAHJ1YnlfZXhwZXJpbWVudHMMAAAAAQEAAHRpbWVs
+				aW5lX2FwcBgAAAABBgAAEAAAACAAAAAwAAAAQAAAAFAA
+				AABoAAAACAAAAAQDAABq1QkAAAAAAAgAAAAEAwAATeIK
+				AAAAAAAIAAAABAMAAC5sCwAAAAAACAAAAAQDAADF2gwA
+				AAAAAAgAAAAEAwAAVeAMAAAAAAAIAAAABAMAAASUaAQA
+				AAAAGAAAAAEGAACcAAAArAAAALwAAADMAAAA3AAAAOwA
+				AAAIAAAAAAQAAEHCImJS139wGAAAAAECAAACAAAAAAAA
+				AA8AAAAAAAAAAAAAAAAAAAAIAAAABAMAAAQAAAAAAAAA
+				BAAAAAMDAAD2AQAACAAAAAEJAABmaWxlOi8vLw0AAAAB
+				AQAARWx6b01hYyBIRCBJVgAAAAgAAAAEAwAAAKAgaHQA
+				AAAIAAAAAAQAAEHB3kSAAAAAJAAAAAEBAABFRTQxNzBC
+				Qy0zMzg0LTRFNzYtQkUwRS02RkQzQUJBNzU0MDIYAAAA
+				AQIAAIEAAAABAAAA7xMAAAEAAAAAAAAAAAAAAAEAAAAB
+				AQAALwAAAAAAAAABBQAAzAAAAP7///8BAAAAAAAAABAA
+				AAAEEAAAfAAAAAAAAAAFEAAA/AAAAAAAAAAQEAAALAEA
+				AAAAAABAEAAAHAEAAAAAAAACIAAA/AEAAAAAAAAFIAAA
+				aAEAAAAAAAAQIAAAeAEAAAAAAAARIAAAsAEAAAAAAAAS
+				IAAAkAEAAAAAAAATIAAAoAEAAAAAAAAgIAAA3AEAAAAA
+				AAAwIAAACAIAAAAAAAABwAAATAEAAAAAAAARwAAAIAAA
+				AAAAAAASwAAAXAEAAAAAAAAQ0AAABAAAAAAAAAA=
+				</data>
+				<key>FileURL</key>
+				<string>file:///Users/ElzoMac/Dropbox/Rails/ruby_experiments/timeline_app/</string>
+				<key>HasSecurityScope</key>
+				<true/>
+				<key>RelativePath</key>
+				<string>./</string>
+				<key>TypeID</key>
+				<string>_CFileLocator</string>
+				<key>Version</key>
+				<integer>1</integer>
+			</dict>
+			<key>ItemName</key>
+			<string>timeline_app</string>
+			<key>ItemType</key>
+			<string>FolderReference</string>
+		</dict>
+	</dict>
+	<key>com.barebones.DocumentFormatVersion</key>
+	<integer>5</integer>
+	<key>com.barebones.DocumentType</key>
+	<string>Project</string>
+</dict>
+</plist>

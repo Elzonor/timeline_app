@@ -1,13 +1,47 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Name:</strong>
-  <%= @timeline.name %>
-</p>
+<h1><%= @timeline.name %></h1>
 
-<p>
-	<%= link_to 'Add Event', new_timeline_event_path(@timeline) %>
-</p>
+<div class="events">
+  <h2>Events</h2>
+  
+  <% if @timeline.events.any? %>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Description</th>
+          <th colspan="3"></th>
+        </tr>
+      </thead>
 
-<%= link_to 'Edit', edit_timeline_path(@timeline) %> |
-<%= link_to 'Back', timelines_path %>
+      <tbody>
+        <% total_events = @timeline.events.count %>
+        <% @timeline.events.order(created_at: :desc).each.with_index do |event, index| %>
+          <tr>
+            <td><%= total_events - index %></td>
+            <td><%= event.name %></td>
+            <td><%= event.description %></td>
+            <td><%= link_to 'Show', timeline_event_path(@timeline, event) %></td>
+            <td><%= link_to 'Edit', edit_timeline_event_path(@timeline, event) %></td>
+            <td><%= link_to 'Delete', timeline_event_path(@timeline, event), 
+                    method: :delete, 
+                    data: { confirm: 'Are you sure?' } %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% else %>
+    <p>No events yet.</p>
+  <% end %>
+
+  <p>
+    <%= link_to 'Add Event', new_timeline_event_path(@timeline) %>
+  </p>
+</div>
+
+<div class="actions">
+  <%= link_to 'Edit Timeline', edit_timeline_path(@timeline) %> |
+  <%= link_to 'Back', timelines_path %>
+</div>

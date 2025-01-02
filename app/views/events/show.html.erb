@@ -1,3 +1,12 @@
+<h1><%= @event.name %></h1>
+
+<div class="actions">
+  <%= link_to timeline_path(@timeline), class: 'icon-link' do %>
+    <i class="fas fa-arrow-left"></i> <%= t('actions.back_to_timeline') %>
+  <% end %> |
+  <%= link_to t('actions.edit_event'), edit_timeline_event_path(@timeline, @event) %>
+</div>
+
 <p>
   <strong><%= t('labels.name') %>:</strong>
   <%= @event.name %>
@@ -6,13 +15,4 @@
 <p>
   <strong><%= t('labels.description') %>:</strong>
   <%= @event.description %>
-</p>
-
-<div class="actions">
-  <%= link_to edit_timeline_event_path(@timeline, @event), class: 'icon-link icon-edit' do %>
-    <i class="fas fa-edit"></i>
-  <% end %> |
-  <%= link_to timeline_path(@timeline), class: 'icon-link' do %>
-    <i class="fas fa-arrow-left"></i> <%= t('actions.back_to_timeline') %>
-  <% end %>
-</div> 
+</p> 

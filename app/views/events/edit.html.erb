@@ -1,5 +1,11 @@
 <h1><%= t('titles.edit_event') %></h1>
 
+<div class="actions">
+  <%= link_to timeline_event_path(@timeline, @event), class: 'icon-link' do %>
+    <i class="fas fa-arrow-left"></i> <%= t('actions.back_to_event') %>
+  <% end %>
+</div>
+
 <%= form_with(model: [@timeline, @event], local: true) do |form| %>
   <% if @event.errors.any? %>
     <div id="error_explanation">
@@ -25,7 +31,4 @@
   <div class="actions">
     <%= form.submit t('actions.update_event') %>
   </div>
-<% end %>
-
-<%= link_to t('actions.show'), timeline_event_path(@timeline, @event) %> |
-<%= link_to t('actions.back_to_timeline'), timeline_path(@timeline) %> 
+<% end %> 

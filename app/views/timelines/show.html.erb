@@ -2,52 +2,44 @@
 
 <h1><%= @timeline.name %></h1>
 
-<div class="events">
-  <h2><%= t('titles.events') %></h2>
-  
-  <% if @timeline.events.any? %>
-    <table>
-      <thead>
-        <tr>
-          <th>#</th>
-          <th><%= t('labels.name') %></th>
-          <th><%= t('labels.description') %></th>
-          <th colspan="3"></th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <% total_events = @timeline.events.count %>
-        <% @timeline.events.order(created_at: :desc).each.with_index do |event, index| %>
-          <tr>
-            <td><%= total_events - index %></td>
-            <td><%= link_to event.name, timeline_event_path(@timeline, event) %></td>
-            <td><%= event.description %></td>
-            <td><%= link_to edit_timeline_event_path(@timeline, event), class: 'icon-link icon-edit' do %>
-              <i class="fas fa-edit"></i>
-            <% end %></td>
-            <td><%= link_to timeline_event_path(@timeline, event), 
-                    method: :delete,
-                    class: 'icon-link icon-delete',
-                    data: { confirm: t('messages.confirm') } do %>
-              <i class="fas fa-trash"></i>
-            <% end %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  <% else %>
-    <p><%= t('messages.no_events') %></p>
-  <% end %>
-
-  <p>
-    <%= link_to t('actions.add_event'), new_timeline_event_path(@timeline) %>
-  </p>
-</div>
-
 <div class="actions">
-  <%= link_to t('actions.edit_timeline'), edit_timeline_path(@timeline) %> |
   <%= link_to timelines_path, class: 'icon-link' do %>
     <i class="fas fa-arrow-left"></i> <%= t('actions.back_to_timelines') %>
+  <% end %> |
+  <%= link_to t('actions.edit_timeline'), edit_timeline_path(@timeline) %> |
+  <%= link_to t('actions.add_event'), new_timeline_event_path(@timeline) %>
+</div>
+
+<div class="events">
+  <% if @timeline.events.any? %>
+    <div class="grid">
+      <div class="header">
+        <div>#</div>
+        <div><%= t('labels.name') %></div>
+        <div><%= t('labels.description') %></div>
+        <div></div>
+        <div></div>
+      </div>
+
+      <% total_events = @timeline.events.count %>
+      <% @timeline.events.order(created_at: :desc).each.with_index do |event, index| %>
+        <div class="row">
+          <div><%= total_events - index %></div>
+          <div><%= link_to event.name, timeline_event_path(@timeline, event) %></div>
+          <div><%= event.description %></div>
+          <div><%= link_to edit_timeline_event_path(@timeline, event), class: 'icon-link icon-edit' do %>
+            <i class="fas fa-edit"></i>
+          <% end %></div>
+          <div><%= link_to timeline_event_path(@timeline, event), 
+                  method: :delete,
+                  class: 'icon-link icon-delete',
+                  data: { confirm: t('messages.confirm') } do %>
+            <i class="fas fa-trash"></i>
+          <% end %></div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p><%= t('messages.no_events') %></p>
   <% end %>
 </div>

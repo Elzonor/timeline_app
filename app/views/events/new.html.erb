@@ -1,5 +1,9 @@
 <h1><%= t('titles.new_event') %></h1>
 
+<div class="actions">
+  <%= link_to t('actions.back_to_timeline'), timeline_path(@timeline) %>
+</div>
+
 <%= form_with(model: [@timeline, @event], local: true) do |form| %>
   <% if @event.errors.any? %>
     <div id="error_explanation">
@@ -25,6 +29,4 @@
   <div class="actions">
     <%= form.submit t('actions.create_event') %>
   </div>
-<% end %>
-
-<%= link_to t('actions.back_to_timeline'), timeline_path(@timeline) %> 
+<% end %> 

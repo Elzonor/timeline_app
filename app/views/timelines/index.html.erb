@@ -2,34 +2,31 @@
 
 <h1><%= t('titles.timelines') %></h1>
 
-<table>
-  <thead>
-    <tr>
-      <th><%= t('labels.name') %></th>
-      <th colspan="2"></th>
-    </tr>
-  </thead>
+<div class="actions">
+  <%= link_to new_timeline_path, class: 'icon-link' do %>
+    <i class="fas fa-plus"></i> <%= t('titles.new_timeline') %>
+  <% end %>
+</div>
 
-  <tbody>
-    <% @timelines.each do |timeline| %>
-      <tr>
-        <td><%= link_to "#{timeline.name} (#{timeline.events.count} #{t('events_count', count: timeline.events.count)})", timeline %></td>
-        <td><%= link_to edit_timeline_path(timeline), class: 'icon-link icon-edit' do %>
-          <i class="fas fa-edit"></i>
-        <% end %></td>
-        <td><%= link_to timeline, 
-                method: :delete,
-                class: 'icon-link icon-delete',
-                data: { confirm: t('messages.confirm') } do %>
-          <i class="fas fa-trash"></i>
-        <% end %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<div class="grid">
+  <div class="header">
+    <div><%= t('labels.name') %></div>
+    <div></div>
+    <div></div>
+  </div>
 
-<br>
-
-<%= link_to new_timeline_path, class: 'icon-link' do %>
-  <i class="fas fa-plus"></i> <%= t('titles.new_timeline') %>
-<% end %>
+  <% @timelines.each do |timeline| %>
+    <div class="row">
+      <div><%= link_to "#{timeline.name} (#{timeline.events.count} #{t('events_count', count: timeline.events.count)})", timeline %></div>
+      <div><%= link_to edit_timeline_path(timeline), class: 'icon-link icon-edit' do %>
+        <i class="fas fa-edit"></i>
+      <% end %></div>
+      <div><%= link_to timeline, 
+              method: :delete,
+              class: 'icon-link icon-delete',
+              data: { confirm: t('messages.confirm') } do %>
+        <i class="fas fa-trash"></i>
+      <% end %></div>
+    </div>
+  <% end %>
+</div>

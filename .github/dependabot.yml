@@ -1,0 +1,19 @@
+version: 2
+updates:
+  # Mantieni le dipendenze di Ruby aggiornate
+  - package-ecosystem: "bundler"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    # Limita il numero massimo di PR aperte
+    open-pull-requests-limit: 10
+    # Assegna le etichette alle PR
+    labels:
+      - "dependencies"
+      - "ruby"
+    # Imposta la priorità per gli aggiornamenti di sicurezza
+    security-updates-only: false
+    # Ignora gli aggiornamenti minori per alcune gemme
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-patch"] 

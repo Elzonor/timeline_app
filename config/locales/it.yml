@@ -1,0 +1,42 @@
+it:
+  # Gestione singolare/plurale per il conteggio eventi
+  events_count:
+    one: "evento"
+    other: "eventi"
+  
+  # Titoli e intestazioni
+  titles:
+    timelines: "Timeline"
+    new_timeline: "Nuova Timeline"
+    edit_timeline: "Modifica Timeline"
+    events: "Eventi"
+    new_event: "Nuovo Evento"
+    edit_event: "Modifica Evento"
+  
+  # Etichette dei campi
+  labels:
+    name: "Nome"
+    description: "Descrizione"
+  
+  # Pulsanti e azioni
+  actions:
+    update_event: "Aggiorna Evento"
+    create_event: "Crea Evento"
+    add_event: "Aggiungi Evento"
+    edit_timeline: "Modifica Timeline"
+    back_to_timeline: "Torna alla Timeline"
+    back_to_timelines: "Torna alle Timeline"
+    back: "Indietro"
+    show: "Visualizza"
+    edit: "Modifica"
+    home: "Tutte le Timeline"
+  
+  # Messaggi
+  messages:
+    no_events: "Nessun evento presente."
+    confirm: "Sei sicuro?"
+    timeline_errors: "hanno impedito il salvataggio della timeline:"
+    event_errors: "hanno impedito il salvataggio dell'evento:"
+  
+  # Titolo dell'applicazione
+  app_name: "Timeline" 

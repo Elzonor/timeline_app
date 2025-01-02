@@ -1,9 +1,9 @@
-<h1>New Event</h1>
+<h1><%= t('titles.new_event') %></h1>
 
 <%= form_with(model: [@timeline, @event], local: true) do |form| %>
   <% if @event.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@event.errors.count, "error") %> prohibited this event from being saved:</h2>
+      <h2><%= pluralize(@event.errors.count, "error") %> <%= t('messages.event_errors') %></h2>
       <ul>
         <% @event.errors.full_messages.each do |message| %>
           <li><%= message %></li>
@@ -13,18 +13,18 @@
   <% end %>
 
   <div class="field">
-    <%= form.label :name %>
+    <%= form.label :name, t('labels.name') %>
     <%= form.text_field :name %>
   </div>
 
   <div class="field">
-    <%= form.label :description %>
+    <%= form.label :description, t('labels.description') %>
     <%= form.text_area :description %>
   </div>
 
   <div class="actions">
-    <%= form.submit %>
+    <%= form.submit t('actions.create_event') %>
   </div>
 <% end %>
 
-<%= link_to 'Back', timeline_path(@timeline) %> 
+<%= link_to t('actions.back_to_timeline'), timeline_path(@timeline) %> 

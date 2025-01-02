@@ -43,7 +43,7 @@ class EventsController < ApplicationController
   def update
     respond_to do |format|
       if @event.update(event_params)
-        format.html { redirect_to [@timeline, @event], notice: 'Event was successfully updated.' }
+        format.html { redirect_to timeline_path(@timeline), notice: 'Event was successfully updated.' }
         format.json { render :show, status: :ok, location: [@timeline, @event] }
       else
         format.html { render :edit }

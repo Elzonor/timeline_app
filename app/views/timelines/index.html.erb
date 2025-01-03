@@ -17,7 +17,11 @@
 
   <% @timelines.each do |timeline| %>
     <div class="row">
-      <div><%= link_to "#{timeline.name} (#{timeline.events.count} #{t('events_count', count: timeline.events.count)})", timeline %></div>
+      <div>
+        <%= link_to timeline_path(timeline) do %>
+          <strong><%= timeline.name %></strong> (<%= timeline.events.count %> <%= t('events_count', count: timeline.events.count) %>)
+        <% end %>
+      </div>
       <div><%= link_to edit_timeline_path(timeline), class: 'icon-link icon-edit' do %>
         <i class="fas fa-edit"></i>
       <% end %></div>

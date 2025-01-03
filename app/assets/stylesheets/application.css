@@ -98,9 +98,23 @@ a:not(.icon-link):hover, .icon-link:has(i + *):hover {
 input[type="text"],
 input[type="email"],
 input[type="password"],
+input[type="date"],
 textarea {
   background-color: #fff;
   color: #000 !important;
+}
+
+/* Stile specifico per i campi data */
+input[type="date"]::-webkit-datetime-edit-text,
+input[type="date"]::-webkit-datetime-edit-month-field,
+input[type="date"]::-webkit-datetime-edit-day-field,
+input[type="date"]::-webkit-datetime-edit-year-field {
+  color: #000;
+}
+
+/* Stile per il placeholder dei campi data */
+input[type="date"]:not(:valid)::-webkit-datetime-edit {
+  color: #EEE;
 }
 
 input[type="submit"] {

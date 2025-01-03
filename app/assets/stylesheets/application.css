@@ -66,7 +66,7 @@ a:not(.icon-link):hover, .icon-link:has(i + *):hover {
 }
 
 .events .grid {
-  grid-template-columns: auto 1fr 1fr auto auto;
+  grid-template-columns: auto 1fr auto auto 2fr auto auto;
 }
 
 .grid .header {
@@ -111,4 +111,8 @@ input[type="submit"] {
 /* Stili per il blocco actions */
 .actions {
   padding-bottom: 34px;
+}
+
+.events .grid .row > div:nth-child(2) {
+  font-weight: bold;
 }

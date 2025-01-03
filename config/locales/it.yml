@@ -1,7 +1,7 @@
 it:
   time:
     formats:
-      short: "%d/%m/%Y"
+      short: "%Y-%m-%d"
       
   # Gestione singolare/plurale per il conteggio eventi
   events_count:

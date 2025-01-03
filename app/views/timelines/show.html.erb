@@ -15,9 +15,9 @@
     <div class="grid">
       <div class="header">
         <div>#</div>
+        <div><%= t('labels.name') %></div>
         <div><%= t('labels.start_date') %></div>
         <div><%= t('labels.end_date') %></div>
-        <div><%= t('labels.name') %></div>
         <div><%= t('labels.description') %></div>
         <div></div>
         <div></div>
@@ -27,9 +27,9 @@
       <% @timeline.events.order(created_at: :desc).each.with_index do |event, index| %>
         <div class="row">
           <div><%= total_events - index %></div>
+          <div><%= link_to event.name, timeline_event_path(@timeline, event) %></div>
           <div><%= l(event.start_date, format: :short) if event.start_date %></div>
           <div><%= event.end_date ? l(event.end_date, format: :short) : t('labels.ongoing') %></div>
-          <div><%= link_to event.name, timeline_event_path(@timeline, event) %></div>
           <div><%= event.description %></div>
           <div><%= link_to edit_timeline_event_path(@timeline, event), class: 'icon-link icon-edit' do %>
             <i class="fas fa-edit"></i>

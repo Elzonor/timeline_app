@@ -15,4 +15,14 @@
 <p>
   <strong><%= t('labels.description') %>:</strong>
   <%= @event.description %>
+</p>
+
+<p>
+  <strong><%= t('labels.start_date') %>:</strong>
+  <%= l(@event.start_date, format: :short) if @event.start_date %>
+</p>
+
+<p>
+  <strong><%= t('labels.end_date') %>:</strong>
+  <%= @event.end_date ? l(@event.end_date, format: :short) : t('labels.ongoing') %>
 </p> 

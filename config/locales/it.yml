@@ -1,4 +1,8 @@
 it:
+  time:
+    formats:
+      short: "%d/%m/%Y"
+      
   # Gestione singolare/plurale per il conteggio eventi
   events_count:
     one: "evento"
@@ -17,6 +21,9 @@ it:
   labels:
     name: "Nome"
     description: "Descrizione"
+    start_date: "Da"
+    end_date: "A"
+    ongoing: "In corso"
   
   # Pulsanti e azioni
   actions:

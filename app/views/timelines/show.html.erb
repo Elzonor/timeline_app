@@ -35,9 +35,11 @@
             <i class="fas fa-edit"></i>
           <% end %></div>
           <div><%= link_to timeline_event_path(@timeline, event), 
-                  method: :delete,
-                  class: 'icon-link icon-delete',
-                  data: { confirm: t('messages.confirm') } do %>
+                  data: { 
+                    turbo_method: :delete,
+                    turbo_confirm: t('messages.confirm')
+                  },
+                  class: 'icon-link icon-delete' do %>
             <i class="fas fa-trash"></i>
           <% end %></div>
         </div>

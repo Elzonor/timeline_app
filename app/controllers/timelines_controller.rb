@@ -10,6 +10,16 @@ class TimelinesController < ApplicationController
   # GET /timelines/1
   # GET /timelines/1.json
   def show
+    # Forza il reload degli eventi
+    @timeline = Timeline.includes(:events).find(params[:id])
+    
+    # Ordina per start_date discendente (dal più al meno recente)
+    # A parità di start_date, ordina per created_at discendente (dal più al meno recente)
+    @ordered_events = @timeline.events
+      .select('events.*')
+      .order('DATE(start_date) DESC, created_at DESC')
+    
+    @events_by_creation = @timeline.events.order(created_at: :asc).each_with_index.map { |e, i| [e.id, i + 1] }.to_h
   end
 
   # GET /timelines/new

@@ -2,6 +2,7 @@ it:
   time:
     formats:
       short: "%Y-%m-%d"
+      long: "%Y-%m-%d %H:%M:%S"
       
   # Gestione singolare/plurale per il conteggio eventi
   events_count:

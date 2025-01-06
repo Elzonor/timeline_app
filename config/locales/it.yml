@@ -33,7 +33,7 @@ it:
     add_event: "Aggiungi Evento"
     edit_event: "Modifica evento"
     edit_timeline: "Modifica"
-    back_to_timeline: "Torna alla lista"
+    back_to_timeline: "Torna alla Timeline"
     back_to_timelines: "Torna alla lista"
     back_to_event: "Torna all'evento"
     back: "Indietro"

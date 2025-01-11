@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_01_02_163915) do
+ActiveRecord::Schema[8.0].define(version: 2025_01_11_164801) do
   create_table "events", force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -19,6 +19,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_02_163915) do
     t.integer "timeline_id"
     t.datetime "start_date", null: false
     t.datetime "end_date"
+    t.string "color"
   end
 
   create_table "timelines", force: :cascade do |t|

@@ -28,12 +28,12 @@ it:
   
   # Pulsanti e azioni
   actions:
-    update_event: "Aggiorna Evento"
-    create_event: "Crea Evento"
-    add_event: "Aggiungi Evento"
+    update_event: "Aggiorna evento"
+    create_event: "Crea evento"
+    add_event: "Aggiungi evento"
     edit_event: "Modifica evento"
     edit_timeline: "Modifica"
-    back_to_timeline: "Torna alla lista"
+    back_to_timeline: "Torna alla timeline"
     back_to_timelines: "Torna alla lista"
     back_to_event: "Torna all'evento"
     back: "Indietro"
@@ -47,6 +47,7 @@ it:
     confirm: "Sei sicuro?"
     timeline_errors: "hanno impedito il salvataggio della timeline:"
     event_errors: "hanno impedito il salvataggio dell'evento:"
+    event_updated: "Evento aggiornato"
   
   # Titolo dell'applicazione
   app_name: "Timeline" 

@@ -1,14 +1,23 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Name:</strong>
-  <%= @event.name %>
-</p>
+<h1 style="color: <%= @event.color %>;"><%= @event.name %></h1>
+
+<div class="actions">
+  <i class="fas fa-arrow-left"> </i> <%= link_to t('actions.back_to_timeline'), timeline_path(@timeline) %> |
+  <%= link_to t('actions.edit'), edit_timeline_event_path(@timeline, @event) %>
+</div>
 
 <p>
-  <strong>Description:</strong>
+  <strong><%= t('labels.description') %>:</strong>
   <%= @event.description %>
 </p>
 
-<%= link_to 'Edit', edit_event_path(@event) %> |
-<%= link_to 'Back', events_path %>
+<p>
+  <strong><%= t('labels.start_date') %>:</strong>
+  <%= @event.start_date %>
+</p>
+
+<p>
+  <strong><%= t('labels.end_date') %>:</strong>
+  <%= @event.end_date %>
+</p>

@@ -12,21 +12,31 @@
   <% end %>
 
   <div class="field">
-    <%= form.label :timeline %>
-    <%= collection_select( :timeline, :timeline_id, Timeline.all, :id, :name, { multiple: false } ) %>
-  </div>
-
-  <div class="field">
-    <%= form.label :name %>
+    <%= form.label :name, t('labels.name') %>
     <%= form.text_field :name %>
   </div>
 
   <div class="field">
-    <%= form.label :description %>
+    <%= form.label :description, t('labels.description') %>
     <%= form.text_area :description %>
   </div>
 
+  <div class="field">
+    <%= form.label :start_date, t('labels.start_date') %>
+    <%= form.date_field :start_date %>
+  </div>
+
+  <div class="field">
+    <%= form.label :end_date, t('labels.end_date') %>
+    <%= form.date_field :end_date %>
+  </div>
+
+  <div class="field color-picker">
+    <%= form.label :color, t('labels.color') %>
+    <%= form.color_field :color, value: event.color %>
+  </div>
+
   <div class="actions">
-    <%= form.submit %>
+    <%= form.submit t('actions.update_event'), class: 'button' %>
   </div>
 <% end %>

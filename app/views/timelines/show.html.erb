@@ -26,7 +26,7 @@
       <% @ordered_events.each do |event| %>
         <div class="row">
           <div><%= @events_by_creation[event.id] %></div>
-          <div><%= link_to event.name, timeline_event_path(@timeline, event) %></div>
+          <div><%= link_to event.name, timeline_event_path(@timeline, event), style: "color: #{event.color};" %></div>
           <div><%= l(event.start_date, format: :short) if event.start_date %></div>
           <div><%= event.end_date ? l(event.end_date, format: :short) : t('labels.ongoing') %></div>
           <div><%= event.description %></div>

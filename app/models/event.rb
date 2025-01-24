@@ -6,6 +6,12 @@ class Event < ApplicationRecord
 	
 	before_create :assign_color
 	
+	def duration
+		return nil unless start_date
+		end_date_to_use = end_date || Date.current
+		(end_date_to_use.to_date - start_date.to_date).to_i
+	end
+	
 	private
 	
 	def end_date_after_start_date

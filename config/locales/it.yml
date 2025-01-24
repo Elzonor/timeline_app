@@ -9,6 +9,12 @@ it:
     one: "evento"
     other: "eventi"
   
+  # Gestione singolare/plurale per la durata in giorni
+  duration:
+    days:
+      one: "giorno"
+      other: "giorni"
+  
   # Titoli e intestazioni
   titles:
     timelines: "Timeline"

@@ -30,8 +30,12 @@
           <div><%= l(event.start_date, format: :short) if event.start_date %></div>
           <div>
             <%= event.end_date ? l(event.end_date, format: :short) : t('labels.ongoing') %>
-            <% if event.duration %>
-              (<%= event.duration %> <%= t('duration.days', count: event.duration) %>)
+            <% if event.duration_details %>
+              <% details = event.duration_details %>
+              (<%= details[:days] %> <%= t('duration.days', count: details[:days]) %>,
+               <%= t('duration.span_text',
+                     weeks: pluralize(details[:weeks], t('duration.weeks.one'), t('duration.weeks.other')),
+                     months: pluralize(details[:months], t('duration.months.one'), t('duration.months.other'))) %>)
             <% end %>
           </div>
           <div><%= event.description %></div>

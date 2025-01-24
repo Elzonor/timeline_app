@@ -11,6 +11,16 @@ class Event < ApplicationRecord
 		end_date_to_use = end_date || Date.current
 		(end_date_to_use.to_date - start_date.to_date).to_i
 	end
+
+	def duration_details
+		return nil unless start_date
+		end_date_to_use = end_date || Date.current
+		{
+			days: (end_date_to_use.to_date - start_date.to_date).to_i,
+			weeks: count_weeks,
+			months: count_months
+		}
+	end
 	
 	private
 	
@@ -29,5 +39,36 @@ class Event < ApplicationRecord
 			new_hue = (last_hue + 125) % 360
 			self.color = "hsl(#{new_hue}, 60%, 50%)"
 		end
+	end
+
+	def count_weeks
+		start_week = start_date.beginning_of_week
+		end_week = (end_date || Date.current).end_of_week
+		weeks = []
+		current = start_week
+		
+		while current <= end_week
+			weeks << current if date_range_includes_day?(current)
+			current += 1.week
+		end
+		weeks.uniq.count
+	end
+
+	def count_months
+		start_month = start_date.beginning_of_month
+		end_month = (end_date || Date.current).end_of_month
+		months = []
+		current = start_month
+		
+		while current <= end_month
+			months << current if date_range_includes_day?(current)
+			current += 1.month
+		end
+		months.uniq.count
+	end
+
+	def date_range_includes_day?(day)
+		range_end = end_date || Date.current
+		(start_date..range_end).cover?(day)
 	end
 end

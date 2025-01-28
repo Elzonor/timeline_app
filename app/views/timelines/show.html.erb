@@ -2,6 +2,15 @@
 
 <h1>Timeline "<%= @timeline.name %>"</h1>
 
+<% if @timeline.duration_details %>
+  <% details = @timeline.duration_details %>
+  <p class="timeline-duration">
+    (<%= t('timeline.span_text',
+           weeks: pluralize(details[:weeks], t('duration.weeks.one'), t('duration.weeks.other')),
+           months: pluralize(details[:months], t('duration.months.one'), t('duration.months.other'))) %>)
+  </p>
+<% end %>
+
 <div class="actions">
   <%= link_to timelines_path, class: 'icon-link' do %>
     <i class="fas fa-arrow-left"></i> <%= t('actions.back_to_timelines') %>

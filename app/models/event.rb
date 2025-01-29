@@ -1,4 +1,6 @@
 class Event < ApplicationRecord
+	include DurationCalculator
+	
 	belongs_to :timeline, touch: true
 	
 	validates :start_date, presence: true
@@ -14,12 +16,7 @@ class Event < ApplicationRecord
 
 	def duration_details
 		return nil unless start_date
-		end_date_to_use = end_date || Date.current
-		{
-			days: (end_date_to_use.to_date - start_date.to_date).to_i,
-			weeks: count_weeks,
-			months: count_months
-		}
+		calculate_duration(start_date, end_date)
 	end
 	
 	private

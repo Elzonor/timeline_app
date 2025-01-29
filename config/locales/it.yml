@@ -20,7 +20,7 @@ it:
     months:
       one: "mese"
       other: "mesi"
-    span_text: "dell'arco di %{weeks} e %{months}"
+    span_text: "nell'arco di %{weeks} e %{months}"
   
   # Gestione durata timeline
   timeline:

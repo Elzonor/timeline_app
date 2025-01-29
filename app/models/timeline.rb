@@ -1,4 +1,6 @@
 class Timeline < ApplicationRecord
+	include DurationCalculator
+	
 	has_many :events, dependent: :destroy
 
 	validates :name, presence: true
@@ -6,25 +8,11 @@ class Timeline < ApplicationRecord
 	def duration_details
 		return nil if events.empty?
 		
-		# Inizializziamo i Set per settimane e mesi
-		weeks = Set.new
-		months = Set.new
-		
-		# Per ogni evento, aggiungiamo tutte le date dal suo inizio alla sua fine
-		events.each do |event|
-			end_date = event.end_date || Date.current
-			current_date = event.start_date
-			
-			while current_date <= end_date
-				weeks << current_date.beginning_of_week
-				months << current_date.beginning_of_month
-				current_date += 1.day
-			end
-		end
+		# Troviamo le date estreme di tutti gli eventi
+		start_date = events.minimum(:start_date)
+		end_date = events.where.not(end_date: nil).maximum(:end_date)
+		end_date = [end_date, Date.current].compact.max if events.where(end_date: nil).exists?
 
-		{
-			weeks: weeks.size,
-			months: months.size
-		}
+		calculate_duration(start_date, end_date)
 	end
 end

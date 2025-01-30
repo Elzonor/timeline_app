@@ -9,6 +9,23 @@ it:
     one: "evento"
     other: "eventi"
   
+  # Gestione singolare/plurale per la durata
+  duration:
+    days:
+      one: "giorno"
+      other: "giorni"
+    weeks:
+      one: "settimana"
+      other: "settimane"
+    months:
+      one: "mese"
+      other: "mesi"
+    span_text: "nell'arco di %{weeks} e %{months}"
+  
+  # Gestione durata timeline
+  timeline:
+    span_text: "si estende per %{weeks} e %{months}"
+  
   # Titoli e intestazioni
   titles:
     timelines: "Timeline"

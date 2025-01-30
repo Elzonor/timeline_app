@@ -130,3 +130,11 @@ input[type="submit"] {
 .events .grid .row > div:nth-child(2) {
   font-weight: bold;
 }
+
+/* Stili per la durata della timeline */
+.timeline-duration {
+  /* color: #666; */
+  font-size: 1rem;
+  margin-top: -1rem;
+  margin-bottom: 2rem;
+}

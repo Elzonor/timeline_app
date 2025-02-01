@@ -13,6 +13,6 @@ class Timeline < ApplicationRecord
 		end_date = events.where.not(end_date: nil).maximum(:end_date)
 		end_date = [end_date, Date.current].compact.max if events.where(end_date: nil).exists?
 
-		calculate_duration(start_date, end_date)
+		calculate_duration(start_date, end_date, events)
 	end
 end

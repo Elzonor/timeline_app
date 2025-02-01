@@ -1,13 +1,14 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Timeline "<%= @timeline.name %>"</h1>
+<h1><%= @timeline.name %></h1>
 
 <% if @timeline.duration_details %>
   <% details = @timeline.duration_details %>
   <p class="timeline-duration">
-    (<%= t('timeline.span_text',
+    <%= t('timeline.span_text_with_days',
+           days: pluralize(details[:days], t('duration.days.one'), t('duration.days.other')),
            weeks: pluralize(details[:weeks], t('duration.weeks.one'), t('duration.weeks.other')),
-           months: pluralize(details[:months], t('duration.months.one'), t('duration.months.other'))) %>)
+           months: pluralize(details[:months], t('duration.months.one'), t('duration.months.other'))) %>
   </p>
 <% end %>
 

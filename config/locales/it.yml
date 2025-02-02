@@ -25,7 +25,7 @@ it:
   # Gestione durata timeline
   timeline:
     span_text: "Questa timeline si estende per %{weeks} e %{months}"
-    span_text_with_days: "Questa timeline si estende per %{days}, %{weeks} e %{months}"
+    span_text_with_days: "Questa timeline dura %{days}, nell'arco di %{weeks} e %{months}"
   
   # Titoli e intestazioni
   titles:

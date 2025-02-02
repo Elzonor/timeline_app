@@ -73,6 +73,7 @@ end
 
 group :production do
 	gem 'pg', '1.5.9'
+  secret_key_base: <%= ENV["78a884bbca661e3df535caa4c71f354d"] %>
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

@@ -138,3 +138,80 @@ input[type="submit"] {
   margin-top: -1rem;
   margin-bottom: 2rem;
 }
+
+/* Stili per la visualizzazione della timeline */
+.visual-timeline {
+  margin-top: 3rem;
+  display: grid;
+  gap: 0;
+  padding-left: 2rem;
+}
+
+.timeline-week {
+  display: grid;
+  grid-template-columns: 150px 8px 2px 1fr;
+  align-items: start;
+  min-height: 34px;
+  position: relative;
+}
+
+.week-date {
+  text-align: right;
+  padding-right: 1rem;
+  color: #666;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.day-line {
+  height: 1px;
+  background-color: #CCCCCC;
+  margin-top: 13px;
+}
+
+.week-line {
+  height: 100%;
+  background-color: #CCCCCC;
+  width: 2px;
+  position: absolute;
+  left: 158px;
+  top: 0;
+  bottom: 0;
+}
+
+.events-container {
+  display: flex;
+  position: relative;
+  min-height: 34px;
+  padding-left: 2rem;
+}
+
+.event-line {
+  width: 5px;
+  position: absolute;
+  top: 0;
+  bottom: -34px;
+  z-index: 1;
+}
+
+.timeline-week:last-child .event-line {
+  bottom: 0;
+}
+
+.event-title-line {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  width: 34px;
+  height: 1px;
+  z-index: 2;
+}
+
+.event-title {
+  position: absolute;
+  top: -8px;
+  left: calc(100% + 34px + 5px);
+  white-space: nowrap;
+  font-size: 0.9rem;
+  z-index: 2;
+}

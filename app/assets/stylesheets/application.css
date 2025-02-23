@@ -14,6 +14,14 @@
  *= require_self
  */
 
+/* Import dei font Fira */
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;700&family=Fira+Mono&display=swap');
+
+/* Stili base */
+body {
+  font-family: 'Fira Sans', sans-serif;
+}
+
 /* Stili base per tutti i link */
 a {
   background: transparent;
@@ -149,7 +157,7 @@ input[type="submit"] {
 
 .visual-timeline > * {
   min-height: 34px;
-  border: 1px solid rgba(255, 0, 0, 0.1);
+  /* border: 1px solid rgba(255, 0, 0, 0.1); */
 }
 
 .week-lines {
@@ -179,6 +187,12 @@ input[type="submit"] {
   color: #666;
   font-size: 0.9rem;
   white-space: nowrap;
+  font-family: 'Fira Mono', monospace;
+  position: relative;
+}
+
+.week-date-text {
+  margin-top: -8px;
 }
 
 .day-line {
@@ -188,13 +202,21 @@ input[type="submit"] {
 }
 
 .week-line {
-  height: 100%;
-  background-color: #CCCCCC;
-  width: 2px;
   position: absolute;
-  left: 158px;
+  right: 0;
   top: 0;
   bottom: 0;
+  width: 2px;
+  background-color: #CCC;
+}
+
+.end-of-week-line {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 8px;
+  height: 1px;
+  background-color: #CCC;
 }
 
 .events-container {
@@ -208,20 +230,24 @@ input[type="submit"] {
   bottom: 0;
 }
 
+.week-events {
+  position: relative;
+}
+
 .event-title-line {
   position: absolute;
   top: 0;
-  left: 100%;
-  width: 34px;
   height: 1px;
-  z-index: 2;
-}
-
-.week-events {
-  padding-left: 1rem;
 }
 
 .event-title {
   font-size: 0.9rem;
   white-space: nowrap;
+  padding-left: 1rem;
+  margin-top: -8px;
+  font-weight: bold;
+}
+
+.hidden {
+  display: none;
 }

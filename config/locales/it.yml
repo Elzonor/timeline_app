@@ -7,6 +7,11 @@ it:
     formats:
       short: "%d-%m-%Y"
       long: "%d %B %Y"
+      timeline: "%-d %b %Y"
+    abbr_month_names:
+      [~, gen, feb, mar, apr, mag, giu, lug, ago, set, ott, nov, dic]
+    month_names:
+      [~, gennaio, febbraio, marzo, aprile, maggio, giugno, luglio, agosto, settembre, ottobre, novembre, dicembre]
       
   # Gestione singolare/plurale per il conteggio eventi
   events_count:

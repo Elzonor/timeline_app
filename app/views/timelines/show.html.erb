@@ -20,7 +20,7 @@
   <%= link_to t('actions.add_event'), new_timeline_event_path(@timeline) %>
 </div>
 
-<div class="events">
+<div class="events hidden">
   <% if @timeline.events.any? %>
     <div class="grid">
       <div class="header">
@@ -72,7 +72,11 @@
   <div class="visual-timeline">
     <% week_dates = @timeline.duration_details[:week_dates].reverse %>
     <% week_dates.each_with_index do |week_start, week_index| %>
-      <div class="week-date"><%= week_start.end_of_week.strftime("%d-%m-%Y") %></div>
+      <div class="week-date">
+        <div class="week-date-text"><%= l(week_start.end_of_week, format: :timeline) %></div>
+        <div class="week-line"></div>
+        <div class="end-of-week-line"></div>
+      </div>
       <div class="week-lines">
         <% @ordered_events.each_with_index do |event, index| %>
           <% event_end = event.end_date || Date.current %>
@@ -80,6 +84,12 @@
             <div class="event-line" 
                  style="background-color: <%= event.color %>; 
                         left: <%= index * 5 %>px;"></div>
+            <% if week_start == event_end.beginning_of_week %>
+              <div class="event-title-line" 
+                   style="background-color: <%= event.color %>; 
+                          left: <%= (index * 5) + 5 %>px;
+                          width: calc(100% - <%= (index * 5) + 5 %>px);"></div>
+            <% end %>
           <% end %>
         <% end %>
       </div>

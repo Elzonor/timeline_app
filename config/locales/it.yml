@@ -74,7 +74,9 @@ it:
     confirm: "Sei sicuro?"
     timeline_errors: "hanno impedito il salvataggio della timeline:"
     event_errors: "hanno impedito il salvataggio dell'evento:"
+    event_created: "Evento creato"
     event_updated: "Evento aggiornato"
+    event_deleted: "Evento eliminato"
   
   # Titolo dell'applicazione
   app_name: "Timeline" 

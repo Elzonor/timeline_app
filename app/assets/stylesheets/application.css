@@ -248,6 +248,28 @@ input[type="submit"] {
   font-weight: bold;
 }
 
+.event-title-link {
+  text-decoration: none;
+  background: transparent;
+}
+
+.event-title-link:hover {
+  text-decoration: underline;
+  background: transparent;
+}
+
+/* Rimuovo gli stili generici dei link per event-title-link */
+a.event-title-link:hover {
+  color: inherit;
+  background: transparent;
+}
+
 .hidden {
   display: none;
+}
+
+.week-gap {
+  height: 21px !important;
+  min-height: 21px !important;
+  background-color: #f8f8f8;
 }

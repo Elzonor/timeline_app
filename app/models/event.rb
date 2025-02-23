@@ -32,9 +32,13 @@ class Event < ApplicationRecord
 		if last_event.nil?
 			self.color = "hsl(140, 60%, 50%)" # Primo evento
 		else
-			last_hue = last_event.color.match(/hsl\((\d+),/)[1].to_i
-			new_hue = (last_hue + 125) % 360
-			self.color = "hsl(#{new_hue}, 60%, 50%)"
+			if match = last_event.color&.match(/hsl\((\d+),/)
+				last_hue = match[1].to_i
+				new_hue = (last_hue + 125) % 360
+				self.color = "hsl(#{new_hue}, 60%, 50%)"
+			else
+				self.color = "hsl(140, 60%, 50%)"
+			end
 		end
 	end
 

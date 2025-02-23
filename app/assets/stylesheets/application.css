@@ -149,6 +149,20 @@ input[type="submit"] {
 
 .visual-timeline > * {
   min-height: 34px;
+  border: 1px solid rgba(255, 0, 0, 0.1);
+}
+
+.week-lines {
+  position: relative;
+  height: 100%;
+}
+
+.event-line {
+  width: 5px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  height: 100%;
 }
 
 .timeline-week {
@@ -190,14 +204,6 @@ input[type="submit"] {
   padding-left: 2rem;
 }
 
-.event-line {
-  width: 5px;
-  position: absolute;
-  top: 0;
-  bottom: -34px;
-  z-index: 1;
-}
-
 .timeline-week:last-child .event-line {
   bottom: 0;
 }
@@ -211,11 +217,11 @@ input[type="submit"] {
   z-index: 2;
 }
 
+.week-events {
+  padding-left: 1rem;
+}
+
 .event-title {
-  position: absolute;
-  top: -8px;
-  left: calc(100% + 34px + 5px);
-  white-space: nowrap;
   font-size: 0.9rem;
-  z-index: 2;
+  white-space: nowrap;
 }

@@ -70,10 +70,27 @@
 
 <% if @timeline.events.any? %>
   <div class="visual-timeline">
-    <% @timeline.duration_details[:week_dates].reverse.each do |week_start| %>
+    <% week_dates = @timeline.duration_details[:week_dates].reverse %>
+    <% week_dates.each_with_index do |week_start, week_index| %>
       <div class="week-date"><%= week_start.end_of_week.strftime("%d-%m-%Y") %></div>
-      <div class="week-lines"></div>
-      <div class="week-events"></div>
+      <div class="week-lines">
+        <% @ordered_events.each_with_index do |event, index| %>
+          <% event_end = event.end_date || Date.current %>
+          <% if (event.start_date.beginning_of_week..event_end.end_of_week).cover?(week_start) %>
+            <div class="event-line" 
+                 style="background-color: <%= event.color %>; 
+                        left: <%= index * 5 %>px;"></div>
+          <% end %>
+        <% end %>
+      </div>
+      <div class="week-events">
+        <% @ordered_events.each_with_index do |event, index| %>
+          <% event_end = event.end_date || Date.current %>
+          <% if week_start == event_end.beginning_of_week %>
+            <div class="event-title" style="color: <%= event.color %>;"><%= event.name %></div>
+          <% end %>
+        <% end %>
+      </div>
     <% end %>
   </div>
 <% end %>

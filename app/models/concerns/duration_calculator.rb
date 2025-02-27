@@ -1,22 +1,30 @@
 module DurationCalculator
   def calculate_duration(start_date, end_date, events = nil)
     end_date_to_use = (end_date || Date.current).to_date
+    start_date_to_use = start_date.to_date
     weeks = Set.new
     months = Set.new
     days = Set.new
 
     if events
+      # Raccogliamo i giorni con eventi
       events.each do |event|
         event_end = (event.end_date || Date.current).to_date
         (event.start_date.to_date..event_end).each do |date|
           days << date
-          weeks << date.beginning_of_week
           months << date.beginning_of_month
         end
       end
+      
+      # Aggiungiamo TUTTE le settimane tra la data di inizio e fine
+      current_week = start_date_to_use.beginning_of_week
+      while current_week <= end_date_to_use.beginning_of_week
+        weeks << current_week
+        current_week += 1.week
+      end
     else
       # Se non abbiamo eventi, calcoliamo basandoci sulle date estreme
-      current_date = start_date.to_date
+      current_date = start_date_to_use
       while current_date <= end_date_to_use
         days << current_date
         weeks << current_date.beginning_of_week

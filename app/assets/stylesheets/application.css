@@ -269,7 +269,12 @@ a.event-title-link:hover {
 }
 
 .week-gap {
-  height: 21px !important;
-  min-height: 21px !important;
-  background-color: #f8f8f8;
+  height: 34px !important;
+  min-height: 34px !important;
+}
+
+.week-gap .week-line {
+  border-right: 2px dashed #CCC;
+  background-color: transparent;
+  width: 0;
 }

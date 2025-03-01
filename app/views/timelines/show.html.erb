@@ -94,12 +94,9 @@
                 break
               end
             end
-            
-            # Verifica se la settimana è il 9 febbraio 2025
-            is_feb_9_2025 = (week_start.to_date == Date.new(2025, 2, 3))
           %>
           
-          <% if week_has_events && !is_feb_9_2025 %>
+          <% if week_has_events %>
             <div class="week-date">
               <div class="week-date-text"><%= l(week_start.end_of_week, format: :timeline) %></div>
               <div class="week-line"></div>

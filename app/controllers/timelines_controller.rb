@@ -190,15 +190,6 @@ class TimelinesController < ApplicationController
         end
       end
       
-      # Aggiungi esplicitamente la settimana del 9 febbraio 2025 come gap
-      feb_9_2025 = Date.new(2025, 2, 9).beginning_of_week
-      all_weeks.each do |week_start|
-        if week_start.to_date == feb_9_2025
-          gap_weeks << week_start unless gap_weeks.include?(week_start)
-          break
-        end
-      end
-      
       gap_weeks
     end
 end

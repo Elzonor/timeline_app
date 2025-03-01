@@ -38,7 +38,7 @@ it:
   
   # Titoli e intestazioni
   titles:
-    timelines: "Timeline"
+    timelines: "Timelinez"
     new_timeline: "Nuova Timeline"
     edit_timeline: "Modifica Timeline"
     events: "Eventi"

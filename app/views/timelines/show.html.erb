@@ -72,6 +72,20 @@
   <div class="visual-timeline">
     <% if @timeline.duration_details && @timeline.duration_details[:week_dates] %>
       <% week_dates = @timeline.duration_details[:week_dates].reverse %>
+      
+      <% 
+        # Creo un hash per mappare gli eventi ai loro gruppi
+        event_to_group = {}
+        
+        # Per ogni gruppo di eventi
+        @event_groups.each_with_index do |group, group_index|
+          # Assegna l'indice del gruppo a ciascun evento nel gruppo
+          group.each do |event|
+            event_to_group[event.id] = group_index
+          end
+        end
+      %>
+      
       <% week_dates.each_with_index do |week_start, week_index| %>
         <% is_gap_week = @gap_weeks.include?(week_start) %>
         
@@ -106,14 +120,38 @@
               <% @ordered_events.each_with_index do |event, index| %>
                 <% event_end = event.end_date || Date.current %>
                 <% if (event.start_date.beginning_of_week..event_end.end_of_week).cover?(week_start) %>
-                  <div class="event-line" 
-                       style="background-color: <%= event.color %>; 
-                              left: <%= index * 5 %>px;"></div>
+                  <% 
+                    # Ottieni l'indice del gruppo dell'evento
+                    group_id = event_to_group[event.id]
+                    
+                    # Calcola l'indice relativo dell'evento all'interno del suo gruppo per questa settimana
+                    relative_index = 0
+                    @ordered_events.each_with_index do |e, i|
+                      if i < index && (e.start_date.beginning_of_week..e.end_date.end_of_week).cover?(week_start) && event_to_group[e.id] == group_id
+                        relative_index += 1
+                      end
+                    end
+                    
+                    # Calcola la posizione left della linea dell'evento
+                    # Se è il primo evento del gruppo (relative_index = 0), deve essere attaccato alla linea verticale (left = 0)
+                    # Altrimenti, si sposta verso destra in base all'indice relativo
+                    left_position = relative_index == 0 ? 0 : relative_index * 5
+                    
+                    # Verifica se l'evento dura solo 1 giorno
+                    is_single_day_event = (event.end_date.nil? ? false : (event.end_date - event.start_date).to_i == 0)
+                  %>
+                  
+                  <% unless is_single_day_event %>
+                    <div class="event-line" 
+                         style="background-color: <%= event.color %>; 
+                                left: <%= left_position %>px;"></div>
+                  <% end %>
+                  
                   <% if week_start == event_end.beginning_of_week %>
                     <div class="event-title-line" 
                          style="background-color: <%= event.color %>; 
-                                left: <%= (index * 5) + 5 %>px;
-                                width: calc(100% - <%= (index * 5) + 5 %>px);"></div>
+                                left: <%= is_single_day_event ? 0 : left_position + 5 %>px;
+                                width: calc(100% - <%= is_single_day_event ? 0 : left_position + 5 %>px);"></div>
                   <% end %>
                 <% end %>
               <% end %>

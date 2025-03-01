@@ -28,6 +28,9 @@ class Event < ApplicationRecord
 	end
 	
 	def assign_color
+		# Non assegnare un colore se è già stato impostato manualmente
+		return if self.color.present?
+		
 		last_event = timeline.events.order(created_at: :desc).first
 		if last_event.nil?
 			self.color = "hsl(140, 60%, 50%)" # Primo evento

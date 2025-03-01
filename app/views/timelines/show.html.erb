@@ -84,6 +84,20 @@
             event_to_group[event.id] = group_index
           end
         end
+        
+        # Creo un hash per mappare gli eventi al loro indice all'interno del gruppo
+        event_to_index_in_group = {}
+        
+        # Per ogni gruppo di eventi
+        @event_groups.each do |group|
+          # Ordina gli eventi nel gruppo per data di inizio
+          sorted_events = group.sort_by(&:start_date)
+          
+          # Assegna un indice progressivo a ciascun evento nel gruppo
+          sorted_events.each_with_index do |event, index_in_group|
+            event_to_index_in_group[event.id] = index_in_group
+          end
+        end
       %>
       
       <% week_dates.each_with_index do |week_start, week_index| %>
@@ -124,14 +138,8 @@
                     # Ottieni l'indice del gruppo dell'evento
                     group_id = event_to_group[event.id]
                     
-                    # Calcola l'indice relativo dell'evento all'interno del suo gruppo per questa settimana
-                    relative_index = 0
-                    @ordered_events.each_with_index do |e, i|
-                      e_end = e.end_date || Date.current
-                      if i < index && (e.start_date.beginning_of_week..e_end.end_of_week).cover?(week_start) && event_to_group[e.id] == group_id
-                        relative_index += 1
-                      end
-                    end
+                    # Ottieni l'indice fisso dell'evento all'interno del suo gruppo
+                    relative_index = event_to_index_in_group[event.id]
                     
                     # Calcola la posizione left della linea dell'evento
                     # Se è il primo evento del gruppo (relative_index = 0), deve essere attaccato alla linea verticale (left = 0)

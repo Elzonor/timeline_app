@@ -33,7 +33,7 @@
 
   <div class="field color-picker">
     <%= form.label :color, t('labels.color') %>
-    <%= form.color_field :color, value: event.color %>
+    <%= form.color_field :color, value: event.color.present? ? event.color : "#0061FF" %>
   </div>
 
   <div class="actions">

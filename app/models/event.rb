@@ -31,18 +31,8 @@ class Event < ApplicationRecord
 		# Non assegnare un colore se è già stato impostato manualmente
 		return if self.color.present?
 		
-		last_event = timeline.events.order(created_at: :desc).first
-		if last_event.nil?
-			self.color = "hsl(140, 60%, 50%)" # Primo evento
-		else
-			if match = last_event.color&.match(/hsl\((\d+),/)
-				last_hue = match[1].to_i
-				new_hue = (last_hue + 125) % 360
-				self.color = "hsl(#{new_hue}, 60%, 50%)"
-			else
-				self.color = "hsl(140, 60%, 50%)"
-			end
-		end
+		# Imposta il colore predefinito a "#0061FF"
+		self.color = "#0061FF"
 	end
 
 	def count_weeks

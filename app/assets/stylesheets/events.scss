@@ -36,6 +36,7 @@ $spacing-large: 2rem;
       padding: $spacing-small;
       border: 1px solid $border-color;
       border-radius: $border-radius;
+      background-color: white;
     }
     
     &.color-picker {
@@ -45,6 +46,15 @@ $spacing-large: 2rem;
       
       label {
         margin-bottom: 0;
+      }
+      
+      input[type="color"] {
+        background-color: white;
+        border: none;
+        border-radius: $border-radius;
+        padding: 0;
+        width: 40px;
+        height: 40px;
       }
     }
   }
@@ -56,7 +66,7 @@ $spacing-large: 2rem;
   .button {
     padding: $spacing-small $spacing-medium;
     background-color: $primary-color;
-    color: white;
+    color: black;
     border: none;
     border-radius: $border-radius;
     cursor: pointer;

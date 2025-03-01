@@ -127,7 +127,8 @@
                     # Calcola l'indice relativo dell'evento all'interno del suo gruppo per questa settimana
                     relative_index = 0
                     @ordered_events.each_with_index do |e, i|
-                      if i < index && (e.start_date.beginning_of_week..e.end_date.end_of_week).cover?(week_start) && event_to_group[e.id] == group_id
+                      e_end = e.end_date || Date.current
+                      if i < index && (e.start_date.beginning_of_week..e_end.end_of_week).cover?(week_start) && event_to_group[e.id] == group_id
                         relative_index += 1
                       end
                     end
@@ -138,7 +139,7 @@
                     left_position = relative_index == 0 ? 0 : relative_index * 5
                     
                     # Verifica se l'evento dura solo 1 giorno
-                    is_single_day_event = (event.end_date.nil? ? false : (event.end_date - event.start_date).to_i == 0)
+                    is_single_day_event = event.end_date && (event.end_date - event.start_date).to_i == 0
                   %>
                   
                   <% unless is_single_day_event %>

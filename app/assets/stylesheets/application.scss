@@ -196,13 +196,31 @@ input[type="submit"] {
 .visual-timeline {
   margin-top: 1.5rem;
   display: grid;
-  grid-template-columns: 3fr 2fr 7fr;
+  grid-template-columns: 60px 3fr 2fr 7fr;
   gap: 0;
   
   > * {
     min-height: 34px;
     // border: 1px solid rgba(255, 0, 0, 0.1);
   }
+}
+
+.time-unit-year {
+  text-align: right;
+  padding-right: 0.5rem;
+  color: $text-color;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  font-family: 'Fira Mono', monospace;
+  position: relative;
+  font-weight: bold;
+  
+  // Allineamento verticale con la data
+  display: flex;
+  align-items: center;
+  
+  // Spostiamo l'anno verso l'alto per allinearlo con la data
+  margin-top: -32px;
 }
 
 .time-unit-lines {
@@ -315,7 +333,6 @@ a.event-title-link:hover {
 }
 
 .time-unit-gap {
-  height: 34px !important;
   min-height: 34px !important;
   
   .time-unit-line {

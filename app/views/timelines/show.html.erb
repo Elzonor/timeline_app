@@ -25,6 +25,7 @@
 <% if @timeline.events.any? %>
   <div class="view-switch">
     <span><%= t('timeline.view_by') %>:</span>
+    <%= link_to t('timeline.view_types.days'), timeline_path(@timeline, view_type: 'days'), class: "view-option #{@view_type == 'days' ? 'active' : ''}" %>
     <%= link_to t('timeline.view_types.weeks'), timeline_path(@timeline, view_type: 'weeks'), class: "view-option #{@view_type == 'weeks' ? 'active' : ''}" %>
     <%= link_to t('timeline.view_types.months'), timeline_path(@timeline, view_type: 'months'), class: "view-option #{@view_type == 'months' ? 'active' : ''}" %>
     <%= link_to t('timeline.view_types.years'), timeline_path(@timeline, view_type: 'years'), class: "view-option #{@view_type == 'years' ? 'active' : ''}" %>
@@ -116,6 +117,8 @@
           <div class="time-unit-date time-unit-gap">
             <div class="time-unit-date-text">
               <% case @view_type %>
+              <% when 'days' %>
+                <%= l(time_unit, format: :day) %>
               <% when 'weeks' %>
                 <%= l(time_unit.end_of_week, format: :timeline) %>
               <% when 'months' %>
@@ -138,6 +141,11 @@
               
               # Verifica se l'evento cade nell'unità di tempo corrente
               case @view_type
+              when 'days'
+                if (event.start_date..event_end).cover?(time_unit)
+                  time_unit_has_events = true
+                  break
+                end
               when 'weeks'
                 if (event.start_date.beginning_of_week..event_end.end_of_week).cover?(time_unit)
                   time_unit_has_events = true
@@ -161,6 +169,8 @@
             <div class="time-unit-date">
               <div class="time-unit-date-text">
                 <% case @view_type %>
+                <% when 'days' %>
+                  <%= l(time_unit, format: :day) %>
                 <% when 'weeks' %>
                   <%= l(time_unit.end_of_week, format: :timeline) %>
                 <% when 'months' %>
@@ -179,6 +189,8 @@
                   # Verifica se l'evento cade nell'unità di tempo corrente
                   event_in_time_unit = false
                   case @view_type
+                  when 'days'
+                    event_in_time_unit = (event.start_date..event_end).cover?(time_unit)
                   when 'weeks'
                     event_in_time_unit = (event.start_date.beginning_of_week..event_end.end_of_week).cover?(time_unit)
                   when 'months'
@@ -215,6 +227,8 @@
                     # Verifica se l'evento termina nell'unità di tempo corrente
                     event_ends_in_time_unit = false
                     case @view_type
+                    when 'days'
+                      event_ends_in_time_unit = time_unit == event_end
                     when 'weeks'
                       event_ends_in_time_unit = time_unit == event_end.beginning_of_week
                     when 'months'
@@ -240,6 +254,8 @@
                   # Verifica se l'evento termina nell'unità di tempo corrente
                   event_ends_in_time_unit = false
                   case @view_type
+                  when 'days'
+                    event_ends_in_time_unit = time_unit == event_end
                   when 'weeks'
                     event_ends_in_time_unit = time_unit == event_end.beginning_of_week
                   when 'months'

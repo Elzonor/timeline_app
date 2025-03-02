@@ -31,6 +31,14 @@ module DurationCalculator
       end
     end
 
+    # Calcoliamo tutti i giorni tra la data di inizio e fine per la visualizzazione
+    all_days = Set.new
+    current_day = start_date_to_use
+    while current_day <= end_date_to_use
+      all_days << current_day
+      current_day += 1.day
+    end
+
     # Calcoliamo tutte le settimane tra la data di inizio e fine per la visualizzazione
     all_weeks = Set.new
     current_week = start_date_to_use.beginning_of_week
@@ -60,6 +68,7 @@ module DurationCalculator
       weeks: weeks.size,
       months: months.size,
       years: years.size,
+      day_dates: all_days.to_a.sort,
       week_dates: all_weeks.to_a.sort,
       month_dates: all_months.to_a.sort,
       year_dates: all_years.to_a.sort

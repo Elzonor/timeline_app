@@ -13,7 +13,7 @@ class TimelinesController < ApplicationController
     # Forza il reload degli eventi
     @timeline = Timeline.includes(:events).find(params[:id])
     
-    # Imposta il tipo di visualizzazione (settimane, mesi, anni)
+    # Imposta il tipo di visualizzazione (giorni, settimane, mesi, anni)
     @view_type = params[:view_type] || 'weeks'
     
     if @timeline.events.any?
@@ -30,6 +30,9 @@ class TimelinesController < ApplicationController
       
       # Ottieni le date appropriate in base al tipo di visualizzazione
       case @view_type
+      when 'days'
+        @time_units = @timeline.duration_details[:day_dates].reverse
+        @gap_units = identify_gap_days(@event_groups, @time_units)
       when 'weeks'
         @time_units = @timeline.duration_details[:week_dates].reverse
         @gap_units = identify_gap_weeks(@event_groups, @time_units)
@@ -138,6 +141,73 @@ class TimelinesController < ApplicationController
       
       groups << current_group unless current_group.empty?
       groups
+    end
+
+    # Identifica i giorni che sono gap tra gruppi di eventi
+    def identify_gap_days(event_groups, all_days)
+      gap_days = []
+      
+      # Se non ci sono gruppi, non ci sono gap
+      return gap_days if event_groups.empty?
+      
+      # Aggiungi un giorno gap prima del primo gruppo di eventi
+      if event_groups.any?
+        first_group = event_groups.first
+        earliest_start_date = first_group.map { |e| e.start_date.to_date }.min
+        
+        # Trova il primo giorno prima dell'inizio del primo gruppo
+        first_day_before_events = nil
+        all_days.each do |day|
+          day_date = day.to_date
+          if day_date < earliest_start_date
+            first_day_before_events = day
+            break
+          end
+        end
+        
+        # Aggiungi il giorno gap prima del primo gruppo, se esiste
+        gap_days << first_day_before_events if first_day_before_events
+      end
+      
+      # Se non ci sono abbastanza gruppi per i gap tra gruppi, ritorna
+      return gap_days if event_groups.length <= 1
+      
+      # Per ogni coppia di gruppi consecutivi
+      (0...event_groups.length - 1).each do |i|
+        group1 = event_groups[i]
+        group2 = event_groups[i + 1]
+        
+        # Trova la data di fine più recente del primo gruppo
+        latest_end_date = group1.map { |e| e.end_date&.to_date || Date.current }.max
+        
+        # Trova la data di inizio più antica del secondo gruppo
+        earliest_start_date = group2.map { |e| e.start_date.to_date }.min
+        
+        # Calcola la differenza in giorni
+        days_difference = (earliest_start_date - latest_end_date).to_i
+        
+        # Se c'è almeno un giorno di gap
+        if days_difference > 1
+          # Calcola i giorni che cadono nel gap
+          gap_start = latest_end_date.to_date
+          
+          # Trova tutti i giorni che cadono nel gap
+          gap_candidates = []
+          all_days.each do |day|
+            day_date = day.to_date
+            
+            # Verifica se il giorno cade nel gap
+            if day_date > gap_start && day_date < earliest_start_date
+              gap_candidates << day
+            end
+          end
+          
+          # Aggiungi solo l'ultimo giorno del gap, se esiste
+          gap_days << gap_candidates.last unless gap_candidates.empty?
+        end
+      end
+      
+      gap_days
     end
 
     # Identifica le settimane che sono gap tra gruppi di eventi

@@ -10,6 +10,7 @@ it:
       timeline: "%-d %b %Y"
       month_year: "%B %Y"
       year: "%Y"
+      day: "%-d %B %Y"
     abbr_month_names:
       [~, gen, feb, mar, apr, mag, giu, lug, ago, set, ott, nov, dic]
     month_names:
@@ -44,6 +45,7 @@ it:
       other: "Questi eventi coprono %{days} su un arco di %{weeks}, %{months} e %{years}."
     view_by: "Visualizza per"
     view_types:
+      days: "Giorni"
       weeks: "Settimane"
       months: "Mesi"
       years: "Anni"

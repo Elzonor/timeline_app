@@ -108,21 +108,93 @@
             event_to_index_in_group[event.id] = index_in_group
           end
         end
+
+        # Teniamo traccia dell'ultimo anno visualizzato
+        last_year_shown = nil
+        
+        # Creiamo un array per tenere traccia di tutte le unità di tempo che verranno mostrate
+        visible_time_units = []
+        
+        # Identifichiamo tutte le unità di tempo che contengono eventi o sono gap
+        @time_units.each do |time_unit|
+          is_gap_unit = @gap_units.include?(time_unit)
+          
+          # Verifica se l'unità di tempo contiene eventi
+          time_unit_has_events = false
+          @ordered_events.each do |event|
+            event_end = event.end_date || Date.current
+            
+            # Verifica se l'evento cade nell'unità di tempo corrente
+            case @view_type
+            when 'days'
+              if (event.start_date..event_end).cover?(time_unit)
+                time_unit_has_events = true
+                break
+              end
+            when 'weeks'
+              if (event.start_date.beginning_of_week..event_end.end_of_week).cover?(time_unit)
+                time_unit_has_events = true
+                break
+              end
+            when 'months'
+              if (event.start_date.beginning_of_month..event_end.end_of_month).cover?(time_unit)
+                time_unit_has_events = true
+                break
+              end
+            when 'years'
+              if (event.start_date.beginning_of_year..event_end.end_of_year).cover?(time_unit)
+                time_unit_has_events = true
+                break
+              end
+            end
+          end
+          
+          # Mostra l'unità di tempo solo se contiene eventi o è un'unità di gap
+          should_show_time_unit = time_unit_has_events || is_gap_unit
+          
+          # Aggiungi l'unità di tempo all'array se deve essere mostrata
+          visible_time_units << time_unit if should_show_time_unit
+        end
+        
+        # Ora iteriamo sulle unità di tempo visibili
+        visible_time_units.each_with_index do |time_unit, index|
+          is_gap_unit = @gap_units.include?(time_unit)
+          
+          # Determina l'anno corrente in base al tipo di visualizzazione
+          current_year = case @view_type
+          when 'days'
+            time_unit.year
+          when 'weeks'
+            time_unit.end_of_week.year
+          when 'months'
+            time_unit.end_of_month.year
+          when 'years'
+            time_unit.end_of_year.year
+          end
+          
+          # Verifica se è il primo elemento dell'anno
+          is_first_of_year = last_year_shown != current_year
+          
+          # Aggiorna l'ultimo anno mostrato
+          last_year_shown = current_year if is_first_of_year
       %>
-      
-      <% @time_units.each_with_index do |time_unit, index| %>
-        <% is_gap_unit = @gap_units.include?(time_unit) %>
+        
+        <div class="time-unit-year <%= is_gap_unit ? 'time-unit-gap' : '' %>">
+          <% if is_first_of_year %>
+            <%= current_year %>
+          <% end %>
+        </div>
         
         <% if is_gap_unit %>
           <div class="time-unit-date time-unit-gap">
             <div class="time-unit-date-text">
               <% case @view_type %>
               <% when 'days' %>
-                <%= l(time_unit, format: :day) %>
+                <%= l(time_unit, format: :day_no_year) %>
               <% when 'weeks' %>
-                <%= l(time_unit.end_of_week, format: :timeline) %>
+                <%= l(time_unit.end_of_week, format: :timeline_no_year) %>
               <% when 'months' %>
-                <%= l(time_unit.end_of_month, format: :month_year) %>
+                <%= l(time_unit.end_of_month, format: :month_no_year) %>
               <% when 'years' %>
                 <%= l(time_unit.end_of_year, format: :year) %>
               <% end %>
@@ -133,123 +205,63 @@
           <div class="time-unit-lines time-unit-gap"></div>
           <div class="time-unit-events time-unit-gap"></div>
         <% else %>
-          <% 
-            # Verifica se l'unità di tempo contiene eventi
-            time_unit_has_events = false
-            @ordered_events.each do |event|
-              event_end = event.end_date || Date.current
-              
-              # Verifica se l'evento cade nell'unità di tempo corrente
-              case @view_type
-              when 'days'
-                if (event.start_date..event_end).cover?(time_unit)
-                  time_unit_has_events = true
-                  break
-                end
-              when 'weeks'
-                if (event.start_date.beginning_of_week..event_end.end_of_week).cover?(time_unit)
-                  time_unit_has_events = true
-                  break
-                end
-              when 'months'
-                if (event.start_date.beginning_of_month..event_end.end_of_month).cover?(time_unit)
-                  time_unit_has_events = true
-                  break
-                end
-              when 'years'
-                if (event.start_date.beginning_of_year..event_end.end_of_year).cover?(time_unit)
-                  time_unit_has_events = true
-                  break
-                end
-              end
-            end
-          %>
-          
-          <% if time_unit_has_events %>
-            <div class="time-unit-date">
-              <div class="time-unit-date-text">
-                <% case @view_type %>
-                <% when 'days' %>
-                  <%= l(time_unit, format: :day) %>
-                <% when 'weeks' %>
-                  <%= l(time_unit.end_of_week, format: :timeline) %>
-                <% when 'months' %>
-                  <%= l(time_unit.end_of_month, format: :month_year) %>
-                <% when 'years' %>
-                  <%= l(time_unit.end_of_year, format: :year) %>
-                <% end %>
-              </div>
-              <div class="time-unit-line"></div>
-              <div class="end-of-time-unit-line"></div>
-            </div>
-            <div class="time-unit-lines">
-              <% @ordered_events.each_with_index do |event, index| %>
-                <% event_end = event.end_date || Date.current %>
-                <% 
-                  # Verifica se l'evento cade nell'unità di tempo corrente
-                  event_in_time_unit = false
-                  case @view_type
-                  when 'days'
-                    event_in_time_unit = (event.start_date..event_end).cover?(time_unit)
-                  when 'weeks'
-                    event_in_time_unit = (event.start_date.beginning_of_week..event_end.end_of_week).cover?(time_unit)
-                  when 'months'
-                    event_in_time_unit = (event.start_date.beginning_of_month..event_end.end_of_month).cover?(time_unit)
-                  when 'years'
-                    event_in_time_unit = (event.start_date.beginning_of_year..event_end.end_of_year).cover?(time_unit)
-                  end
-                %>
-                
-                <% if event_in_time_unit %>
-                  <% 
-                    # Ottieni l'indice del gruppo dell'evento
-                    group_id = event_to_group[event.id]
-                    
-                    # Ottieni l'indice fisso dell'evento all'interno del suo gruppo
-                    relative_index = event_to_index_in_group[event.id]
-                    
-                    # Calcola la posizione left della linea dell'evento
-                    # Se è il primo evento del gruppo (relative_index = 0), deve essere attaccato alla linea verticale (left = 0)
-                    # Altrimenti, si sposta verso destra in base all'indice relativo
-                    left_position = relative_index == 0 ? 0 : relative_index * 5
-                    
-                    # Verifica se l'evento dura solo 1 giorno
-                    is_single_day_event = event.end_date && (event.end_date - event.start_date).to_i == 0
-                  %>
-                  
-                  <% unless is_single_day_event %>
-                    <div class="event-line" 
-                         style="background-color: <%= event.color %>; 
-                                left: <%= left_position %>px;"></div>
-                  <% end %>
-                  
-                  <% 
-                    # Verifica se l'evento termina nell'unità di tempo corrente
-                    event_ends_in_time_unit = false
-                    case @view_type
-                    when 'days'
-                      event_ends_in_time_unit = time_unit == event_end
-                    when 'weeks'
-                      event_ends_in_time_unit = time_unit == event_end.beginning_of_week
-                    when 'months'
-                      event_ends_in_time_unit = time_unit == event_end.beginning_of_month
-                    when 'years'
-                      event_ends_in_time_unit = time_unit == event_end.beginning_of_year
-                    end
-                  %>
-                  
-                  <% if event_ends_in_time_unit %>
-                    <div class="event-title-line" 
-                         style="background-color: <%= event.color %>; 
-                                left: <%= is_single_day_event ? 0 : left_position + 5 %>px;
-                                width: calc(100% - <%= is_single_day_event ? 0 : left_position + 5 %>px);"></div>
-                  <% end %>
-                <% end %>
+          <div class="time-unit-date">
+            <div class="time-unit-date-text">
+              <% case @view_type %>
+              <% when 'days' %>
+                <%= l(time_unit, format: :day_no_year) %>
+              <% when 'weeks' %>
+                <%= l(time_unit.end_of_week, format: :timeline_no_year) %>
+              <% when 'months' %>
+                <%= l(time_unit.end_of_month, format: :month_no_year) %>
+              <% when 'years' %>
+                <%= l(time_unit.end_of_year, format: :year) %>
               <% end %>
             </div>
-            <div class="time-unit-events">
-              <% @ordered_events.each_with_index do |event, index| %>
-                <% event_end = event.end_date || Date.current %>
+            <div class="time-unit-line"></div>
+            <div class="end-of-time-unit-line"></div>
+          </div>
+          <div class="time-unit-lines">
+            <% @ordered_events.each_with_index do |event, index| %>
+              <% event_end = event.end_date || Date.current %>
+              <% 
+                # Verifica se l'evento cade nell'unità di tempo corrente
+                event_in_time_unit = false
+                case @view_type
+                when 'days'
+                  event_in_time_unit = (event.start_date..event_end).cover?(time_unit)
+                when 'weeks'
+                  event_in_time_unit = (event.start_date.beginning_of_week..event_end.end_of_week).cover?(time_unit)
+                when 'months'
+                  event_in_time_unit = (event.start_date.beginning_of_month..event_end.end_of_month).cover?(time_unit)
+                when 'years'
+                  event_in_time_unit = (event.start_date.beginning_of_year..event_end.end_of_year).cover?(time_unit)
+                end
+              %>
+              
+              <% if event_in_time_unit %>
+                <% 
+                  # Ottieni l'indice del gruppo dell'evento
+                  group_id = event_to_group[event.id]
+                  
+                  # Ottieni l'indice fisso dell'evento all'interno del suo gruppo
+                  relative_index = event_to_index_in_group[event.id]
+                  
+                  # Calcola la posizione left della linea dell'evento
+                  # Se è il primo evento del gruppo (relative_index = 0), deve essere attaccato alla linea verticale (left = 0)
+                  # Altrimenti, si sposta verso destra in base all'indice relativo
+                  left_position = relative_index == 0 ? 0 : relative_index * 5
+                  
+                  # Verifica se l'evento dura solo 1 giorno
+                  is_single_day_event = event.end_date && (event.end_date - event.start_date).to_i == 0
+                %>
+                
+                <% unless is_single_day_event %>
+                  <div class="event-line" 
+                       style="background-color: <%= event.color %>; 
+                              left: <%= left_position %>px;"></div>
+                <% end %>
+                
                 <% 
                   # Verifica se l'evento termina nell'unità di tempo corrente
                   event_ends_in_time_unit = false
@@ -266,17 +278,43 @@
                 %>
                 
                 <% if event_ends_in_time_unit %>
-                  <div class="event-title">
-                    <%= link_to edit_timeline_event_path(@timeline, event), 
-                                style: "color: #{event.color};",
-                                class: "event-title-link" do %>
-                      <%= event.name %>
-                    <% end %>
-                  </div>
+                  <div class="event-title-line" 
+                       style="background-color: <%= event.color %>; 
+                              left: <%= is_single_day_event ? 0 : left_position + 5 %>px;
+                              width: calc(100% - <%= is_single_day_event ? 0 : left_position + 5 %>px);"></div>
                 <% end %>
               <% end %>
-            </div>
-          <% end %>
+            <% end %>
+          </div>
+          <div class="time-unit-events">
+            <% @ordered_events.each_with_index do |event, index| %>
+              <% event_end = event.end_date || Date.current %>
+              <% 
+                # Verifica se l'evento termina nell'unità di tempo corrente
+                event_ends_in_time_unit = false
+                case @view_type
+                when 'days'
+                  event_ends_in_time_unit = time_unit == event_end
+                when 'weeks'
+                  event_ends_in_time_unit = time_unit == event_end.beginning_of_week
+                when 'months'
+                  event_ends_in_time_unit = time_unit == event_end.beginning_of_month
+                when 'years'
+                  event_ends_in_time_unit = time_unit == event_end.beginning_of_year
+                end
+              %>
+              
+              <% if event_ends_in_time_unit %>
+                <div class="event-title">
+                  <%= link_to edit_timeline_event_path(@timeline, event), 
+                              style: "color: #{event.color};",
+                              class: "event-title-link" do %>
+                    <%= event.name %>
+                  <% end %>
+                </div>
+              <% end %>
+            <% end %>
+          </div>
         <% end %>
       <% end %>
     <% end %>

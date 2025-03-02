@@ -8,9 +8,12 @@ it:
       short: "%d-%m-%Y"
       long: "%d %B %Y"
       timeline: "%-d %b %Y"
+      timeline_no_year: "%-d %b"
       month_year: "%B %Y"
+      month_no_year: "%B"
       year: "%Y"
       day: "%-d %B %Y"
+      day_no_year: "%-d %B"
     abbr_month_names:
       [~, gen, feb, mar, apr, mag, giu, lug, ago, set, ott, nov, dic]
     month_names:

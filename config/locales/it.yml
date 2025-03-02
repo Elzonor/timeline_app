@@ -38,8 +38,8 @@ it:
   timeline:
     span_text: "Questa timeline si estende per %{weeks} e %{months}."
     span_text_with_days:
-      one: "L'evento di questa timeline ha una durata complessiva di %{days}, distribuito nell'arco di %{weeks}, %{months} e %{years}."
-      other: "Gli eventi di questa timeline hanno una durata complessiva di %{days}, distribuiti nell'arco di %{weeks}, %{months} e %{years}."
+      one: "Questo evento ha una durata di %{days} su un arco di %{weeks}, %{months} e %{years}."
+      other: "Questi eventi coprono %{days} su un arco di %{weeks}, %{months} e %{years}."
   
   # Titoli e intestazioni
   titles:

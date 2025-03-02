@@ -37,7 +37,9 @@ it:
   # Gestione durata timeline
   timeline:
     span_text: "Questa timeline si estende per %{weeks} e %{months}."
-    span_text_with_days: "Questi eventi coprono %{days}, nell'arco di %{weeks}, %{months} e %{years}."
+    span_text_with_days:
+      one: "L'evento di questa timeline ha una durata complessiva di %{days}, distribuito nell'arco di %{weeks}, %{months} e %{years}."
+      other: "Gli eventi di questa timeline hanno una durata complessiva di %{days}, distribuiti nell'arco di %{weeks}, %{months} e %{years}."
   
   # Titoli e intestazioni
   titles:

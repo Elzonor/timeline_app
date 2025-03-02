@@ -31,8 +31,8 @@ class Event < ApplicationRecord
 		# Non assegnare un colore se è già stato impostato manualmente
 		return if self.color.present?
 		
-		# Imposta il colore predefinito a "#0061FF"
-		self.color = "#0061FF"
+		# Imposta il colore predefinito a "#00A3D7"
+		self.color = "#00A3D7"
 	end
 
 	def count_weeks

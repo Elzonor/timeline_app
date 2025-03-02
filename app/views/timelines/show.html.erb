@@ -156,6 +156,57 @@
           visible_time_units << time_unit if should_show_time_unit
         end
         
+        # Prepariamo un hash per tenere traccia del primo elemento non-gap per ogni anno
+        first_non_gap_of_year = {}
+        
+        # Prepariamo un hash per tenere traccia del primo elemento non-gap per ogni mese
+        first_non_gap_of_month = {}
+        
+        # Identifichiamo il primo elemento non-gap per ogni anno e mese
+        visible_time_units.each do |time_unit|
+          is_gap_unit = @gap_units.include?(time_unit)
+          
+          # Salta le unità gap
+          next if is_gap_unit
+          
+          # Determina l'anno corrente in base al tipo di visualizzazione
+          current_year = case @view_type
+          when 'days'
+            time_unit.year
+          when 'weeks'
+            time_unit.end_of_week.year
+          when 'months'
+            time_unit.end_of_month.year
+          when 'years'
+            time_unit.end_of_year.year
+          end
+          
+          # Determina il mese corrente in base al tipo di visualizzazione
+          current_month = case @view_type
+          when 'days'
+            time_unit.month
+          when 'weeks'
+            time_unit.end_of_week.month
+          when 'months'
+            time_unit.end_of_month.month
+          when 'years'
+            time_unit.end_of_year.month
+          end
+          
+          # Creiamo una chiave combinata anno-mese per identificare univocamente ogni mese
+          year_month_key = "#{current_year}-#{current_month}"
+          
+          # Se non abbiamo ancora trovato un elemento non-gap per questo anno, lo memorizziamo
+          first_non_gap_of_year[current_year] ||= time_unit
+          
+          # Se non abbiamo ancora trovato un elemento non-gap per questo mese, lo memorizziamo
+          first_non_gap_of_month[year_month_key] ||= time_unit
+        end
+        
+        # Teniamo traccia dell'ultimo anno e mese visualizzati
+        last_year_shown = nil
+        last_month_shown = nil
+        
         # Ora iteriamo sulle unità di tempo visibili
         visible_time_units.each_with_index do |time_unit, index|
           is_gap_unit = @gap_units.include?(time_unit)
@@ -172,16 +223,47 @@
             time_unit.end_of_year.year
           end
           
+          # Determina il mese corrente in base al tipo di visualizzazione
+          current_month = case @view_type
+          when 'days'
+            time_unit.month
+          when 'weeks'
+            time_unit.end_of_week.month
+          when 'months'
+            time_unit.end_of_month.month
+          when 'years'
+            time_unit.end_of_year.month
+          end
+          
+          # Creiamo una chiave combinata anno-mese per identificare univocamente ogni mese
+          year_month_key = "#{current_year}-#{current_month}"
+          
+          # Verifica se questa unità di tempo è la prima non-gap del suo anno
+          is_first_non_gap_of_year = !is_gap_unit && first_non_gap_of_year[current_year] == time_unit
+          
+          # Verifica se questa unità di tempo è la prima non-gap del suo mese
+          is_first_non_gap_of_month = !is_gap_unit && first_non_gap_of_month[year_month_key] == time_unit
+          
           # Verifica se è il primo elemento dell'anno
           is_first_of_year = last_year_shown != current_year
           
-          # Aggiorna l'ultimo anno mostrato
+          # Verifica se è il primo elemento del mese
+          is_first_of_month = last_month_shown != current_month || is_first_of_year
+          
+          # Aggiorna l'ultimo anno e mese mostrati
           last_year_shown = current_year if is_first_of_year
+          last_month_shown = current_month if is_first_of_month
       %>
         
         <div class="time-unit-year <%= is_gap_unit ? 'time-unit-gap' : '' %>">
-          <% if is_first_of_year %>
-            <%= current_year %>
+          <% if is_first_non_gap_of_year %>
+            <div><%= current_year %></div>
+          <% end %>
+        </div>
+        
+        <div class="time-unit-month <%= is_gap_unit ? 'time-unit-gap' : '' %>">
+          <% if is_first_non_gap_of_month && !is_gap_unit %>
+            <div><%= l(Date.new(current_year, current_month, 1), format: :month_no_year) %></div>
           <% end %>
         </div>
         
@@ -190,13 +272,13 @@
             <div class="time-unit-date-text">
               <% case @view_type %>
               <% when 'days' %>
-                <%= l(time_unit, format: :day_no_year) %>
+                <%= l(time_unit, format: :day_only) %>
               <% when 'weeks' %>
-                <%= l(time_unit.end_of_week, format: :timeline_no_year) %>
+                <%= l(time_unit.end_of_week, format: :day_only) %>
               <% when 'months' %>
-                <%= l(time_unit.end_of_month, format: :month_no_year) %>
+                <%= l(time_unit.end_of_month, format: :day_only) %>
               <% when 'years' %>
-                <%= l(time_unit.end_of_year, format: :year) %>
+                <%= l(time_unit.end_of_year, format: :day_only) %>
               <% end %>
             </div>
             <div class="time-unit-line"></div>
@@ -209,13 +291,13 @@
             <div class="time-unit-date-text">
               <% case @view_type %>
               <% when 'days' %>
-                <%= l(time_unit, format: :day_no_year) %>
+                <%= l(time_unit, format: :day_only) %>
               <% when 'weeks' %>
-                <%= l(time_unit.end_of_week, format: :timeline_no_year) %>
+                <%= l(time_unit.end_of_week, format: :day_only) %>
               <% when 'months' %>
-                <%= l(time_unit.end_of_month, format: :month_no_year) %>
+                <%= l(time_unit.end_of_month, format: :day_only) %>
               <% when 'years' %>
-                <%= l(time_unit.end_of_year, format: :year) %>
+                <%= l(time_unit.end_of_year, format: :day_only) %>
               <% end %>
             </div>
             <div class="time-unit-line"></div>

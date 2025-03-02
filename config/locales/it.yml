@@ -11,6 +11,8 @@ it:
       timeline_no_year: "%-d %b"
       month_year: "%B %Y"
       month_no_year: "%B"
+      month_abbr: "%b"
+      day_only: "%-d"
       year: "%Y"
       day: "%-d %B %Y"
       day_no_year: "%-d %B"

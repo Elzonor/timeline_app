@@ -196,7 +196,7 @@ input[type="submit"] {
 .visual-timeline {
   margin-top: 1.5rem;
   display: grid;
-  grid-template-columns: 60px 3fr 2fr 7fr;
+  grid-template-columns: 60px 120px 60px 2fr 7fr;
   gap: 0;
   
   > * {
@@ -225,6 +225,31 @@ input[type="submit"] {
   min-height: 34px;
   
   // Stile per il div contenente l'anno
+  > div {
+    position: relative;
+    top: -8px; // Allinea verticalmente con la data (stesso valore di .time-unit-date-text)
+  }
+}
+
+.time-unit-month {
+  text-align: right;
+  padding-right: 0.5rem;
+  color: $text-color;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  font-family: 'Fira Mono', monospace;
+  position: relative;
+  
+  // Allineamento verticale con la data
+  display: flex;
+  align-items: top;
+  justify-content: flex-end;
+  
+  // Impostiamo un'altezza minima uguale a quella delle altre celle
+  margin-top: 0;
+  min-height: 34px;
+  
+  // Stile per il div contenente il mese
   > div {
     position: relative;
     top: -8px; // Allinea verticalmente con la data (stesso valore di .time-unit-date-text)

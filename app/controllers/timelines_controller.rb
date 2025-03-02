@@ -13,6 +13,9 @@ class TimelinesController < ApplicationController
     # Forza il reload degli eventi
     @timeline = Timeline.includes(:events).find(params[:id])
     
+    # Imposta il tipo di visualizzazione (settimane, mesi, anni)
+    @view_type = params[:view_type] || 'weeks'
+    
     if @timeline.events.any?
       # Ordina per start_date discendente (dal più al meno recente)
       # A parità di start_date, ordina per created_at discendente (dal più al meno recente)
@@ -24,12 +27,28 @@ class TimelinesController < ApplicationController
       
       # Identifica i gruppi di eventi e i gap
       @event_groups = identify_event_groups(@timeline.events.to_a)
-      @gap_weeks = identify_gap_weeks(@event_groups, @timeline.duration_details[:week_dates])
+      
+      # Ottieni le date appropriate in base al tipo di visualizzazione
+      case @view_type
+      when 'weeks'
+        @time_units = @timeline.duration_details[:week_dates].reverse
+        @gap_units = identify_gap_weeks(@event_groups, @time_units)
+      when 'months'
+        @time_units = @timeline.duration_details[:month_dates].reverse
+        @gap_units = identify_gap_months(@event_groups, @time_units)
+      when 'years'
+        @time_units = @timeline.duration_details[:year_dates].reverse
+        @gap_units = identify_gap_years(@event_groups, @time_units)
+      else
+        @time_units = @timeline.duration_details[:week_dates].reverse
+        @gap_units = identify_gap_weeks(@event_groups, @time_units)
+      end
     else
       @ordered_events = []
       @events_by_creation = {}
       @event_groups = []
-      @gap_weeks = []
+      @time_units = []
+      @gap_units = []
     end
   end
 
@@ -49,7 +68,7 @@ class TimelinesController < ApplicationController
 
     respond_to do |format|
       if @timeline.save
-        format.html { redirect_to @timeline, notice: 'Timeline was successfully created.' }
+        format.html { redirect_to @timeline, notice: t('messages.timeline_created') }
         format.json { render :show, status: :created, location: @timeline }
       else
         format.html { render :new }
@@ -63,7 +82,7 @@ class TimelinesController < ApplicationController
   def update
     respond_to do |format|
       if @timeline.update(timeline_params)
-        format.html { redirect_to @timeline, notice: 'Timeline was successfully updated.' }
+        format.html { redirect_to @timeline, notice: t('messages.timeline_updated') }
         format.json { render :show, status: :ok, location: @timeline }
       else
         format.html { render :edit }
@@ -77,7 +96,7 @@ class TimelinesController < ApplicationController
   def destroy
     @timeline.destroy
     respond_to do |format|
-      format.html { redirect_to timelines_url, notice: 'Timeline was successfully destroyed.' }
+      format.html { redirect_to timelines_url, notice: t('messages.timeline_destroyed') }
       format.json { head :no_content }
     end
   end
@@ -92,11 +111,13 @@ class TimelinesController < ApplicationController
     def timeline_params
       params.require(:timeline).permit(:name)
     end
-
-    # Identifica i gruppi di eventi basati sulla sovrapposizione temporale
+    
+    # Identifica i gruppi di eventi che si sovrappongono
     def identify_event_groups(events)
-      # Ordina gli eventi per data di inizio ASCENDENTE (dal meno al più recente)
+      # Ordina gli eventi per data di inizio
       sorted_events = events.sort_by(&:start_date)
+      
+      # Inizializza i gruppi
       groups = []
       current_group = []
       
@@ -191,5 +212,145 @@ class TimelinesController < ApplicationController
       end
       
       gap_weeks
+    end
+    
+    # Identifica i mesi che sono gap tra gruppi di eventi
+    def identify_gap_months(event_groups, all_months)
+      gap_months = []
+      
+      # Se non ci sono gruppi, non ci sono gap
+      return gap_months if event_groups.empty?
+      
+      # Aggiungi un mese gap prima del primo gruppo di eventi
+      if event_groups.any?
+        first_group = event_groups.first
+        earliest_start_date = first_group.map { |e| e.start_date.to_date }.min
+        
+        # Trova il primo mese prima dell'inizio del primo gruppo
+        first_month_before_events = nil
+        all_months.each do |month_start|
+          month_start_date = month_start.to_date
+          if month_start_date < earliest_start_date && 
+             month_start_date.beginning_of_month != earliest_start_date.beginning_of_month
+            first_month_before_events = month_start
+            break
+          end
+        end
+        
+        # Aggiungi il mese gap prima del primo gruppo, se esiste
+        gap_months << first_month_before_events if first_month_before_events
+      end
+      
+      # Se non ci sono abbastanza gruppi per i gap tra gruppi, ritorna
+      return gap_months if event_groups.length <= 1
+      
+      # Per ogni coppia di gruppi consecutivi
+      (0...event_groups.length - 1).each do |i|
+        group1 = event_groups[i]
+        group2 = event_groups[i + 1]
+        
+        # Trova la data di fine più recente del primo gruppo
+        latest_end_date = group1.map { |e| e.end_date&.to_date || Date.current }.max
+        
+        # Trova la data di inizio più antica del secondo gruppo
+        earliest_start_date = group2.map { |e| e.start_date.to_date }.min
+        
+        # Calcola la differenza in giorni
+        days_difference = (earliest_start_date - latest_end_date).to_i
+        
+        # Se c'è almeno un mese di gap (approssimativamente 30 giorni)
+        if days_difference > 30
+          # Calcola i mesi che cadono nel gap
+          gap_start = latest_end_date.to_date
+          
+          # Trova tutti i mesi che cadono nel gap
+          gap_candidates = []
+          all_months.each do |month_start|
+            month_start_date = month_start.to_date
+            
+            # Verifica se il mese cade nel gap
+            if month_start_date > gap_start && 
+               month_start_date.beginning_of_month != earliest_start_date.beginning_of_month &&
+               month_start_date < earliest_start_date
+              gap_candidates << month_start
+            end
+          end
+          
+          # Aggiungi solo l'ultimo mese del gap, se esiste
+          gap_months << gap_candidates.last unless gap_candidates.empty?
+        end
+      end
+      
+      gap_months
+    end
+    
+    # Identifica gli anni che sono gap tra gruppi di eventi
+    def identify_gap_years(event_groups, all_years)
+      gap_years = []
+      
+      # Se non ci sono gruppi, non ci sono gap
+      return gap_years if event_groups.empty?
+      
+      # Aggiungi un anno gap prima del primo gruppo di eventi
+      if event_groups.any?
+        first_group = event_groups.first
+        earliest_start_date = first_group.map { |e| e.start_date.to_date }.min
+        
+        # Trova il primo anno prima dell'inizio del primo gruppo
+        first_year_before_events = nil
+        all_years.each do |year_start|
+          year_start_date = year_start.to_date
+          if year_start_date < earliest_start_date && 
+             year_start_date.beginning_of_year != earliest_start_date.beginning_of_year
+            first_year_before_events = year_start
+            break
+          end
+        end
+        
+        # Aggiungi l'anno gap prima del primo gruppo, se esiste
+        gap_years << first_year_before_events if first_year_before_events
+      end
+      
+      # Se non ci sono abbastanza gruppi per i gap tra gruppi, ritorna
+      return gap_years if event_groups.length <= 1
+      
+      # Per ogni coppia di gruppi consecutivi
+      (0...event_groups.length - 1).each do |i|
+        group1 = event_groups[i]
+        group2 = event_groups[i + 1]
+        
+        # Trova la data di fine più recente del primo gruppo
+        latest_end_date = group1.map { |e| e.end_date&.to_date || Date.current }.max
+        
+        # Trova la data di inizio più antica del secondo gruppo
+        earliest_start_date = group2.map { |e| e.start_date.to_date }.min
+        
+        # Calcola la differenza in giorni
+        days_difference = (earliest_start_date - latest_end_date).to_i
+        
+        # Se c'è almeno un anno di gap (approssimativamente 365 giorni)
+        if days_difference > 365
+          # Calcola gli anni che cadono nel gap
+          gap_start = latest_end_date.to_date
+          
+          # Trova tutti gli anni che cadono nel gap
+          gap_candidates = []
+          all_years.each do |year_start|
+            year_start_date = year_start.to_date
+            
+            # Verifica se l'anno cade nel gap
+            if year_start_date > gap_start && 
+               year_start_date.beginning_of_year != earliest_start_date.beginning_of_year &&
+               year_start_date < earliest_start_date
+              gap_candidates << year_start
+            end
+          end
+          
+          # Aggiungi solo l'ultimo anno del gap, se esiste
+          gap_years << gap_candidates.last unless gap_candidates.empty?
+        end
+      end
+      
+      gap_years
     end
 end

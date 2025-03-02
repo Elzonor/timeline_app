@@ -8,6 +8,8 @@ it:
       short: "%d-%m-%Y"
       long: "%d %B %Y"
       timeline: "%-d %b %Y"
+      month_year: "%B %Y"
+      year: "%Y"
     abbr_month_names:
       [~, gen, feb, mar, apr, mag, giu, lug, ago, set, ott, nov, dic]
     month_names:
@@ -40,6 +42,11 @@ it:
     span_text_with_days:
       one: "Questo evento ha una durata di %{days} su un arco di %{weeks}, %{months} e %{years}."
       other: "Questi eventi coprono %{days} su un arco di %{weeks}, %{months} e %{years}."
+    view_by: "Visualizza per"
+    view_types:
+      weeks: "Settimane"
+      months: "Mesi"
+      years: "Anni"
   
   # Titoli e intestazioni
   titles:
@@ -83,6 +90,9 @@ it:
     event_created: "Evento creato"
     event_updated: "Evento aggiornato"
     event_deleted: "Evento eliminato"
+    timeline_created: "Timeline creata con successo"
+    timeline_updated: "Timeline aggiornata con successo"
+    timeline_destroyed: "Timeline eliminata con successo"
   
   # Titolo dell'applicazione
   app_name: "Timeline" 

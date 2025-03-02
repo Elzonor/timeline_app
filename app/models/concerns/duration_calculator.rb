@@ -38,6 +38,22 @@ module DurationCalculator
       all_weeks << current_week
       current_week += 1.week
     end
+    
+    # Calcoliamo tutti i mesi tra la data di inizio e fine per la visualizzazione
+    all_months = Set.new
+    current_month = start_date_to_use.beginning_of_month
+    while current_month <= end_date_to_use.beginning_of_month
+      all_months << current_month
+      current_month = (current_month + 1.month).beginning_of_month
+    end
+    
+    # Calcoliamo tutti gli anni tra la data di inizio e fine per la visualizzazione
+    all_years = Set.new
+    current_year = start_date_to_use.beginning_of_year
+    while current_year <= end_date_to_use.beginning_of_year
+      all_years << current_year
+      current_year = (current_year + 1.year).beginning_of_year
+    end
 
     {
       days: days.size,
@@ -45,7 +61,8 @@ module DurationCalculator
       months: months.size,
       years: years.size,
       week_dates: all_weeks.to_a.sort,
-      month_dates: months.to_a.sort
+      month_dates: all_months.to_a.sort,
+      year_dates: all_years.to_a.sort
     }
   end
 end 

@@ -29,12 +29,15 @@ it:
     months:
       one: "mese"
       other: "mesi"
+    years:
+      one: "anno"
+      other: "anni"
     span_text: "nell'arco di %{weeks} e %{months}"
   
   # Gestione durata timeline
   timeline:
-    span_text: "Questa timeline si estende per %{weeks} e %{months}"
-    span_text_with_days: "Questa timeline copre %{days}, nell'arco di %{weeks} e %{months}"
+    span_text: "Questa timeline si estende per %{weeks} e %{months}."
+    span_text_with_days: "Questi eventi coprono %{days}, nell'arco di %{weeks}, %{months} e %{years}."
   
   # Titoli e intestazioni
   titles:

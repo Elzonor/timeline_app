@@ -8,7 +8,8 @@
     <%= t('timeline.span_text_with_days',
            days: pluralize(details[:days], t('duration.days.one'), t('duration.days.other')),
            weeks: pluralize(details[:weeks], t('duration.weeks.one'), t('duration.weeks.other')),
-           months: pluralize(details[:months], t('duration.months.one'), t('duration.months.other'))) %>
+           months: pluralize(details[:months], t('duration.months.one'), t('duration.months.other')),
+           years: pluralize(details[:years], t('duration.years.one'), t('duration.years.other'))) %>
   </p>
 <% end %>
 

@@ -4,6 +4,7 @@ module DurationCalculator
     start_date_to_use = start_date.to_date
     weeks = Set.new
     months = Set.new
+    years = Set.new
     days = Set.new
 
     if events
@@ -13,6 +14,7 @@ module DurationCalculator
         (event.start_date.to_date..event_end).each do |date|
           days << date
           months << date.beginning_of_month
+          years << date.beginning_of_year
         end
       end
       
@@ -29,6 +31,7 @@ module DurationCalculator
         days << current_date
         weeks << current_date.beginning_of_week
         months << current_date.beginning_of_month
+        years << current_date.beginning_of_year
         current_date += 1.day
       end
     end
@@ -37,6 +40,7 @@ module DurationCalculator
       days: days.size,
       weeks: weeks.size,
       months: months.size,
+      years: years.size,
       week_dates: weeks.to_a.sort,
       month_dates: months.to_a.sort
     }

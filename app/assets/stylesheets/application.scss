@@ -369,6 +369,12 @@ a.event-title-link:hover {
   display: none;
 }
 
+// Classe per nascondere il contenuto mantenendo il layout
+.hidden-content {
+  color: transparent;
+  user-select: none;
+}
+
 .time-unit-gap {
   min-height: 34px !important;
   

@@ -263,13 +263,13 @@
         
         <div class="time-unit-month <%= is_gap_unit ? 'time-unit-gap' : '' %>">
           <% if is_first_non_gap_of_month && !is_gap_unit %>
-            <div><%= l(Date.new(current_year, current_month, 1), format: :month_no_year) %></div>
+            <div class="<%= @view_type == 'years' ? 'hidden-content' : '' %>"><%= l(Date.new(current_year, current_month, 1), format: :month_no_year) %></div>
           <% end %>
         </div>
         
         <% if is_gap_unit %>
           <div class="time-unit-date time-unit-gap">
-            <div class="time-unit-date-text">
+            <div class="time-unit-date-text <%= (@view_type == 'months' || @view_type == 'years') ? 'hidden-content' : '' %>">
               <% case @view_type %>
               <% when 'days' %>
                 <%= l(time_unit, format: :day_only) %>
@@ -288,7 +288,7 @@
           <div class="time-unit-events time-unit-gap"></div>
         <% else %>
           <div class="time-unit-date">
-            <div class="time-unit-date-text">
+            <div class="time-unit-date-text <%= (@view_type == 'months' || @view_type == 'years') ? 'hidden-content' : '' %>">
               <% case @view_type %>
               <% when 'days' %>
                 <%= l(time_unit, format: :day_only) %>

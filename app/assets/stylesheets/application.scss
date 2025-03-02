@@ -196,18 +196,19 @@ input[type="submit"] {
 .visual-timeline {
   margin-top: 1.5rem;
   display: grid;
-  grid-template-columns: 60px 120px 60px 2fr 7fr;
+  grid-template-columns: auto auto auto 2fr 7fr;
   gap: 0;
   
   > * {
     min-height: 34px;
-    border: 1px solid rgba(255, 0, 0, 0.3);
+    // border: 1px solid rgba(255, 0, 0, 0.3);
   }
 }
 
 .time-unit-year {
   text-align: right;
   padding-right: 0.5rem;
+  padding-left: 0.5rem;
   color: $text-color;
   font-size: 0.9rem;
   white-space: nowrap;
@@ -234,6 +235,7 @@ input[type="submit"] {
 .time-unit-month {
   text-align: right;
   padding-right: 0.5rem;
+  padding-left: 0.5rem;
   color: $text-color;
   font-size: 0.9rem;
   white-space: nowrap;
@@ -283,6 +285,7 @@ input[type="submit"] {
 .time-unit-date {
   text-align: right;
   padding-right: 1rem;
+  padding-left: 0.5rem;
   color: $text-color;
   font-size: 0.9rem;
   white-space: nowrap;

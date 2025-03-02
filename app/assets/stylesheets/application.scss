@@ -201,7 +201,7 @@ input[type="submit"] {
   
   > * {
     min-height: 34px;
-    // border: 1px solid rgba(255, 0, 0, 0.1);
+    border: 1px solid rgba(255, 0, 0, 0.3);
   }
 }
 
@@ -217,10 +217,18 @@ input[type="submit"] {
   
   // Allineamento verticale con la data
   display: flex;
-  align-items: center;
+  align-items: top;
+  justify-content: flex-end;
   
-  // Spostiamo l'anno verso l'alto per allinearlo con la data
-  margin-top: -32px;
+  // Impostiamo un'altezza minima uguale a quella delle altre celle
+  margin-top: 0;
+  min-height: 34px;
+  
+  // Stile per il div contenente l'anno
+  > div {
+    position: relative;
+    top: -8px; // Allinea verticalmente con la data (stesso valore di .time-unit-date-text)
+  }
 }
 
 .time-unit-lines {
@@ -258,7 +266,8 @@ input[type="submit"] {
 }
 
 .time-unit-date-text {
-  margin-top: -8px;
+  position: relative;
+  top: -8px;
 }
 
 .day-line {

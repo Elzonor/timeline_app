@@ -340,4 +340,9 @@ a.event-title-link:hover {
     background-color: transparent;
     width: 0;
   }
+  
+  // Nascondiamo la data per le settimane gap
+  .time-unit-date-text {
+    display: none;
+  }
 } 

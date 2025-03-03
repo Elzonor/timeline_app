@@ -23,12 +23,14 @@
 </div>
 
 <% if @timeline.events.any? %>
-  <div class="view-switch">
-    <span><%= t('timeline.view_by') %>:</span>
-    <%= link_to t('timeline.view_types.days'), timeline_path(@timeline, view_type: 'days'), class: "view-option #{@view_type == 'days' ? 'active' : ''}" %>
-    <%= link_to t('timeline.view_types.weeks'), timeline_path(@timeline, view_type: 'weeks'), class: "view-option #{@view_type == 'weeks' ? 'active' : ''}" %>
-    <%= link_to t('timeline.view_types.months'), timeline_path(@timeline, view_type: 'months'), class: "view-option #{@view_type == 'months' ? 'active' : ''}" %>
-    <%= link_to t('timeline.view_types.years'), timeline_path(@timeline, view_type: 'years'), class: "view-option #{@view_type == 'years' ? 'active' : ''}" %>
+  <div class="view-switch-container">
+    <div class="view-switch">
+      <span><%= t('timeline.view_by') %>:</span>
+      <%= link_to t('timeline.view_types.days'), timeline_path(@timeline, view_type: 'days'), class: "view-option #{@view_type == 'days' ? 'active' : ''}" %>
+      <%= link_to t('timeline.view_types.weeks'), timeline_path(@timeline, view_type: 'weeks'), class: "view-option #{@view_type == 'weeks' ? 'active' : ''}" %>
+      <%= link_to t('timeline.view_types.months'), timeline_path(@timeline, view_type: 'months'), class: "view-option #{@view_type == 'months' ? 'active' : ''}" %>
+      <%= link_to t('timeline.view_types.years'), timeline_path(@timeline, view_type: 'years'), class: "view-option #{@view_type == 'years' ? 'active' : ''}" %>
+    </div>
   </div>
 <% end %>
 
@@ -81,7 +83,7 @@
 </div>
 
 <% if @timeline.events.any? %>
-  <div class="visual-timeline">
+  <div class="visual-timeline view-type-<%= @view_type %>">
     <% if @timeline.duration_details && @time_units.any? %>
       <% 
         # Creo un hash per mappare gli eventi ai loro gruppi

@@ -203,6 +203,11 @@ input[type="submit"] {
     min-height: 34px;
     // border: 1px solid rgba(255, 0, 0, 0.3);
   }
+
+  // Impostiamo una larghezza minima per la colonna degli eventi
+  .time-unit-events {
+    min-width: 200px;
+  }
 }
 
 .time-unit-year {
@@ -367,12 +372,6 @@ a.event-title-link:hover {
 
 .hidden {
   display: none;
-}
-
-// Classe per nascondere il contenuto mantenendo il layout
-.hidden-content {
-  color: transparent;
-  user-select: none;
 }
 
 .time-unit-gap {

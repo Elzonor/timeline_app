@@ -6,16 +6,16 @@ it:
   date:
     formats:
       short: "%d-%m-%Y"
-      long: "%d %B %Y"
+      long: "%d %b %Y"
       timeline: "%-d %b %Y"
       timeline_no_year: "%-d %b"
-      month_year: "%B %Y"
-      month_no_year: "%B"
+      month_year: "%b %Y"
+      month_no_year: "%b"
       month_abbr: "%b"
       day_only: "%-d"
       year: "%Y"
-      day: "%-d %B %Y"
-      day_no_year: "%-d %B"
+      day: "%-d %b %Y"
+      day_no_year: "%-d %b"
     abbr_month_names:
       [~, gen, feb, mar, apr, mag, giu, lug, ago, set, ott, nov, dic]
     month_names:

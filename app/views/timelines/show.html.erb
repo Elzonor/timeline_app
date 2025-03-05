@@ -337,7 +337,7 @@
                   left_position = relative_index == 0 ? 0 : relative_index * 5
                   
                   # Verifica se l'evento dura solo 1 giorno
-                  is_single_day_event = event.end_date && (event.end_date - event.start_date).to_i == 0
+                  is_single_day_event = event.end_date && event.start_date && (event.end_date.to_date - event.start_date.to_date).to_i == 0
                 %>
                 
                 <% unless is_single_day_event %>

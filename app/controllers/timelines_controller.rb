@@ -10,8 +10,19 @@ class TimelinesController < ApplicationController
   # GET /timelines/1
   # GET /timelines/1.json
   def show
-    # Forza il reload degli eventi
-    @timeline = Timeline.includes(:events).find(params[:id])
+    @timeline = Timeline.find(params[:id])
+    @view = params[:view] || 'days'
+    @ordered_events = @timeline.events.order(:start_date)
+    
+    # Debug logging
+    Rails.logger.debug "=== Debug Timeline Events ==="
+    @ordered_events.each do |event|
+      Rails.logger.debug "Event: #{event.name}"
+      Rails.logger.debug "  Start: #{event.start_date}"
+      Rails.logger.debug "  End: #{event.end_date}"
+      Rails.logger.debug "  Duration: #{event.end_date ? (event.end_date - event.start_date).to_i : 'ongoing'} days"
+      Rails.logger.debug "------------------------"
+    end
     
     # Imposta il tipo di visualizzazione (giorni, settimane, mesi, anni)
     @view_type = params[:view_type] || 'weeks'
@@ -126,20 +137,27 @@ class TimelinesController < ApplicationController
       
       sorted_events.each do |event|
         if current_group.empty?
+          # Se non ci sono eventi nel gruppo corrente, inizia un nuovo gruppo
           current_group << event
         else
-          # Verifica se l'evento si sovrappone con l'ultimo del gruppo corrente
-          last_event_end = current_group.last.end_date || Date.current
-          if event.start_date <= last_event_end + 1.week
+          # Trova la data di fine più recente nel gruppo corrente
+          latest_end_date = current_group.map { |e| e.end_date || Date.current }.max
+          
+          # Se l'evento inizia prima o lo stesso giorno in cui finisce l'ultimo evento del gruppo
+          # allora fa parte dello stesso gruppo
+          if event.start_date <= latest_end_date
             current_group << event
           else
+            # Altrimenti, chiudi il gruppo corrente e iniziane uno nuovo
             groups << current_group
             current_group = [event]
           end
         end
       end
       
+      # Aggiungi l'ultimo gruppo se non è vuoto
       groups << current_group unless current_group.empty?
+      
       groups
     end
 

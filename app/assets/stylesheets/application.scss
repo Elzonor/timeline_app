@@ -35,6 +35,12 @@ body {
   font-family: 'Fira Sans', sans-serif;
 }
 
+// Stili per il logo nella navbar
+.navbar-logo {
+  max-width: 150px;
+  border-radius: 0;
+}
+
 // Stili base per tutti i link
 a {
   background: transparent;

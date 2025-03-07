@@ -105,12 +105,27 @@
           # Ordina gli eventi nel gruppo per data di inizio
           sorted_events = group.sort_by(&:start_date)
           
-          # Assegna un indice progressivo a ciascun evento nel gruppo
-          sorted_events.each_with_index do |event, index_in_group|
-            event_to_index_in_group[event.id] = index_in_group
+          # Filtra gli eventi che durano più di un giorno
+          multi_day_events = sorted_events.select do |event|
+            !event.end_date || (event.end_date.to_date - event.start_date.to_date).to_i > 0
+          end
+          
+          # Assegna un indice progressivo solo agli eventi che durano più di un giorno
+          current_index = 0
+          sorted_events.each do |event|
+            # Verifica se l'evento dura più di un giorno
+            is_multi_day = !event.end_date || (event.end_date.to_date - event.start_date.to_date).to_i > 0
+            
+            if is_multi_day
+              event_to_index_in_group[event.id] = current_index
+              current_index += 1
+            else
+              # Per gli eventi di un solo giorno, assegna indice 0 (attaccati alla linea verticale)
+              event_to_index_in_group[event.id] = 0
+            end
           end
         end
-
+        
         # Teniamo traccia dell'ultimo anno visualizzato
         last_year_shown = nil
         

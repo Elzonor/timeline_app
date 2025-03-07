@@ -86,42 +86,122 @@
   <div class="visual-timeline view-type-<%= @view_type %>">
     <% if @timeline.duration_details && @time_units.any? %>
       <% 
-        # Creo un hash per mappare gli eventi ai loro gruppi
-        event_to_group = {}
+        # Creo un hash per mappare gli eventi ai loro gruppi in base al tipo di visualizzazione
+        event_to_group_by_view_type = {
+          'days' => {},
+          'weeks' => {},
+          'months' => {},
+          'years' => {}
+        }
         
-        # Per ogni gruppo di eventi
-        @event_groups.each_with_index do |group, group_index|
+        # Per ogni tipo di visualizzazione, creiamo gruppi di eventi che si sovrappongono
+        ['days', 'weeks', 'months', 'years'].each do |view_type|
+          # Ordina gli eventi per data di inizio
+          sorted_events = @timeline.events.sort_by(&:start_date)
+          
+          # Inizializza i gruppi
+          groups = []
+          current_group = []
+          
+          sorted_events.each do |event|
+            if current_group.empty?
+              # Se non ci sono eventi nel gruppo corrente, inizia un nuovo gruppo
+              current_group << event
+            else
+              # Trova la data di fine più recente nel gruppo corrente
+              latest_end_date = current_group.map { |e| e.end_date || Date.current }.max
+              
+              # Determina se l'evento si sovrappone al gruppo corrente in base al tipo di visualizzazione
+              overlaps = false
+              case view_type
+              when 'days'
+                overlaps = event.start_date <= latest_end_date
+              when 'weeks'
+                overlaps = event.start_date.beginning_of_week <= latest_end_date.end_of_week
+              when 'months'
+                overlaps = event.start_date.beginning_of_month <= latest_end_date.end_of_month
+              when 'years'
+                overlaps = event.start_date.beginning_of_year <= latest_end_date.end_of_year
+              end
+              
+              if overlaps
+                current_group << event
+              else
+                # Altrimenti, chiudi il gruppo corrente e iniziane uno nuovo
+                groups << current_group
+                current_group = [event]
+              end
+            end
+          end
+          
+          # Aggiungi l'ultimo gruppo se non è vuoto
+          groups << current_group unless current_group.empty?
+          
           # Assegna l'indice del gruppo a ciascun evento nel gruppo
-          group.each do |event|
-            event_to_group[event.id] = group_index
+          groups.each_with_index do |group, group_index|
+            group.each do |event|
+              event_to_group_by_view_type[view_type][event.id] = group_index
+            end
           end
         end
         
-        # Creo un hash per mappare gli eventi al loro indice all'interno del gruppo
-        event_to_index_in_group = {}
+        # Creo un hash per mappare gli eventi al loro indice all'interno del gruppo in base al tipo di visualizzazione
+        event_to_index_in_group_by_view_type = {
+          'days' => {},
+          'weeks' => {},
+          'months' => {},
+          'years' => {}
+        }
         
-        # Per ogni gruppo di eventi
-        @event_groups.each do |group|
-          # Ordina gli eventi nel gruppo per data di inizio
-          sorted_events = group.sort_by(&:start_date)
-          
-          # Filtra gli eventi che durano più di un giorno
-          multi_day_events = sorted_events.select do |event|
-            !event.end_date || (event.end_date.to_date - event.start_date.to_date).to_i > 0
+        # Per ogni tipo di visualizzazione e per ogni gruppo di eventi
+        ['days', 'weeks', 'months', 'years'].each do |view_type|
+          # Raggruppa gli eventi per gruppo
+          events_by_group = {}
+          @timeline.events.each do |event|
+            group_id = event_to_group_by_view_type[view_type][event.id]
+            events_by_group[group_id] ||= []
+            events_by_group[group_id] << event
           end
           
-          # Assegna un indice progressivo solo agli eventi che durano più di un giorno
-          current_index = 0
-          sorted_events.each do |event|
-            # Verifica se l'evento dura più di un giorno
-            is_multi_day = !event.end_date || (event.end_date.to_date - event.start_date.to_date).to_i > 0
+          # Per ogni gruppo, ordina gli eventi e assegna un indice
+          events_by_group.each do |group_id, events|
+            # Ordina gli eventi nel gruppo per data di inizio
+            sorted_events = events.sort_by(&:start_date)
             
-            if is_multi_day
-              event_to_index_in_group[event.id] = current_index
+            # Filtra gli eventi che durano più di un giorno
+            multi_day_events = sorted_events.select do |event|
+              !event.end_date || (event.end_date.to_date - event.start_date.to_date).to_i > 0
+            end
+            
+            # Ordina gli eventi multi-giorno per durata (dal più lungo al più corto)
+            sorted_multi_day_events = multi_day_events.sort_by do |event|
+              if !event.end_date
+                # Gli eventi senza data di fine (ongoing) sono considerati i più lunghi
+                999999
+              else
+                # Calcola la durata in giorni
+                (event.end_date.to_date - event.start_date.to_date).to_i
+              end
+            end.reverse
+            
+            # Assegna un indice progressivo solo agli eventi che durano più di un giorno, in ordine di durata
+            current_index = 0
+            
+            # Prima assegna indici agli eventi multi-giorno ordinati per durata
+            sorted_multi_day_events.each do |event|
+              event_to_index_in_group_by_view_type[view_type][event.id] = current_index
               current_index += 1
-            else
-              # Per gli eventi di un solo giorno, assegna indice 0 (attaccati alla linea verticale)
-              event_to_index_in_group[event.id] = 0
+            end
+            
+            # Poi assegna indice 0 agli eventi di un solo giorno
+            sorted_events.each do |event|
+              # Verifica se l'evento dura solo un giorno
+              is_single_day = event.end_date && (event.end_date.to_date - event.start_date.to_date).to_i == 0
+              
+              if is_single_day
+                # Per gli eventi di un solo giorno, assegna indice 0 (attaccati alla linea verticale)
+                event_to_index_in_group_by_view_type[view_type][event.id] = 0
+              end
             end
           end
         end
@@ -341,10 +421,10 @@
               <% if event_in_time_unit %>
                 <% 
                   # Ottieni l'indice del gruppo dell'evento
-                  group_id = event_to_group[event.id]
+                  group_id = event_to_group_by_view_type[@view_type][event.id]
                   
                   # Ottieni l'indice fisso dell'evento all'interno del suo gruppo
-                  relative_index = event_to_index_in_group[event.id]
+                  relative_index = event_to_index_in_group_by_view_type[@view_type][event.id]
                   
                   # Calcola la posizione left della linea dell'evento
                   # Se è il primo evento del gruppo (relative_index = 0), deve essere attaccato alla linea verticale (left = 0)
@@ -353,12 +433,28 @@
                   
                   # Verifica se l'evento dura solo 1 giorno
                   is_single_day_event = event.end_date && event.start_date && (event.end_date.to_date - event.start_date.to_date).to_i == 0
+                  
+                  # DEBUG: Stampa informazioni sull'evento
+                  if time_unit.month == 2 && time_unit.year == 2025  # Solo per febbraio 2025
+                    Rails.logger.debug "=== DEBUG EVENT IN FEB 2025 ==="
+                    Rails.logger.debug "Event: #{event.name}"
+                    Rails.logger.debug "  Color: #{event.color}"
+                    Rails.logger.debug "  Start: #{event.start_date}"
+                    Rails.logger.debug "  End: #{event.end_date}"
+                    Rails.logger.debug "  Group ID: #{group_id}"
+                    Rails.logger.debug "  Relative Index: #{relative_index}"
+                    Rails.logger.debug "  Left Position: #{left_position}"
+                    Rails.logger.debug "  Is Single Day Event: #{is_single_day_event}"
+                    Rails.logger.debug "  View Type: #{@view_type}"
+                    Rails.logger.debug "------------------------"
+                  end
                 %>
                 
                 <% unless is_single_day_event %>
                   <div class="event-line" 
                        style="background-color: <%= event.color %>; 
-                              left: <%= left_position %>px;"></div>
+                              left: <%= left_position %>px;
+                              z-index: <%= (event.end_date || Date.current).to_time.to_i %>;"></div>
                 <% end %>
                 
                 <% 
@@ -380,7 +476,8 @@
                   <div class="event-title-line" 
                        style="background-color: <%= event.color %>; 
                               left: <%= is_single_day_event ? 0 : left_position + 5 %>px;
-                              width: calc(100% - <%= is_single_day_event ? 0 : left_position + 5 %>px);"></div>
+                              width: calc(100% - <%= is_single_day_event ? 0 : left_position + 5 %>px);
+                              z-index: <%= (event.end_date || Date.current).to_time.to_i %>;"></div>
                 <% end %>
               <% end %>
             <% end %>

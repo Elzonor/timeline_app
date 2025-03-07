@@ -175,14 +175,15 @@
             
             # Ordina gli eventi multi-giorno per durata (dal più lungo al più corto)
             sorted_multi_day_events = multi_day_events.sort_by do |event|
-              if !event.end_date
+              duration = if !event.end_date
                 # Gli eventi senza data di fine (ongoing) sono considerati i più lunghi
-                999999
+                -999999  # Numero negativo per invertire l'ordine
               else
                 # Calcola la durata in giorni
-                (event.end_date.to_date - event.start_date.to_date).to_i
+                -(event.end_date.to_date - event.start_date.to_date).to_i  # Negativo per invertire l'ordine
               end
-            end.reverse
+              duration
+            end
             
             # Assegna un indice progressivo solo agli eventi che durano più di un giorno, in ordine di durata
             current_index = 0
@@ -435,21 +436,6 @@
                   
                   # Verifica se l'evento dura solo 1 giorno
                   is_single_day_event = event.end_date && event.start_date && (event.end_date.to_date - event.start_date.to_date).to_i == 0
-                  
-                  # DEBUG: Stampa informazioni sull'evento
-                  if time_unit.month == 2 && time_unit.year == 2025  # Solo per febbraio 2025
-                    Rails.logger.debug "=== DEBUG EVENT IN FEB 2025 ==="
-                    Rails.logger.debug "Event: #{event.name}"
-                    Rails.logger.debug "  Color: #{event.color}"
-                    Rails.logger.debug "  Start: #{event.start_date}"
-                    Rails.logger.debug "  End: #{event.end_date}"
-                    Rails.logger.debug "  Group ID: #{group_id}"
-                    Rails.logger.debug "  Relative Index: #{relative_index}"
-                    Rails.logger.debug "  Left Position: #{left_position}"
-                    Rails.logger.debug "  Is Single Day Event: #{is_single_day_event}"
-                    Rails.logger.debug "  View Type: #{@view_type}"
-                    Rails.logger.debug "------------------------"
-                  end
                 %>
                 
                 <% unless is_single_day_event %>

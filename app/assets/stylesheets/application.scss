@@ -41,7 +41,8 @@ body {
   border-radius: 0;
 }
 
-.navigation-bar {
+.navigation-bar a {
+  display: inline-block;
   padding-top: 8px;
 }
 
@@ -433,6 +434,6 @@ a.event-title-link:hover {
 } 
 
 h1 {
-  padding: 8px 0 13px;
+  padding: 8px 0 21px;
   margin: 0;
 }

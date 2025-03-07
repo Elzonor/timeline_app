@@ -35,27 +35,14 @@ body {
   font-family: 'Fira Sans', sans-serif;
 }
 
-// Stili per la navbar
-.navbar {
-  display: flex;
-  align-items: center;
-}
-
-.navbar-left {
-  display: flex;
-  align-items: center;
-}
-
-.navbar-left a {
-  display: inline-block;
-  line-height: 0; /* Rimuove lo spazio extra sotto l'immagine */
-}
-
 // Stili per il logo nella navbar
 .navbar-logo {
   max-width: 150px;
   border-radius: 0;
-  display: block; /* Assicura che l'immagine sia visualizzata correttamente */
+}
+
+.navigation-bar {
+  padding-top: 8px;
 }
 
 // Stili base per tutti i link
@@ -444,3 +431,8 @@ a.event-title-link:hover {
     display: none;
   }
 } 
+
+h1 {
+  padding: 8px 0 13px;
+  margin: 0;
+}

@@ -57,7 +57,7 @@ it:
   
   # Titoli e intestazioni
   titles:
-    timelines: "Timelinez"
+    timelines: "Le mie timeline"
     new_timeline: "Nuova Timeline"
     edit_timeline: "Modifica Timeline"
     events: "Eventi"
@@ -81,7 +81,7 @@ it:
     edit_event: "Modifica evento"
     edit_timeline: "Modifica"
     back_to_timeline: "Torna alla Timeline"
-    back_to_timelines: "Torna alla lista"
+    back_to_timelines: "Torna alle mie timeline"
     back_to_event: "Torna all'evento"
     back: "Indietro"
     show: "Visualizza"

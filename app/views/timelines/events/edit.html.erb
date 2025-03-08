@@ -1,7 +1,3 @@
 <h1><%= t('titles.edit_event') %></h1>
 
-<div class="actions">
-  <i class="fas fa-arrow-left"></i> <%= link_to t('actions.back_to_timeline'), timeline_path(@timeline) %>
-</div>
-
 <%= render 'form', event: @event %>

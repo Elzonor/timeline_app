@@ -38,5 +38,12 @@
 
   <div class="actions">
     <%= form.submit t('actions.update_event'), class: 'button' %>
+    oppure <%= link_to 'torna alla timeline', timeline_path(@timeline), class: 'back-link' %> | 
+    <%= link_to 'elimina evento', timeline_event_path(@timeline, event), 
+                data: { 
+                  turbo_method: :delete,
+                  turbo_confirm: t('messages.confirm')
+                },
+                style: "color: red;" %>
   </div>
 <% end %>

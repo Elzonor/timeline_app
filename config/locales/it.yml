@@ -66,12 +66,17 @@ it:
   
   # Etichette dei campi
   labels:
-    name: "Nome"
-    description: "Descrizione"
+    name: "Evento"
+    description: "Note"
     start_date: "Da"
     end_date: "A"
     ongoing: "In corso"
     color: "Colore"
+    duration:
+      one_day: "Dura un giorno"
+      multiple_days: "Dura più giorni"
+      from: "da"
+      to: "a"
   
   # Pulsanti e azioni
   actions:

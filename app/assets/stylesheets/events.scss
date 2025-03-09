@@ -6,7 +6,7 @@
 $primary-color: #F5B041;
 $primary-hover: #E59E2D;
 $border-color: #CCC;
-$border-radius: 4px;
+$border-radius: 3px;
 $spacing-small: 0.5rem;
 $spacing-medium: 1rem;
 $spacing-large: 2rem;
@@ -87,4 +87,105 @@ $spacing-large: 2rem;
       margin: 0 5px;
     }
   }
+}
+
+// Stili per la selezione della durata
+.duration-type {
+  margin-bottom: $spacing-large;
+
+  .duration-option {
+    margin-bottom: $spacing-medium;
+    display: flex;
+    align-items: center;
+    gap: $spacing-medium;
+    height: 34px;
+
+    // Stile custom per i radio button
+    .duration-radio {
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #ccc;
+      border-radius: 50%;
+      margin: 0;
+      position: relative;
+      cursor: pointer;
+
+      &:checked {
+        border-color: #000;
+        
+        &:after {
+          content: '';
+          position: absolute;
+          width: 12px;
+          height: 12px;
+          background: #000;
+          border-radius: 50%;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+      }
+    }
+
+    // Stile per le label
+    label {
+      margin: 0;
+      font-weight: normal;
+      cursor: pointer;
+    }
+  }
+
+  .date-range-fields {
+    display: flex;
+    align-items: center;
+    gap: $spacing-medium;
+    margin-left: 0; // Allinea con il testo dopo il radio button
+
+    .date-field {
+      display: flex;
+      align-items: center;
+      gap: $spacing-small;
+
+      label {
+        margin: 0;
+        font-weight: normal;
+        color: #666;
+      }
+    }
+  }
+
+  input[type="date"] {
+    padding: $spacing-small $spacing-medium;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    background-color: white;
+    min-width: 144px;
+    height: 34px;
+    margin-bottom: 0;
+    padding: 6px 13px;
+
+    &::placeholder {
+      color: #999;
+    }
+
+    // Nasconde l'icona del calendario nativa
+    &::-webkit-calendar-picker-indicator {
+      background: transparent;
+      cursor: pointer;
+      position: absolute;
+      right: 10px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+}
+
+.form-data-block {
+  margin-bottom: $spacing-large;
+}
+
+#no-notice-spacer {
+  line-height: 18px;
+  margin: 1.5rem;
 }

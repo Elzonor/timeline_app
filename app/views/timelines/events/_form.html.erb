@@ -10,40 +10,122 @@
       </ul>
     </div>
   <% end %>
+  
+  <div id="event-description" class="form-data-block">
 
-  <div class="field">
-    <%= form.label :name, t('labels.name') %>
-    <%= form.text_field :name, autocomplete: "off" %>
+    <div class="field">
+      <%= form.label :name, t('labels.name') %>
+      <%= form.text_field :name, autocomplete: "off" %>
+    </div>
+
+    <div class="field">
+      <%= form.label :description, t('labels.description') %>
+      <%= form.text_area :description %>
+    </div>
+
   </div>
 
-  <div class="field">
-    <%= form.label :description, t('labels.description') %>
-    <%= form.text_area :description %>
+  <div id="event-duration" class="form-data-block">
+
+    <div class="field duration-type">
+      <div class="duration-option">
+        <%= radio_button_tag :duration_type, '1-day', true, class: 'duration-radio' %>
+        <label for="duration_type_1-day"><%= t('labels.duration.one_day') %></label>
+        <%= form.date_field :start_date, class: 'single-day-date', placeholder: 'Choose date...' %>
+      </div>
+
+      <div class="duration-option">
+        <%= radio_button_tag :duration_type, 'multi-day', false, class: 'duration-radio' %>
+        <label for="duration_type_multi-day"><%= t('labels.duration.multiple_days') %></label>
+        <div class="date-range-fields">
+          <div class="date-field">
+            <label><%= t('labels.duration.from') %></label>
+            <%= form.date_field :start_date, class: 'multi-day-start', placeholder: 'Choose date...' %>
+          </div>
+          <div class="date-field">
+            <label><%= t('labels.duration.to') %></label>
+            <%= form.date_field :end_date, class: 'multi-day-end', placeholder: 'Choose date...' %>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
-  <div class="field">
-    <%= form.label :start_date, t('labels.start_date') %>
-    <%= form.date_field :start_date %>
-  </div>
+  <div id="event-color" class="form-data-block">
 
-  <div class="field">
-    <%= form.label :end_date, t('labels.end_date') %>
-    <%= form.date_field :end_date %>
-  </div>
+    <div class="field color-picker">
+      <%= form.label :color, t('labels.color') %>
+      <%= form.color_field :color, value: event.color.present? ? event.color : "#00A3D7" %>
+    </div>
 
-  <div class="field color-picker">
-    <%= form.label :color, t('labels.color') %>
-    <%= form.color_field :color, value: event.color.present? ? event.color : "#00A3D7" %>
   </div>
 
   <div class="actions">
-    <%= form.submit t('actions.update_event'), class: 'button' %>
-    oppure <%= link_to 'torna alla timeline', timeline_path(@timeline), class: 'back-link' %> | 
-    <%= link_to 'elimina evento', timeline_event_path(@timeline, event), 
+    <%= form.submit event.new_record? ? t('actions.create_event') : t('actions.update_event'), class: 'button' %>
+    oppure <%= link_to 'torna alla timeline', timeline_path(@timeline), class: 'back-link' %>
+    <% unless event.new_record? %>
+      | <%= link_to 'elimina evento', timeline_event_path(@timeline, event), 
                 data: { 
                   turbo_method: :delete,
                   turbo_confirm: t('messages.confirm')
                 },
                 style: "color: red;" %>
+    <% end %>
   </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const singleDayDate = document.querySelector('.single-day-date');
+      const multiDayStart = document.querySelector('.multi-day-start');
+      const multiDayEnd = document.querySelector('.multi-day-end');
+      const durationRadios = document.querySelectorAll('.duration-radio');
+
+      // Funzione per sincronizzare le date
+      function syncDates() {
+        const selectedType = document.querySelector('.duration-radio:checked').value;
+        
+        if (selectedType === '1-day') {
+          // Nascondi i campi multi-day
+          document.querySelector('.date-range-fields').style.display = 'none';
+          // Mostra il campo single-day
+          singleDayDate.style.display = 'block';
+          // Sincronizza le date
+          multiDayStart.value = singleDayDate.value;
+          multiDayEnd.value = singleDayDate.value;
+        } else {
+          // Mostra i campi multi-day
+          document.querySelector('.date-range-fields').style.display = 'flex';
+          // Nascondi il campo single-day
+          singleDayDate.style.display = 'none';
+          // Sincronizza la data di inizio
+          multiDayStart.value = singleDayDate.value;
+        }
+      }
+
+      // Gestisci il cambio di tipo durata
+      durationRadios.forEach(radio => {
+        radio.addEventListener('change', syncDates);
+      });
+
+      // Gestisci il cambio della data nel campo single-day
+      singleDayDate.addEventListener('change', function() {
+        if (document.querySelector('input[value="1-day"]').checked) {
+          multiDayStart.value = this.value;
+          multiDayEnd.value = this.value;
+        }
+      });
+
+      // Gestisci il cambio della data di inizio nel multi-day
+      multiDayStart.addEventListener('change', function() {
+        if (document.querySelector('input[value="1-day"]').checked) {
+          singleDayDate.value = this.value;
+          multiDayEnd.value = this.value;
+        }
+      });
+
+      // Inizializza lo stato
+      syncDates();
+    });
+  </script>
 <% end %>

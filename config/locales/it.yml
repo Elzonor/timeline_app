@@ -66,7 +66,7 @@ it:
   
   # Etichette dei campi
   labels:
-    name: "Evento"
+    name: "Nome"
     description: "Note"
     start_date: "Da"
     end_date: "A"

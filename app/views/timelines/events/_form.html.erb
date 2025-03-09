@@ -26,30 +26,36 @@
   </div>
 
   <div id="event-duration" class="form-data-block">
+    <%# Aggiungiamo un campo nascosto per tracciare il tipo di evento %>
+    <%= hidden_field_tag :current_duration_type, event.end_date && event.start_date != event.end_date ? 'multi-day' : '1-day' %>
 
     <div class="field duration-type">
       <div class="duration-option">
-        <%= radio_button_tag :duration_type, '1-day', true, class: 'duration-radio' %>
-        <label for="duration_type_1-day"><%= t('labels.duration.one_day') %></label>
-        <%= form.date_field :start_date, class: 'single-day-date', placeholder: 'Choose date...' %>
+        <%= radio_button_tag :duration_type, '1-day', event.end_date.nil? || event.start_date == event.end_date, 
+            class: 'duration-radio', id: 'duration_type_single' %>
+        <label for="duration_type_single"><%= t('labels.duration.one_day') %></label>
+        <%= form.date_field :start_date, class: 'single-day-date date-field', placeholder: 'Choose date...', 
+            data: { controller: 'datepicker' } %>
       </div>
 
       <div class="duration-option">
-        <%= radio_button_tag :duration_type, 'multi-day', false, class: 'duration-radio' %>
-        <label for="duration_type_multi-day"><%= t('labels.duration.multiple_days') %></label>
+        <%= radio_button_tag :duration_type, 'multi-day', event.end_date && event.start_date != event.end_date,
+            class: 'duration-radio', id: 'duration_type_multi' %>
+        <label for="duration_type_multi"><%= t('labels.duration.multiple_days') %></label>
         <div class="date-range-fields">
           <div class="date-field">
             <label><%= t('labels.duration.from') %></label>
-            <%= form.date_field :start_date, class: 'multi-day-start', placeholder: 'Choose date...' %>
+            <%= form.date_field :start_date, class: 'multi-day-start date-field', placeholder: 'Choose date...', 
+                data: { controller: 'datepicker' } %>
           </div>
           <div class="date-field">
             <label><%= t('labels.duration.to') %></label>
-            <%= form.date_field :end_date, class: 'multi-day-end', placeholder: 'Choose date...' %>
+            <%= form.date_field :end_date, class: 'multi-day-end date-field', placeholder: 'Choose date...', 
+                data: { controller: 'datepicker' } %>
           </div>
         </div>
       </div>
     </div>
-
   </div>
 
   <div id="event-color" class="form-data-block">
@@ -124,8 +130,22 @@
         }
       });
 
+      // Imposta lo stato iniziale in base alle date dell'evento
+      function setInitialState() {
+        // Se le date sono uguali o la data di fine non è impostata, seleziona "1-day"
+        if (multiDayStart.value && (!multiDayEnd.value || multiDayStart.value === multiDayEnd.value)) {
+          document.querySelector('input[value="1-day"]').checked = true;
+          singleDayDate.value = multiDayStart.value;
+        } else if (multiDayStart.value && multiDayEnd.value) {
+          // Se le date sono diverse, seleziona "multi-day"
+          document.querySelector('input[value="multi-day"]').checked = true;
+        }
+        // Sincronizza la visualizzazione
+        syncDates();
+      }
+
       // Inizializza lo stato
-      syncDates();
+      setInitialState();
     });
   </script>
 <% end %>

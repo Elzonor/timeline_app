@@ -29,10 +29,19 @@ Ciascuna **unità temporale standard** è caratterizzata da una linea verticale 
 
 Allineata in alto a destra è presente una *tacca di fine unità temporale* alta 1px e larga 8px, di fine dell'unità temporale (fine del giorno, fine della settimana, e così via).
 
+![Unità temporale standard per un evento in corso o passato](./images/time_unit_standard_current_past.png)
+
 Nel caso di **unità temporale iniziale**, cioè quando l'unità temporale è la prima del proprio gruppo di appartenenza, anche quando il gruppo è costituito da una untà soltanto, allora dovrà avere anche una *tacca di inizio unità temporale*. Le unità temporali *gap* sono eslcude dal conteggio.
+
+![Unità temporale iniziale per un evento in corso o passato](./images/time_unit_first_current_past.png)
+
 Sia le *unità temporali standard* che le *unità temporali iniziali* sono di colore "#000000" e con una lineea solida, mentre le *unità temporali gap* sono di colore "#CCCCCC" e con una linea tratteggiata.
 
-Di seguito un prontuario delle **unità temporali** che illustra le possibili combinazioni di colore, tratto, tacche.
+Le unità **gap** vengono rappresentate con una linea verticale tratteggiata di colore "#CCCCCC".
+
+![X](./images/time_unit_gap.png)
+
+Di seguito un prontuario delle **unità temporali** che raccoglie tutte le possibili combinazioni di colore, tratto, presenza della tacca o delle tacche, per eventi passati/in corso e futuri.
 
 ![Prontuario unità temporali](./images/time_units_matrix.png)
 

@@ -1,41 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="761px" height="174px" viewBox="0 0 761 174" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>timelinez_logo_6.0</title>
-    <g id="timelinez_logo_6.0" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <title>timelinez_logo_6.1</title>
+    <g id="timelinez_logo_6.1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <polygon id="Path" fill="#77BB41" fill-rule="nonzero" points="33.2698695 22.0975991 0 22.0975991 0 2.11009174 87.5688073 2.11009174 87.5688073 22.0975991 54.2989379 22.0975991 54.2989379 113.944954 33.2698695 113.944954"></polygon>
         <polygon id="Path" fill="#77BB41" fill-rule="nonzero" points="101.443057 34.0252294 122.068014 34.0252294 122.068014 113.944954 101.443057 113.944954"></polygon>
         <g id="events_colour" transform="translate(0, 161)" fill-rule="nonzero">
-            <rect id="Rectangle" fill="#00A3D7" x="598" y="0" width="74" height="13"></rect>
-            <rect id="Rectangle" fill="#77BB41" x="0" y="0" width="357" height="13"></rect>
+            <rect id="Rectangle" fill="#00A3D7" x="602" y="0" width="70" height="13"></rect>
+            <rect id="Rectangle" fill="#77BB41" x="0" y="0" width="340" height="13"></rect>
         </g>
         <g id="timeline_days" transform="translate(0, 135)" fill-rule="nonzero">
             <g id="Group" fill="#222222">
                 <rect id="Rectangle" x="0" y="0" width="5" height="21"></rect>
-                <rect id="Rectangle" x="101" y="0" width="5" height="21"></rect>
-                <rect id="Rectangle" x="140" y="0" width="5" height="21"></rect>
-                <rect id="Rectangle" x="264" y="0" width="5" height="21"></rect>
-                <rect id="Rectangle" x="352" y="0" width="5" height="21"></rect>
-                <rect id="Rectangle" x="598" y="0" width="5" height="21"></rect>
+                <rect id="Rectangle" x="82" y="0" width="5" height="21"></rect>
+                <rect id="Rectangle" x="117" y="0" width="5" height="21"></rect>
+                <rect id="Rectangle" x="246" y="0" width="5" height="21"></rect>
+                <rect id="Rectangle" x="335" y="0" width="5" height="21"></rect>
+                <rect id="Rectangle" x="602" y="0" width="5" height="21"></rect>
                 <rect id="Rectangle" x="667" y="0" width="5" height="21"></rect>
             </g>
             <g id="Rectangle-2" transform="translate(0, 21)">
-                <rect id="Rectangle" fill="#222222" x="0" y="0" width="357" height="5"></rect>
-                <rect id="Rectangle" fill="#222222" transform="translate(635, 2.5) scale(-1, 1) translate(-635, -2.5)" x="598" y="0" width="74" height="5"></rect>
+                <rect id="Rectangle" fill="#222222" x="0" y="0" width="340" height="5"></rect>
+                <rect id="Rectangle" fill="#222222" transform="translate(637, 2.5) scale(-1, 1) translate(-637, -2.5)" x="602" y="0" width="70" height="5"></rect>
                 <rect id="Rectangle" fill="#AAAAAA" x="672" y="0" width="21" height="5"></rect>
-                <rect id="Rectangle" fill="#AAAAAA" x="357" y="0" width="21" height="5"></rect>
+                <rect id="Rectangle" fill="#AAAAAA" x="340" y="0" width="21" height="5"></rect>
                 <rect id="Rectangle" fill="#AAAAAA" x="706" y="0" width="21" height="5"></rect>
-                <rect id="Rectangle" fill="#AAAAAA" x="391" y="0" width="21" height="5"></rect>
+                <rect id="Rectangle" fill="#AAAAAA" x="374" y="0" width="21" height="5"></rect>
                 <rect id="Rectangle" fill="#AAAAAA" x="740" y="0" width="21" height="5"></rect>
-                <rect id="Rectangle" fill="#AAAAAA" x="425" y="0" width="21" height="5"></rect>
-                <rect id="Rectangle" fill="#AAAAAA" x="459" y="0" width="21" height="5"></rect>
-                <rect id="Rectangle" fill="#AAAAAA" x="493" y="0" width="21" height="5"></rect>
-                <rect id="Rectangle" fill="#AAAAAA" x="527" y="0" width="21" height="5"></rect>
-                <rect id="Rectangle" fill="#AAAAAA" x="561" y="0" width="21" height="5"></rect>
-            </g>
-            <g id="Group-2" transform="translate(31, 8)" fill="#222222">
-                <rect id="Rectangle" x="154" y="0" width="5" height="13"></rect>
-                <rect id="Rectangle" x="0" y="0" width="5" height="13"></rect>
-                <rect id="Rectangle" x="199" y="0" width="5" height="13"></rect>
+                <rect id="Rectangle" fill="#AAAAAA" x="408" y="0" width="21" height="5"></rect>
+                <rect id="Rectangle" fill="#AAAAAA" x="442" y="0" width="21" height="5"></rect>
+                <rect id="Rectangle" fill="#AAAAAA" x="476" y="0" width="21" height="5"></rect>
+                <rect id="Rectangle" fill="#AAAAAA" x="510" y="0" width="21" height="5"></rect>
+                <rect id="Rectangle" fill="#AAAAAA" x="544" y="0" width="21" height="5"></rect>
+                <rect id="Rectangle" fill="#AAAAAA" x="578" y="0" width="21" height="5"></rect>
             </g>
         </g>
         <polygon id="Path" fill="#77BB41" fill-rule="nonzero" points="101.284404 3.16513761 122.385321 3.16513761 122.385321 22.1559633 101.284404 22.1559633"></polygon>

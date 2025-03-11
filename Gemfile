@@ -37,7 +37,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 
 # Specify minimum versions for security fixes
 gem 'globalid', '>= 1.0.1'
-gem 'rack', '>= 2.2.6.2'
+gem 'rack', '~> 3.1.12'
 gem 'rails-html-sanitizer', '>= 1.4.4'
 gem 'loofah', '>= 2.19.1'
 gem 'addressable', '>= 2.8.1'

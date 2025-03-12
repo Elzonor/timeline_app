@@ -1,0 +1,290 @@
+---
+description: Best practice per i Service Object in Rails
+globs: app/services/**/*.rb
+alwaysApply: false
+---
+# Linee guida per i Service Object
+
+I Service Object implementano la logica di business complessa che non appartiene ai modelli o ai controller. Seguono il principio di Single Responsibility e rendono il codice più mantenibile e testabile.
+
+## Principi Fondamentali
+- Un service fa **una cosa sola** e la fa bene
+- Input validati e ben definiti
+- Output prevedibile e consistente
+- Gestione degli errori robusta
+- Facilmente testabile
+- Transazionale quando necessario
+
+## Struttura Standard
+```ruby
+class ExampleService
+  # 1. Result Object per output consistente
+  Result = Struct.new(:success?, :data, :errors) do
+    def failure?
+      !success?
+    end
+  end
+
+  # 2. Entry point della classe
+  def self.call(*args)
+    new(*args).call
+  end
+
+  # 3. Inizializzazione con validazione input
+  def initialize(params)
+    @params = params
+    @errors = []
+  end
+
+  # 4. Metodo principale
+  def call
+    return failure('Parametri non validi') unless valid?
+
+    ActiveRecord::Base.transaction do
+      # Logica principale
+      process_data
+      Result.new(true, @data, [])
+    end
+  rescue StandardError => e
+    handle_error(e)
+  end
+
+  private
+
+  # 5. Metodi di supporto
+  def valid?
+    # Validazione
+  end
+
+  def process_data
+    # Elaborazione
+  end
+
+  def failure(message)
+    Result.new(false, nil, [message])
+  end
+
+  def handle_error(error)
+    Rails.logger.error("#{self.class}: #{error.message}")
+    failure(error.message)
+  end
+end
+```
+
+## Pattern Comuni
+
+### Service di Creazione
+```ruby
+class Users::RegistrationService
+  def initialize(params)
+    @params = params
+    @user = User.new
+  end
+
+  def call
+    return failure('Parametri invalidi') unless valid?
+
+    ActiveRecord::Base.transaction do
+      create_user
+      send_welcome_email
+      notify_admin
+      
+      Result.new(true, @user, [])
+    end
+  end
+
+  private
+
+  def valid?
+    @params[:email].present? && @params[:password].present?
+  end
+
+  def create_user
+    @user = User.create!(@params)
+  end
+
+  def send_welcome_email
+    UserMailer.welcome(@user).deliver_later
+  end
+
+  def notify_admin
+    AdminNotificationService.call(
+      event: 'new_user_registered',
+      user_id: @user.id
+    )
+  end
+end
+```
+
+### Service di Aggiornamento
+```ruby
+class Orders::ProcessingService
+  def initialize(order)
+    @order = order
+    @errors = []
+  end
+
+  def call
+    return failure('Ordine già processato') if @order.processed?
+
+    ActiveRecord::Base.transaction do
+      update_inventory
+      process_payment
+      send_confirmation
+      
+      @order.update!(status: 'processed')
+      Result.new(true, @order, [])
+    end
+  end
+
+  private
+
+  def update_inventory
+    @order.items.each do |item|
+      InventoryService.call(item)
+    end
+  end
+
+  def process_payment
+    result = PaymentService.call(@order)
+    raise PaymentError unless result.success?
+  end
+end
+```
+
+### Service di Integrazione API
+```ruby
+class ExternalApi::SyncService
+  def initialize(resource)
+    @resource = resource
+    @client = ApiClient.new
+  end
+
+  def call
+    return failure('Risorsa non sincronizzabile') unless syncable?
+
+    with_retry do
+      response = @client.sync(@resource)
+      handle_response(response)
+    end
+  end
+
+  private
+
+  def with_retry
+    retries = 0
+    begin
+      yield
+    rescue ApiError => e
+      retries += 1
+      retry if retries < 3
+      failure(e.message)
+    end
+  end
+
+  def handle_response(response)
+    if response.success?
+      Result.new(true, response.data, [])
+    else
+      failure(response.errors)
+    end
+  end
+end
+```
+
+## ❌ Anti-pattern da Evitare
+
+1. Service Objects troppo complessi:
+```ruby
+# NO ❌
+class DoEverythingService
+  def call
+    create_user
+    process_payment
+    update_inventory
+    send_notifications
+    generate_reports
+  end
+end
+
+# SI ✅
+class UserRegistrationService
+  def call
+    create_user
+    EnqueuePostRegistrationJob.perform_later(@user.id)
+  end
+end
+```
+
+2. Mancata gestione degli errori:
+```ruby
+# NO ❌
+class UnsafeService
+  def call
+    @user.save!
+    charge_card!
+    send_email!
+  end
+end
+
+# SI ✅
+class SafeService
+  def call
+    ActiveRecord::Base.transaction do
+      @user.save!
+      charge_card!
+      send_email!
+    rescue StandardError => e
+      handle_error(e)
+    end
+  end
+end
+```
+
+3. Stato mutabile:
+```ruby
+# NO ❌
+class StatefulService
+  def initialize
+    @state = {}
+  end
+
+  def call
+    @state[:user] = find_user
+    @state[:order] = process_order
+    @state
+  end
+end
+
+# SI ✅
+class StatelessService
+  def call(user_id)
+    user = find_user(user_id)
+    order = process_order(user)
+    Result.new(true, { user: user, order: order }, [])
+  end
+end
+```
+
+4. Dipendenze nascoste:
+```ruby
+# NO ❌
+class ServiceWithHiddenDependencies
+  def call
+    helper = HelperClass.new  # Dipendenza nascosta
+    helper.do_something
+  end
+end
+
+# SI ✅
+class ServiceWithExplicitDependencies
+  def initialize(helper: HelperClass.new)
+    @helper = helper
+  end
+
+  def call
+    @helper.do_something
+  end
+end
+```
+```

@@ -1,0 +1,256 @@
+---
+description: Best practice per i modelli Rails
+globs: app/controllers/**/*.rb
+alwaysApply: false
+---
+# Linee guida per i Modelli Rails
+
+I modelli sono il cuore della logica di business in Rails. Rappresentano i dati e le relazioni del dominio applicativo, implementando la business logic secondo il principio "Fat Models, Skinny Controllers".
+
+## Principi Fondamentali
+- Ogni modello ha una **singola responsabilità**
+- La logica di business appartiene ai modelli
+- Le validazioni garantiscono l'integrità dei dati
+- Le query complesse vanno incapsulate in scope
+- I callback vanno usati con cautela
+
+## Struttura Standard
+```ruby
+class Example < ApplicationRecord
+  # 1. Costanti e Configurazioni
+  STATI = %w[attivo sospeso cancellato].freeze
+  self.table_name = 'esempi'
+  
+  # 2. Attributi Virtuali
+  attribute :full_name, :string
+  
+  # 3. Associazioni
+  belongs_to :user
+  has_many :items, dependent: :destroy
+  
+  # 4. Validazioni
+  validates :name, presence: true
+  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
+  
+  # 5. Callbacks
+  before_validation :normalize_data
+  
+  # 6. Scopes
+  scope :active, -> { where(status: 'attivo') }
+  
+  # 7. Delegazioni
+  delegate :name, to: :user, prefix: true
+  
+  # 8. Metodi di Classe
+  
+  # 9. Metodi di Istanza
+  
+  # 10. Metodi Privati
+  private
+end
+```
+
+## Best Practices
+
+### Associazioni
+```ruby
+class User < ApplicationRecord
+  # Specificare sempre la dipendenza
+  has_many :posts, dependent: :destroy
+  
+  # Usare through per relazioni indirette
+  has_many :comments, through: :posts
+  
+  # Specificare le condizioni nelle associazioni
+  has_many :published_posts, 
+           -> { where(status: 'published') },
+           class_name: 'Post'
+           
+  # Usare inverse_of quando possibile
+  has_many :comments, inverse_of: :user
+end
+```
+
+### Validazioni
+```ruby
+class Product < ApplicationRecord
+  # Validazioni semplici
+  validates :name, presence: true
+  validates :code, uniqueness: true
+  validates :price, numericality: { greater_than: 0 }
+  
+  # Validazioni condizionali
+  validates :tax_number, presence: true, if: :company?
+  
+  # Validazioni custom
+  validate :expiration_date_cannot_be_in_past
+  
+  private
+  
+  def expiration_date_cannot_be_in_past
+    if expiration_date.present? && expiration_date < Date.current
+      errors.add(:expiration_date, "non può essere nel passato")
+    end
+  end
+end
+```
+
+### Scopes
+```ruby
+class Order < ApplicationRecord
+  # Scope base
+  scope :completed, -> { where(status: 'completed') }
+  
+  # Scope con parametri
+  scope :created_after, ->(date) { where('created_at > ?', date) }
+  
+  # Scope che combina altri scope
+  scope :recent_completed, -> { completed.created_after(1.week.ago) }
+  
+  # Evitare logica complessa negli scope
+  scope :with_total_over, ->(amount) { 
+    joins(:order_items)
+      .group('orders.id')
+      .having('SUM(order_items.price) > ?', amount) 
+  }
+end
+```
+
+### Query Interface
+```ruby
+class Post < ApplicationRecord
+  # Incapsulare query complesse in metodi di classe
+  def self.trending
+    joins(:views)
+      .group('posts.id')
+      .select('posts.*, COUNT(views.id) as views_count')
+      .where('views.created_at > ?', 1.week.ago)
+      .having('COUNT(views.id) > 100')
+      .order('views_count DESC')
+  end
+  
+  # Usare find_each per grandi dataset
+  def self.process_all
+    find_each(batch_size: 100) do |post|
+      post.process
+    end
+  end
+end
+```
+
+### Callbacks
+```ruby
+class User < ApplicationRecord
+  # Callback semplice
+  before_validation :normalize_email
+  
+  # Callback condizionale
+  after_create :send_welcome_email, if: :email_confirmed?
+  
+  # Evitare side effects nei callback
+  after_commit :notify_admin, on: :create
+  
+  private
+  
+  def normalize_email
+    self.email = email.downcase.strip if email.present?
+  end
+  
+  def send_welcome_email
+    UserMailer.welcome(self).deliver_later
+  end
+end
+```
+
+## ❌ Anti-pattern da Evitare
+
+1. Callback con side effects:
+```ruby
+# NO ❌
+class User < ApplicationRecord
+  after_create :charge_credit_card
+  after_create :send_notifications
+  after_create :update_external_service
+end
+
+# SI ✅
+class UserRegistrationService
+  def self.call(user)
+    ActiveRecord::Base.transaction do
+      user.save!
+      charge_credit_card(user)
+      send_notifications(user)
+      update_external_service(user)
+    end
+  end
+end
+```
+
+2. Logica di business nei modelli che dovrebbe essere in un service:
+```ruby
+# NO ❌
+class Order < ApplicationRecord
+  def process_payment
+    calculate_total
+    charge_credit_card
+    send_confirmation
+    update_inventory
+  end
+end
+
+# SI ✅
+class Order < ApplicationRecord
+  def process_payment
+    OrderProcessingService.call(self)
+  end
+end
+```
+
+3. Validazioni complesse nel modello:
+```ruby
+# NO ❌
+class Subscription < ApplicationRecord
+  validate :complex_business_rules
+  
+  def complex_business_rules
+    # 50 righe di logica di validazione
+  end
+end
+
+# SI ✅
+class Subscription < ApplicationRecord
+  validates :status, presence: true
+  validate :basic_rules
+  
+  def process_subscription
+    SubscriptionValidationService.call(self)
+  end
+end
+```
+
+4. Query non ottimizzate:
+```ruby
+# NO ❌
+class User < ApplicationRecord
+  def expensive_operation
+    posts.each do |post|      # N+1 query
+      post.comments.each do |comment|
+        process_comment(comment)
+      end
+    end
+  end
+end
+
+# SI ✅
+class User < ApplicationRecord
+  def efficient_operation
+    posts.includes(:comments)  # Eager loading
+        .find_each do |post|
+      post.comments.each do |comment|
+        process_comment(comment)
+      end
+    end
+  end
+end
+```
+```

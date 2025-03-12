@@ -1,0 +1,237 @@
+---
+description: Best practice per i Job in Rails
+globs: app/jobs/**/*.rb
+alwaysApply: false
+---
+# Linee guida per i Job (ActiveJob)
+
+I Job in Rails gestiscono operazioni asincrone e in background. Sono fondamentali per mantenere le risposte HTTP veloci e gestire operazioni lunghe o complesse in modo affidabile.
+
+## Principi Fondamentali
+- Ogni job deve essere **idempotente** (sicuro da eseguire più volte)
+- Usa **code diverse** per job con priorità diverse
+- Implementa sempre una **gestione degli errori** robusta
+- Mantieni i job **focused** e con una singola responsabilità
+- Aggiungi **logging** appropriato per il debugging
+
+## Struttura Standard
+```ruby
+class ExampleJob < ApplicationJob
+  # 1. Configurazione della coda
+  queue_as :default
+  
+  # 2. Retry e gestione errori
+  retry_on ActiveRecord::Deadlocked, wait: 5.seconds, attempts: 3
+  discard_on ActiveJob::DeserializationError
+  
+  # 3. Callbacks
+  before_perform :setup_context
+  after_perform :cleanup_context
+  
+  # 4. Metodo perform
+  def perform(args...)
+  end
+  
+  # 5. Metodi privati
+  private
+end
+```
+
+## Best Practices per i Job
+
+### Configurazione della Coda
+```ruby
+class ImportantJob < ApplicationJob
+  queue_as :high_priority
+  
+  # Per job schedulati
+  self.scheduled_at = -> { 1.hour.from_now }
+  
+  # Per job ricorrenti (con sidekiq-cron)
+  def self.schedule
+    every '1h', class: 'ImportantJob'
+  end
+end
+```
+
+### Gestione Errori e Retry
+```ruby
+class ProcessPaymentJob < ApplicationJob
+  queue_as :payments
+  
+  retry_on ActiveRecord::Deadlocked,
+           wait: :exponentially_longer,
+           attempts: 3
+           
+  retry_on TransientError,
+           wait: 5.seconds,
+           attempts: 5
+           
+  discard_on InvalidPaymentError do |job, error|
+    PaymentErrorNotifier.call(
+      payment_id: job.arguments.first,
+      error: error
+    )
+  end
+  
+  def perform(payment_id)
+    payment = Payment.find(payment_id)
+    
+    Rails.logger.info "Processando pagamento #{payment_id}"
+    
+    PaymentService.call(payment)
+  rescue => e
+    Rails.logger.error "Errore nel processare il pagamento #{payment_id}: #{e.message}"
+    raise
+  end
+end
+```
+
+### Logging e Monitoraggio
+```ruby
+class DataProcessingJob < ApplicationJob
+  include JobInstrumentation  # Custom concern per metriche
+  
+  def perform(dataset_id)
+    Rails.logger.tagged("DataProcessingJob", dataset_id) do
+      Rails.logger.info "Inizio elaborazione dataset"
+      
+      measure_timing do
+        process_dataset(dataset_id)
+      end
+      
+      Rails.logger.info "Elaborazione completata"
+    end
+  end
+end
+```
+
+### Job Idempotenti
+```ruby
+class ChargeSubscriptionJob < ApplicationJob
+  def perform(subscription_id)
+    subscription = Subscription.find(subscription_id)
+    
+    # Evita doppi addebiti
+    return if subscription.charged_for_current_period?
+    
+    charge = create_charge(subscription)
+    
+    # Usa una transazione per garantire l'atomicità
+    ActiveRecord::Base.transaction do
+      charge.process!
+      subscription.update!(
+        last_charged_at: Time.current,
+        next_charge_at: 1.month.from_now
+      )
+    end
+  end
+end
+```
+
+## ❌ Anti-pattern da Evitare
+
+1. Job non idempotenti:
+```ruby
+# NO ❌
+class BadJob < ApplicationJob
+  def perform(user_id)
+    user = User.find(user_id)
+    user.credits += 100  # Potrebbe essere eseguito più volte!
+    user.save!
+  end
+end
+
+# SI ✅
+class GoodJob < ApplicationJob
+  def perform(user_id, credit_transaction_id)
+    transaction = CreditTransaction.find(credit_transaction_id)
+    return if transaction.processed?  # Controllo idempotenza
+    
+    ActiveRecord::Base.transaction do
+      user = User.find(user_id)
+      user.credits += transaction.amount
+      user.save!
+      transaction.update!(processed_at: Time.current)
+    end
+  end
+end
+```
+
+2. Troppa logica nel job:
+```ruby
+# NO ❌
+class ComplexJob < ApplicationJob
+  def perform(order_id)
+    order = Order.find(order_id)
+    calculate_totals(order)
+    apply_discounts(order)
+    process_payment(order)
+    send_notifications(order)
+    update_inventory(order)
+  end
+end
+
+# SI ✅
+class OrderProcessingJob < ApplicationJob
+  def perform(order_id)
+    OrderProcessingService.call(order_id)
+  end
+end
+```
+
+3. Mancata gestione degli errori:
+```ruby
+# NO ❌
+class UnsafeJob < ApplicationJob
+  def perform(record_id)
+    record = Record.find(record_id)  # Potrebbe fallire
+    external_api.process(record)     # Potrebbe fallire
+  end
+end
+
+# SI ✅
+class SafeJob < ApplicationJob
+  retry_on ActiveRecord::RecordNotFound, wait: 5.seconds
+  retry_on ExternalApi::Error, wait: :exponentially_longer
+  
+  def perform(record_id)
+    record = Record.find(record_id)
+    
+    with_external_api_retry do
+      external_api.process(record)
+    end
+  rescue ExternalApi::FatalError => e
+    NotificationService.alert_admin(
+      job: self.class.name,
+      error: e.message
+    )
+    raise
+  end
+end
+```
+
+4. Job che non usano transazioni quando necessario:
+```ruby
+# NO ❌
+class UnsafeTransactionJob < ApplicationJob
+  def perform(transfer_id)
+    transfer = Transfer.find(transfer_id)
+    source_account.withdraw(transfer.amount)
+    destination_account.deposit(transfer.amount)
+  end
+end
+
+# SI ✅
+class SafeTransactionJob < ApplicationJob
+  def perform(transfer_id)
+    Transfer.transaction do
+      transfer = Transfer.find(transfer_id)
+      source_account.withdraw(transfer.amount)
+      destination_account.deposit(transfer.amount)
+      transfer.update!(completed_at: Time.current)
+    end
+  end
+end
+```
+```

@@ -1,0 +1,246 @@
+---
+description: Best practice per le view in Rails
+globs: app/views/**/*.html.erb
+alwaysApply: false
+---
+# Linee guida per le View Rails
+
+Le view sono responsabili della presentazione dei dati all'utente. Devono essere semplici, riutilizzabili e mantenere una chiara separazione dalla logica di business.
+
+## Principi Fondamentali
+- Mantieni le view **semplici** e **focused**
+- Usa partial per il **riutilizzo** del codice
+- Delega la logica di presentazione ai **Helper** o **Presenter**
+- Implementa **i18n** per tutti i testi
+- Evita logica di business nelle view
+
+## Struttura Standard
+```erb
+<%# app/views/layouts/application.html.erb %>
+<!DOCTYPE html>
+<html>
+  <head>
+    <%= render 'shared/head' %>
+  </head>
+  <body>
+    <%= render 'shared/header' %>
+    
+    <main>
+      <%= render 'shared/flash' %>
+      <%= yield %>
+    </main>
+    
+    <%= render 'shared/footer' %>
+    <%= render 'shared/javascript' %>
+  </body>
+</html>
+```
+
+## Best Practices
+
+### Partial e Collections
+```erb
+<%# app/views/users/index.html.erb %>
+<div class="users-container">
+  <h1><%= t('.title') %></h1>
+  
+  <%# Rendering di collection %>
+  <%= render partial: 'user', 
+             collection: @users,
+             cached: true %>
+             
+  <%# Pagination %>
+  <%= render 'shared/pagination', records: @users %>
+</div>
+
+<%# app/views/users/_user.html.erb %>
+<%= content_tag :div, 
+                id: dom_id(user),
+                class: 'user-card' do %>
+  <h2><%= user.full_name %></h2>
+  <%= render 'user_details', user: user %>
+<% end %>
+```
+
+### Helper e Presenter
+```ruby
+# app/helpers/application_helper.rb
+module ApplicationHelper
+  def format_date(date)
+    l(date, format: :long) if date.present?
+  end
+  
+  def status_badge(status)
+    content_tag :span, 
+                t("statuses.#{status}"),
+                class: "badge badge-#{status}"
+  end
+end
+
+# app/presenters/user_presenter.rb
+class UserPresenter < SimpleDelegator
+  def full_name
+    [first_name, last_name].compact.join(' ')
+  end
+  
+  def status_with_icon
+    "#{status_icon} #{status_text}"
+  end
+  
+  private
+  
+  def status_icon
+    status == 'active' ? '✅' : '❌'
+  end
+end
+```
+
+### Form e Validazioni
+```erb
+<%# app/views/users/_form.html.erb %>
+<%= form_with(model: @user, local: true) do |f| %>
+  <%= render 'shared/error_messages', record: @user %>
+  
+  <div class="form-group">
+    <%= f.label :email %>
+    <%= f.email_field :email, 
+                      class: 'form-control',
+                      required: true %>
+    <%= f.error_messages_for(:email) %>
+  </div>
+  
+  <%= f.submit t('.submit'), 
+               class: 'btn btn-primary',
+               data: { disable_with: t('.submitting') } %>
+<% end %>
+```
+
+### Internazionalizzazione (i18n)
+```yml
+# config/locales/it.yml
+it:
+  users:
+    index:
+      title: "Utenti"
+      no_users: "Nessun utente trovato"
+    form:
+      submit: "Salva"
+      submitting: "Salvataggio in corso..."
+    user:
+      edit: "Modifica"
+      delete: "Elimina"
+      confirm: "Sei sicuro?"
+```
+
+### Caching
+```erb
+<%# app/views/products/index.html.erb %>
+<% cache ['v1', @products] do %>
+  <div class="products-grid">
+    <% @products.each do |product| %>
+      <% cache product do %>
+        <%= render 'product', product: product %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>
+```
+
+### JavaScript e Asset Management
+```erb
+<%# app/views/shared/_javascript.html.erb %>
+<%# Caricamento condizionale di JavaScript %>
+<%= javascript_pack_tag 'application' %>
+
+<% if content_for?(:page_specific_js) %>
+  <%= yield :page_specific_js %>
+<% end %>
+
+<%# app/views/users/show.html.erb %>
+<% content_for :page_specific_js do %>
+  <%= javascript_pack_tag 'users/show' %>
+<% end %>
+```
+
+## ❌ Anti-pattern da Evitare
+
+1. Logica complessa nelle view:
+```erb
+<%# NO ❌ %>
+<% @users.each do |user| %>
+  <% if user.orders.where(status: 'completed')
+           .where('created_at > ?', 30.days.ago)
+           .sum(:total) > 1000 %>
+    <%= render 'premium_user', user: user %>
+  <% end %>
+<% end %>
+
+<%# SI ✅ %>
+<%= render partial: 'user',
+           collection: @premium_users,
+           cached: true %>
+```
+
+2. Query nel template (N+1 problem):
+```erb
+<%# NO ❌ %>
+<% @posts.each do |post| %>
+  <h2><%= post.title %></h2>
+  <p>Commenti: <%= post.comments.count %></p>
+<% end %>
+
+<%# SI ✅ %>
+<%# Controller: @posts = Post.includes(:comments) %>
+<% @posts.each do |post| %>
+  <%= render 'post', post: post %>
+<% end %>
+```
+
+3. Mancato uso di i18n:
+```erb
+<%# NO ❌ %>
+<h1>Lista Utenti</h1>
+<p>Nessun utente trovato.</p>
+
+<%# SI ✅ %>
+<h1><%= t('.title') %></h1>
+<p><%= t('.no_users') %></p>
+```
+
+4. Markup duplicato:
+```erb
+<%# NO ❌ %>
+<div class="card">
+  <div class="card-body">
+    <h5><%= user1.name %></h5>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <h5><%= user2.name %></h5>
+  </div>
+</div>
+
+<%# SI ✅ %>
+<%= render partial: 'user_card',
+           collection: @users,
+           as: :user %>
+```
+
+5. JavaScript inline:
+```erb
+<%# NO ❌ %>
+<script>
+  document.querySelector('.btn').addEventListener('click', function() {
+    // JavaScript inline
+  });
+</script>
+
+<%# SI ✅ %>
+<%# Usa Stimulus o file JavaScript dedicati %>
+<div data-controller="button">
+  <button data-action="button#click">Click me</button>
+</div>
+```
+```

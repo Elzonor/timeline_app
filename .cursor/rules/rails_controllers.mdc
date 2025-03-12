@@ -1,0 +1,220 @@
+---
+description: Best practice per i controller Rails
+globs: app/controllers/**/*.rb
+alwaysApply: false
+---
+# Linee guida per i controller Rails
+
+I controller sono il cuore del pattern MVC in Rails. Gestiscono le richieste HTTP, coordinano l'interazione tra model e view, e garantiscono un flusso dati pulito nell'applicazione.
+
+## Principi Fondamentali
+- Mantieni i controller **skinny**, i modelli **fat**, i servizi **focused**
+- Segui il principio di **Single Responsibility**
+- Usa **solo azioni RESTful** standard
+- Non superare le **7 azioni** per controller
+- Delega la logica di business ai Service Objects
+
+## Struttura Standard
+```ruby
+class ResourcesController < ApplicationController
+  # 1. Costanti
+  PER_PAGE = 20
+
+  # 2. Callbacks
+  before_action :set_resource, only: [:show, :update, :destroy]
+  before_action :authorize_resource
+  
+  # 3. Gestione errori
+  rescue_from StandardError, with: :handle_error
+  
+  # 4. Configurazioni
+  respond_to :json
+  
+  # 5. Azioni pubbliche
+  def index
+  end
+  
+  # 6. Metodi privati
+  private
+  
+  def set_resource
+  end
+end
+```
+
+## Best Practices per le Azioni
+
+### Index
+```ruby
+def index
+  @resources = Resource
+    .includes(:associations)  # Evita N+1 queries
+    .page(params[:page])     # Paginazione
+    .per(PER_PAGE)
+    
+  fresh_when(@resources)     # HTTP caching
+  respond_with(@resources)
+end
+```
+
+### Show
+```ruby
+def show
+  fresh_when(@resource)
+  respond_with(@resource)
+end
+```
+
+### Create
+```ruby
+def create
+  result = ResourceCreationService.call(resource_params)
+  
+  if result.success?
+    respond_with(result.resource, status: :created)
+  else
+    respond_with(result.errors, status: :unprocessable_entity)
+  end
+end
+```
+
+### Update
+```ruby
+def update
+  result = ResourceUpdateService.call(@resource, resource_params)
+  
+  if result.success?
+    respond_with(result.resource)
+  else
+    respond_with(result.errors, status: :unprocessable_entity)
+  end
+end
+```
+
+### Destroy
+```ruby
+def destroy
+  @resource.destroy
+  head :no_content
+end
+```
+
+## Gestione delle Autorizzazioni
+```ruby
+class ResourcesController < ApplicationController
+  before_action :authorize_resource
+  
+  private
+  
+  def authorize_resource
+    authorize(@resource || Resource)  # Usando Pundit
+  end
+end
+```
+
+## Gestione degli Errori
+```ruby
+class ApplicationController < ActionController::Base
+  rescue_from StandardError, with: :handle_error
+  rescue_from ActiveRecord::RecordNotFound, with: :handle_not_found
+  rescue_from ActionController::ParameterMissing, with: :handle_bad_request
+  
+  private
+  
+  def handle_error(error)
+    ErrorReportingService.notify(error)
+    respond_to do |format|
+      format.html { render 'errors/internal_error', status: :internal_server_error }
+      format.json { render json: { error: 'Errore interno del server' }, status: :internal_server_error }
+    end
+  end
+end
+```
+
+## Strong Parameters
+```ruby
+private
+
+def resource_params
+  params.require(:resource)
+        .permit(:name, :description, metadata: {}, tags: [])
+end
+```
+
+## Testing
+```ruby
+RSpec.describe ResourcesController, type: :controller do
+  describe 'GET #index' do
+    it 'returns paginated resources' do
+      create_list(:resource, 3)
+      
+      get :index
+      
+      expect(response).to have_http_status(:ok)
+      expect(json_response.size).to eq(3)
+    end
+  end
+end
+```
+
+## ❌ Anti-pattern da Evitare
+
+1. Logica di business nel controller:
+```ruby
+# NO ❌
+def create
+  @order = Order.new(order_params)
+  @order.calculate_total
+  @order.apply_discount
+  @order.charge_card
+end
+
+# SI ✅
+def create
+  result = OrderCreationService.call(order_params)
+  respond_with(result)
+end
+```
+
+2. Callback eccessivi:
+```ruby
+# NO ❌
+before_action :set_user
+before_action :set_organization
+before_action :set_project
+before_action :set_task
+
+# SI ✅
+before_action :set_task
+```
+
+3. Azioni non RESTful:
+```ruby
+# NO ❌
+def mark_as_complete
+  @task.complete!
+  redirect_to tasks_path
+end
+
+# SI ✅
+def update
+  @task.update(status: 'completed')
+  respond_with(@task)
+end
+```
+
+4. Mancata gestione degli errori:
+```ruby
+# NO ❌
+def show
+  @product = Product.find(params[:id])
+end
+
+# SI ✅
+def show
+  @product = Product.find(params[:id])
+rescue ActiveRecord::RecordNotFound => e
+  handle_not_found(e)
+end
+```
+```

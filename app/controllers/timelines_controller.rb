@@ -28,11 +28,8 @@ class TimelinesController < ApplicationController
     @view_type = params[:view_type] || 'weeks'
     
     if @timeline.events.any?
-      # Ordina per start_date discendente (dal più al meno recente)
-      # A parità di start_date, ordina per created_at discendente (dal più al meno recente)
-      @ordered_events = @timeline.events
-        .select('events.*')
-        .order('DATE(start_date) DESC, created_at DESC')
+      # Usa lo scope by_recency per ordinare gli eventi
+      @ordered_events = @timeline.events.by_recency
       
       @events_by_creation = @timeline.events.order(created_at: :asc).each_with_index.map { |e, i| [e.id, i + 1] }.to_h
       

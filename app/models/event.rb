@@ -3,10 +3,24 @@ class Event < ApplicationRecord
 	
 	belongs_to :timeline, touch: true
 	
+	validates :name, presence: true
 	validates :start_date, presence: true
 	validate :end_date_after_start_date, if: -> { end_date.present? }
 	
 	before_create :assign_color
+	
+	# Scope per ordinare gli eventi dal più recente al meno recente
+	scope :by_recency, -> {
+		order(start_date: :desc)
+			.order(Arel.sql('CASE WHEN end_date IS NULL THEN 0 ELSE 1 END'))
+			.order(end_date: :desc)
+	}
+	
+	# Scope per gli eventi aperti
+	scope :ongoing, -> { where(end_date: nil) }
+	
+	# Scope per gli eventi chiusi
+	scope :completed, -> { where.not(end_date: nil) }
 	
 	def duration
 		return nil unless start_date

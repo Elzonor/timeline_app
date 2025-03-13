@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_01_11_164801) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_13_180419) do
   create_table "events", force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -20,6 +20,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_01_11_164801) do
     t.datetime "start_date", null: false
     t.datetime "end_date"
     t.string "color"
+    t.index ["end_date"], name: "index_events_on_end_date"
+    t.index ["start_date"], name: "index_events_on_start_date"
+    t.index ["timeline_id"], name: "index_events_on_timeline_id"
   end
 
   create_table "timelines", force: :cascade do |t|

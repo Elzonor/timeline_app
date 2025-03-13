@@ -1,3 +1,4 @@
 {
-    "workbench.editor.openPositioning": "right"
+    "workbench.editor.openPositioning": "right",
+    "chat.editor.fontSize": 15
 }

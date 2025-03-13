@@ -9,18 +9,18 @@ class Event < ApplicationRecord
 	
 	before_create :assign_color
 	
-	# Scope per ordinare gli eventi dal più recente al meno recente
-	scope :by_recency, -> {
-		order(start_date: :desc)
-			.order(Arel.sql('CASE WHEN end_date IS NULL THEN 0 ELSE 1 END'))
-			.order(end_date: :desc)
-	}
-	
 	# Scope per gli eventi aperti
 	scope :ongoing, -> { where(end_date: nil) }
 	
 	# Scope per gli eventi chiusi
 	scope :completed, -> { where.not(end_date: nil) }
+	
+	# Scope per ordinare gli eventi dal più recente al meno recente
+	scope :by_recency, -> {
+		# Ordina prima per stato (aperti prima dei chiusi)
+		# Poi per data di inizio discendente
+		order(end_date: :asc, start_date: :desc)
+	}
 	
 	def duration
 		return nil unless start_date

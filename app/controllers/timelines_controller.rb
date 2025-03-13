@@ -4,62 +4,23 @@ class TimelinesController < ApplicationController
   # GET /timelines
   # GET /timelines.json
   def index
-    @timelines = Timeline.all
+    @timelines = Timeline.includes(:events)
+                        .select('timelines.*, COUNT(events.id) as events_count')
+                        .left_joins(:events)
+                        .group('timelines.id, timelines.created_at')
+                        .order('timelines.created_at ASC')
   end
 
   # GET /timelines/1
   # GET /timelines/1.json
   def show
-    @timeline = Timeline.find(params[:id])
     @view = params[:view] || 'days'
-    @ordered_events = @timeline.events.order(:start_date)
-    
-    # Debug logging
-    Rails.logger.debug "=== Debug Timeline Events ==="
-    @ordered_events.each do |event|
-      Rails.logger.debug "Event: #{event.name}"
-      Rails.logger.debug "  Start: #{event.start_date}"
-      Rails.logger.debug "  End: #{event.end_date}"
-      Rails.logger.debug "  Duration: #{event.end_date ? (event.end_date - event.start_date).to_i : 'ongoing'} days"
-      Rails.logger.debug "------------------------"
-    end
-    
-    # Imposta il tipo di visualizzazione (giorni, settimane, mesi, anni)
     @view_type = params[:view_type] || 'weeks'
     
-    if @timeline.events.any?
-      # Usa lo scope by_recency per ordinare gli eventi
-      @ordered_events = @timeline.events.by_recency
-      
-      @events_by_creation = @timeline.events.order(created_at: :asc).each_with_index.map { |e, i| [e.id, i + 1] }.to_h
-      
-      # Identifica i gruppi di eventi e i gap
-      @event_groups = identify_event_groups(@timeline.events.to_a)
-      
-      # Ottieni le date appropriate in base al tipo di visualizzazione
-      case @view_type
-      when 'days'
-        @time_units = @timeline.duration_details[:day_dates].reverse
-        @gap_units = identify_gap_days(@event_groups, @time_units)
-      when 'weeks'
-        @time_units = @timeline.duration_details[:week_dates].reverse
-        @gap_units = identify_gap_weeks(@event_groups, @time_units)
-      when 'months'
-        @time_units = @timeline.duration_details[:month_dates].reverse
-        @gap_units = identify_gap_months(@event_groups, @time_units)
-      when 'years'
-        @time_units = @timeline.duration_details[:year_dates].reverse
-        @gap_units = identify_gap_years(@event_groups, @time_units)
-      else
-        @time_units = @timeline.duration_details[:week_dates].reverse
-        @gap_units = identify_gap_weeks(@event_groups, @time_units)
-      end
+    if @timeline.events.loaded?
+      load_and_process_events
     else
-      @ordered_events = []
-      @events_by_creation = {}
-      @event_groups = []
-      @time_units = []
-      @gap_units = []
+      initialize_empty_collections
     end
   end
 
@@ -115,7 +76,11 @@ class TimelinesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_timeline
-      @timeline = Timeline.find(params[:id])
+      @timeline = if action_name == 'show'
+        Timeline.includes(:events).find(params[:id])
+      else
+        Timeline.find(params[:id])
+      end
     end
 
     # Only allow a list of trusted parameters through.
@@ -123,6 +88,74 @@ class TimelinesController < ApplicationController
       params.require(:timeline).permit(:name)
     end
     
+    def load_and_process_events
+      @ordered_events = sort_events_by_recency(@timeline.events)
+      @events_by_creation = create_events_creation_map(@timeline.events)
+      @event_groups = identify_event_groups(@timeline.events.to_a)
+      load_time_units_and_gaps
+    end
+
+    def initialize_empty_collections
+      @ordered_events = []
+      @events_by_creation = {}
+      @event_groups = []
+      @time_units = []
+      @gap_units = []
+    end
+
+    def sort_events_by_recency(events)
+      events.sort do |a, b|
+        if a.end_date.nil? && b.end_date.nil?
+          b.start_date <=> a.start_date
+        elsif a.end_date.nil?
+          -1
+        elsif b.end_date.nil?
+          1
+        else
+          if a.end_date == b.end_date
+            b.start_date <=> a.start_date
+          else
+            a.end_date <=> b.end_date
+          end
+        end
+      end
+    end
+
+    def create_events_creation_map(events)
+      events.sort_by(&:created_at)
+            .each_with_index
+            .map { |e, i| [e.id, i + 1] }
+            .to_h
+    end
+
+    def load_time_units_and_gaps
+      @time_units = case @view_type
+                   when 'days'
+                     @timeline.duration_details[:day_dates].reverse
+                   when 'weeks'
+                     @timeline.duration_details[:week_dates].reverse
+                   when 'months'
+                     @timeline.duration_details[:month_dates].reverse
+                   when 'years'
+                     @timeline.duration_details[:year_dates].reverse
+                   else
+                     @timeline.duration_details[:week_dates].reverse
+                   end
+
+      @gap_units = case @view_type
+                  when 'days'
+                    identify_gap_days(@event_groups, @time_units)
+                  when 'weeks'
+                    identify_gap_weeks(@event_groups, @time_units)
+                  when 'months'
+                    identify_gap_months(@event_groups, @time_units)
+                  when 'years'
+                    identify_gap_years(@event_groups, @time_units)
+                  else
+                    identify_gap_weeks(@event_groups, @time_units)
+                  end
+    end
+
     # Identifica i gruppi di eventi che si sovrappongono
     def identify_event_groups(events)
       # Ordina gli eventi per data di inizio

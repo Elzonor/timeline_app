@@ -28,7 +28,7 @@ $accent-color: #007bff;
 
 // Variabili per i colori delle linee temporali
 $timeline-standard-color: #222;
-$timeline-gap-color: #CCC;
+$timeline-gap-color: #CCCCCC;
 
 // Stili base
 body {
@@ -419,9 +419,13 @@ a.event-title-link:hover {
   min-height: 34px !important;
   
   .time-unit-line {
+    border-left: none;
     border-right: 2px dashed $timeline-gap-color;
-    background-color: transparent;
+    background: none;
+    background-color: transparent !important;
     width: 0;
+    right: 0;
+    left: auto;
   }
   
   .end-of-time-unit-line {

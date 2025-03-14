@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: timeline-app
+    env: ruby
+    buildCommand: "./bin/render-build.sh"
+    startCommand: bundle exec puma -C config/puma.rb
+    envVars:
+      - key: RAILS_MASTER_KEY
+        sync: false
+      - key: postgresql://timelinez_db_user:31Rz00J3TO1x3AALN49g05EyqGcWxqEo@dpg-cva3422j1k6c739e89c0-a.oregon-postgres.render.com/timelinez_db
+        fromDatabase:
+          name: timelinez_db
+          property: connectionString
+    healthCheckPath: /
+    autoDeploy: true 

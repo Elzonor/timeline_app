@@ -34,54 +34,6 @@
   </div>
 <% end %>
 
-<div class="events hidden">
-  <% if @timeline.events.any? %>
-    <div class="grid">
-      <div class="header">
-        <div>#</div>
-        <div><%= t('labels.name') %></div>
-        <div><%= t('labels.start_date') %></div>
-        <div><%= t('labels.end_date') %></div>
-        <div><%= t('labels.description') %></div>
-        <div></div>
-        <div></div>
-      </div>
-
-      <% @ordered_events.each do |event| %>
-        <div class="row">
-          <div><%= @events_by_creation[event.id] %></div>
-          <div><%= link_to event.name, timeline_event_path(@timeline, event), style: "color: #{event.color};" %></div>
-          <div><%= l(event.start_date, format: :short) if event.start_date %></div>
-          <div>
-            <%= event.end_date ? l(event.end_date, format: :short) : t('labels.ongoing') %>
-            <% if event.duration_details %>
-              <% details = event.duration_details %>
-              (<%= details[:days] %> <%= t('duration.days', count: details[:days]) %>,
-               <%= t('duration.span_text',
-                     weeks: pluralize(details[:weeks], t('duration.weeks.one'), t('duration.weeks.other')),
-                     months: pluralize(details[:months], t('duration.months.one'), t('duration.months.other'))) %>)
-            <% end %>
-          </div>
-          <div><%= event.description %></div>
-          <div><%= link_to edit_timeline_event_path(@timeline, event), class: 'icon-link icon-edit' do %>
-            <i class="fas fa-edit"></i>
-          <% end %></div>
-          <div><%= link_to timeline_event_path(@timeline, event), 
-                  data: { 
-                    turbo_method: :delete,
-                    turbo_confirm: t('messages.confirm')
-                  },
-                  class: 'icon-link icon-delete' do %>
-            <i class="fas fa-trash"></i>
-          <% end %></div>
-        </div>
-      <% end %>
-    </div>
-  <% else %>
-    <p><%= t('messages.no_events') %></p>
-  <% end %>
-</div>
-
 <% if @timeline.events.any? %>
   <div class="visual-timeline view-type-<%= @view_type %>">
     <% if @timeline.duration_details && @time_units.any? %>

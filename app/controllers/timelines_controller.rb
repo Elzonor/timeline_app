@@ -129,6 +129,8 @@ class TimelinesController < ApplicationController
     end
 
     def load_time_units_and_gaps
+      return initialize_empty_collections unless @timeline.duration_details
+
       @time_units = case @view_type
                    when 'days'
                      @timeline.duration_details[:day_dates].reverse

@@ -230,11 +230,6 @@ input[type="submit"] {
     // border: 1px solid rgba(255, 0, 0, 0.3);
   }
 
-  // Impostiamo una larghezza minima per la colonna degli eventi
-  .time-unit-events {
-    min-width: 200px;
-  }
-
   // Nascondiamo i testi dei giorni nella vista mesi
   &.view-type-months {
     .time-unit-date-text {
@@ -388,7 +383,7 @@ input[type="submit"] {
 
 .event-title {
   font-size: 0.9rem;
-  white-space: nowrap;
+  // white-space: nowrap;
   padding-left: 1rem;
   margin-top: -8px;
   font-weight: bold;

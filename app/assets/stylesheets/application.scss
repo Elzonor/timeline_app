@@ -309,6 +309,10 @@ input[type="submit"] {
   top: 0;
   bottom: 0;
   width: 5px;
+  
+  &.future {
+    background-color: $timeline-gap-color;
+  }
 }
 
 .timeline-week {
@@ -353,6 +357,10 @@ input[type="submit"] {
   width: 2px;
   background-color: $timeline-standard-color;
   height: 100%;
+  
+  &.future {
+    background-color: $timeline-gap-color;
+  }
 }
 
 .end-of-time-unit-line {
@@ -373,6 +381,7 @@ input[type="submit"] {
 
 .time-unit-events {
   position: relative;
+  padding-bottom: 13px;
 }
 
 .event-title-line {
@@ -385,6 +394,7 @@ input[type="submit"] {
   font-size: 0.9rem;
   // white-space: nowrap;
   padding-left: 1rem;
+  margin-bottom: 3px;
   margin-top: -8px;
   font-weight: bold;
   padding-bottom: 8px;

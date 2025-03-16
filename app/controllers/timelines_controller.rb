@@ -108,14 +108,14 @@ class TimelinesController < ApplicationController
         if a.end_date.nil? && b.end_date.nil?
           b.start_date <=> a.start_date
         elsif a.end_date.nil?
-          -1
-        elsif b.end_date.nil?
           1
+        elsif b.end_date.nil?
+          -1
         else
           if a.end_date == b.end_date
             b.start_date <=> a.start_date
           else
-            a.end_date <=> b.end_date
+            b.end_date <=> a.end_date
           end
         end
       end

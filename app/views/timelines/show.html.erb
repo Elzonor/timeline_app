@@ -71,7 +71,14 @@
               when 'weeks'
                 overlaps = event.start_date.beginning_of_week <= latest_end_date.end_of_week
               when 'months'
-                overlaps = event.start_date.beginning_of_month <= latest_end_date.end_of_month
+                # Verifica se gli eventi condividono almeno un mese
+                event_end = (event.end_date || Date.current).to_date
+                event_months = (event.start_date.to_date.beginning_of_month..event_end.end_of_month).map { |d| d.beginning_of_month }.uniq
+                current_group_months = current_group.flat_map do |e|
+                  e_end = (e.end_date || Date.current).to_date
+                  (e.start_date.to_date.beginning_of_month..e_end.end_of_month).map { |d| d.beginning_of_month }.uniq
+                end
+                overlaps = (event_months & current_group_months).any?
               when 'years'
                 overlaps = event.start_date.beginning_of_year <= latest_end_date.end_of_year
               end
@@ -120,41 +127,37 @@
             # Ordina gli eventi nel gruppo per data di inizio
             sorted_events = events.sort_by(&:start_date)
             
-            # Filtra gli eventi che durano più di un giorno
-            multi_day_events = sorted_events.select do |event|
-              !event.end_date || (event.end_date.to_date - event.start_date.to_date).to_i > 0
-            end
-            
-            # Ordina gli eventi multi-giorno per durata (dal più lungo al più corto)
-            sorted_multi_day_events = multi_day_events.sort_by do |event|
-              duration = if !event.end_date
-                # Gli eventi senza data di fine (ongoing) sono considerati i più lunghi
-                -999999  # Numero negativo per invertire l'ordine
-              else
-                # Calcola la durata in giorni
-                -(event.end_date.to_date - event.start_date.to_date).to_i  # Negativo per invertire l'ordine
-              end
-              duration
-            end
-            
-            # Assegna un indice progressivo solo agli eventi che durano più di un giorno, in ordine di durata
-            current_index = 0
-            
-            # Prima assegna indici agli eventi multi-giorno ordinati per durata
-            sorted_multi_day_events.each do |event|
-              event_to_index_in_group_by_view_type[view_type][event.id] = current_index
-              current_index += 1
-            end
-            
-            # Poi assegna indice 0 agli eventi di un solo giorno
+            # Per ogni evento nel gruppo, trova gli eventi che condividono la stessa time-unit
             sorted_events.each do |event|
-              # Verifica se l'evento dura solo un giorno
-              is_single_day = event.end_date && (event.end_date.to_date - event.start_date.to_date).to_i == 0
-              
-              if is_single_day
-                # Per gli eventi di un solo giorno, assegna indice 0 (attaccati alla linea verticale)
-                event_to_index_in_group_by_view_type[view_type][event.id] = 0
+              event_end = (event.end_date || Date.current).to_date
+              overlapping_events = sorted_events.select do |other_event|
+                next if other_event == event
+                other_end = (other_event.end_date || Date.current).to_date
+                
+                # Verifica se gli eventi condividono almeno una time-unit
+                case view_type
+                when 'days'
+                  (event.start_date.to_date..event_end).overlaps?(other_event.start_date.to_date..other_end)
+                when 'weeks'
+                  (event.start_date.to_date.beginning_of_week..event_end.end_of_week)
+                    .overlaps?(other_event.start_date.to_date.beginning_of_week..other_end.end_of_week)
+                when 'months'
+                  event_months = (event.start_date.to_date.beginning_of_month..event_end.end_of_month)
+                    .map { |d| d.beginning_of_month }.uniq
+                  other_months = (other_event.start_date.to_date.beginning_of_month..other_end.end_of_month)
+                    .map { |d| d.beginning_of_month }.uniq
+                  (event_months & other_months).any?
+                when 'years'
+                  (event.start_date.to_date.beginning_of_year..event_end.end_of_year)
+                    .overlaps?(other_event.start_date.to_date.beginning_of_year..other_end.end_of_year)
+                end
               end
+              
+              # Trova il primo indice disponibile che non è usato da eventi sovrapposti
+              used_indices = overlapping_events.map { |e| event_to_index_in_group_by_view_type[view_type][e.id] }.compact
+              available_index = (0..used_indices.size).find { |i| !used_indices.include?(i) }
+              
+              event_to_index_in_group_by_view_type[view_type][event.id] = available_index
             end
           end
         end
@@ -332,7 +335,7 @@
               <% end %>
             </div>
             <% is_future = time_unit > Date.current %>
-            <div class="time-unit-line"></div>
+            <div class="time-unit-line <%= is_future ? 'future' : '' %>"></div>
             <div class="end-of-time-unit-line" style="background-color: <%= is_future ? '#CCC' : '#222' %>;"></div>
           </div>
           <div class="time-unit-lines time-unit-gap"></div>
@@ -352,7 +355,7 @@
               <% end %>
             </div>
             <% is_future = time_unit > Date.current %>
-            <div class="time-unit-line"></div>
+            <div class="time-unit-line <%= is_future ? 'future' : '' %>"></div>
             <div class="end-of-time-unit-line" style="background-color: <%= is_future ? '#CCC' : '#222' %>;"></div>
           </div>
           <div class="time-unit-lines">
@@ -391,8 +394,8 @@
                 %>
                 
                 <% unless is_single_day_event %>
-                  <div class="event-line" 
-                       style="background-color: <%= event.color %>; 
+                  <div class="event-line <%= event.start_date > Date.current ? 'future' : '' %>" 
+                       style="background-color: <%= event.start_date > Date.current ? nil : event.color %>; 
                               left: <%= left_position %>px;
                               z-index: <%= (event.end_date || Date.current).to_time.to_i %>;"></div>
                 <% end %>

@@ -384,13 +384,15 @@
                   # Ottieni l'indice fisso dell'evento all'interno del suo gruppo
                   relative_index = event_to_index_in_group_by_view_type[@view_type][event.id]
                   
+                  # Verifica se l'evento dura solo 1 giorno
+                  is_single_day_event = event.end_date && event.start_date && (event.end_date.to_date - event.start_date.to_date).to_i == 0
+                  
                   # Calcola la posizione left della linea dell'evento
                   # Se è il primo evento del gruppo (relative_index = 0), deve essere attaccato alla linea verticale (left = 0)
                   # Altrimenti, si sposta verso destra in base all'indice relativo
-                  left_position = relative_index == 0 ? 0 : relative_index * 5
-                  
-                  # Verifica se l'evento dura solo 1 giorno
-                  is_single_day_event = event.end_date && event.start_date && (event.end_date.to_date - event.start_date.to_date).to_i == 0
+                  unless is_single_day_event
+                    left_position = relative_index == 0 ? 0 : relative_index * 6
+                  end
                 %>
                 
                 <% unless is_single_day_event %>

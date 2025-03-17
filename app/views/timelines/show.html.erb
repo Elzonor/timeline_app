@@ -391,7 +391,7 @@
                   # Se è il primo evento del gruppo (relative_index = 0), deve essere attaccato alla linea verticale (left = 0)
                   # Altrimenti, si sposta verso destra in base all'indice relativo
                   unless is_single_day_event
-                    left_position = relative_index == 0 ? 0 : relative_index * 6
+                    left_position = relative_index == 0 ? 0 : relative_index * 7
                   end
                 %>
                 
@@ -428,7 +428,7 @@
             <% end %>
           </div>
           <div class="time-unit-events">
-            <% @ordered_events.each_with_index do |event, index| %>
+            <% @ordered_events.sort_by { |event| event.created_at }.reverse.each do |event| %>
               <% event_end = event.end_date || Date.current %>
               <% 
                 # Verifica se l'evento termina nell'unità di tempo corrente

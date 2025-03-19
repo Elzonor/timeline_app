@@ -309,10 +309,6 @@ input[type="submit"] {
   top: 0;
   bottom: 0;
   width: 5px;
-  
-  &.future {
-    background-color: $timeline-gap-color;
-  }
 }
 
 .timeline-week {

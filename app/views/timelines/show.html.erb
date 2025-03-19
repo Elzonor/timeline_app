@@ -397,7 +397,7 @@
                 
                 <% unless is_single_day_event %>
                   <div class="event-line <%= event.start_date > Date.current ? 'future' : '' %>" 
-                       style="background-color: <%= event.start_date > Date.current ? nil : event.color %>; 
+                       style="background-color: <%= event.color %>; 
                               left: <%= left_position %>px;
                               z-index: <%= (event.end_date || Date.current).to_time.to_i %>;"></div>
                 <% end %>

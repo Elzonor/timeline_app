@@ -6,17 +6,25 @@ class Event < ApplicationRecord
 	validates :name, presence: true
 	validates :start_date, presence: true
 	validates :event_type, presence: true, inclusion: { in: %w[open closed] }
+	validates :event_duration, presence: true, inclusion: { in: %w[1-day multi-day] }
 	validate :end_date_after_start_date, if: -> { end_date.present? }
 	validate :future_events_must_be_closed
 	
 	before_create :assign_color
 	before_save :update_event_type
+	before_save :update_event_duration
 	
 	# Scope per gli eventi aperti
 	scope :ongoing, -> { where(event_type: 'open') }
 	
 	# Scope per gli eventi chiusi
 	scope :completed, -> { where(event_type: 'closed') }
+	
+	# Scope per gli eventi di un giorno
+	scope :one_day, -> { where(event_duration: '1-day') }
+	
+	# Scope per gli eventi multi-giorno
+	scope :multi_day, -> { where(event_duration: 'multi-day') }
 	
 	# Scope per ordinare gli eventi dal più recente al meno recente
 	scope :by_recency, -> {
@@ -54,6 +62,15 @@ class Event < ApplicationRecord
 
 	def update_event_type
 		self.event_type = end_date.present? ? 'closed' : 'open'
+	end
+
+	def update_event_duration
+		# Un evento è 1-day solo se ha sia start_date che end_date valorizzate e uguali
+		self.event_duration = if end_date.present? && start_date == end_date
+			'1-day'
+		else
+			'multi-day'
+		end
 	end
 
 	def future_events_must_be_closed

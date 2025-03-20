@@ -1,0 +1,16 @@
+---
+description: This rule explains SQLite database design patterns and performance considerations.
+globs: *.sql
+alwaysApply: false
+---
+
+# SQLite rules
+
+- Use appropriate data types for columns (INTEGER, TEXT, REAL, BLOB, NULL)
+- Create indexes for frequently queried columns
+- Enable foreign key support with `PRAGMA foreign_keys = ON`
+- Use transactions for multiple operations
+- Use prepared statements to prevent SQL injection
+- Use EXPLAIN QUERY PLAN to analyze query performance
+- Consider using WAL journal mode for better concurrency
+- Use VACUUM periodically to optimize database size

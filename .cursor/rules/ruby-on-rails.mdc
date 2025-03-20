@@ -1,0 +1,29 @@
+---
+description: This rule explains Ruby on Rails conventions and best practices for backend development.
+globs: *.rb
+alwaysApply: false
+---
+
+# Ruby on Rails rules
+
+- Use Rails generators to create models, controllers, and migrations.
+- Follow Rails naming conventions (singular for models, plural for controllers).
+- Use ActiveRecord methods instead of raw SQL queries when possible.
+- Avoid N+1 queries by using eager loading with `includes`, `preload`, or `eager_load`:
+
+```ruby
+# Good pattern
+users = User.includes(:posts)
+users.each { |user| puts user.posts.count }
+```
+
+- Use strong parameters in controllers for mass assignment protection:
+
+```ruby
+def user_params
+  params.require(:user).permit(:name, :email, :password)
+end
+```
+
+- Use scopes for common query patterns and concerns to share code between models.
+- Use service objects for complex business logic that doesn't belong in models or controllers.

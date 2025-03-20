@@ -5,21 +5,24 @@ class Event < ApplicationRecord
 	
 	validates :name, presence: true
 	validates :start_date, presence: true
+	validates :event_type, presence: true, inclusion: { in: %w[open closed] }
 	validate :end_date_after_start_date, if: -> { end_date.present? }
+	validate :future_events_must_be_closed
 	
 	before_create :assign_color
+	before_save :update_event_type
 	
 	# Scope per gli eventi aperti
-	scope :ongoing, -> { where(end_date: nil) }
+	scope :ongoing, -> { where(event_type: 'open') }
 	
 	# Scope per gli eventi chiusi
-	scope :completed, -> { where.not(end_date: nil) }
+	scope :completed, -> { where(event_type: 'closed') }
 	
 	# Scope per ordinare gli eventi dal più recente al meno recente
 	scope :by_recency, -> {
 		# Ordina prima per stato (aperti prima dei chiusi)
 		# Poi per data di inizio discendente
-		order(end_date: :asc, start_date: :desc)
+		order(event_type: :desc, start_date: :desc)
 	}
 	
 	def duration
@@ -47,6 +50,16 @@ class Event < ApplicationRecord
 		
 		# Imposta il colore predefinito a "#00A3D7"
 		self.color = "#00A3D7"
+	end
+
+	def update_event_type
+		self.event_type = end_date.present? ? 'closed' : 'open'
+	end
+
+	def future_events_must_be_closed
+		if start_date&.future? && event_type == 'open'
+			errors.add(:event_type, "gli eventi futuri devono avere una data di fine")
+		end
 	end
 
 	def count_weeks

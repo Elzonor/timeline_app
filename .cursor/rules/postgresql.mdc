@@ -1,0 +1,16 @@
+---
+description: This rule explains PostgreSQL database design patterns and advanced features usage.
+globs: *.sql
+alwaysApply: false
+---
+
+# PostgreSQL rules
+
+- Use appropriate data types (e.g., SERIAL for IDs, specialized types like JSONB, POINT when appropriate)
+- Create indexes for frequently queried columns (B-tree for equality/range, GIN for full-text search)
+- Use constraints to enforce data integrity (CHECK, FOREIGN KEY, UNIQUE)
+- Use EXPLAIN ANALYZE to optimize queries
+- Use Common Table Expressions (CTEs) for complex queries
+- Use prepared statements to prevent SQL injection
+- Use JSON functions for working with JSON data
+- Use transactions for operations that must be atomic

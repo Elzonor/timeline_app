@@ -1,9 +1,18 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: MyString
-  description: MyText
+  name: Past Event
+  description: A past event
+  start_date: <%= Date.yesterday %>
+  timeline: one
+  event_type: open
+  event_duration: multi-day
 
 two:
-  name: MyString
-  description: MyText
+  name: Future Event
+  description: A future event
+  start_date: <%= Date.tomorrow %>
+  end_date: <%= Date.tomorrow + 1.day %>
+  timeline: one
+  event_type: closed
+  event_duration: multi-day

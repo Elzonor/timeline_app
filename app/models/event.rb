@@ -5,6 +5,7 @@ class Event < ApplicationRecord
 	
 	validates :name, presence: true
 	validates :start_date, presence: true
+	validates :end_date, presence: true, if: :future_event?
 	validates :event_type, presence: true, inclusion: { in: %w[open closed] }
 	validates :event_duration, presence: true, inclusion: { in: %w[1-day multi-day] }
 	validate :end_date_after_start_date, if: -> { end_date.present? }
@@ -47,6 +48,7 @@ class Event < ApplicationRecord
 	private
 	
 	def end_date_after_start_date
+		return unless start_date && end_date
 		if end_date < start_date
 			errors.add(:end_date, "deve essere successiva alla data di inizio")
 		end
@@ -108,5 +110,9 @@ class Event < ApplicationRecord
 	def date_range_includes_day?(day)
 		range_end = end_date || Date.current
 		(start_date..range_end).cover?(day)
+	end
+
+	def future_event?
+		start_date&.future?
 	end
 end

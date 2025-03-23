@@ -61,7 +61,7 @@ module Timelines
       end
 
       def event_params
-        params.require(:event).permit(:name, :description, :start_date, :end_date, :color)
+        params.require(:event).permit(:name, :description, :color, :start_date, :end_date)
       end
   end
 end 

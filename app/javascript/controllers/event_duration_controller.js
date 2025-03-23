@@ -108,6 +108,7 @@ const EventDurationManager = {
         this.state.hasValidDates = true;
         this.elements.validationMessage.style.display = 'none';
       }
+
     }
 
     this.elements.submitButton.disabled = !this.state.hasValidDates;

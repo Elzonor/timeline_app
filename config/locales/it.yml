@@ -107,4 +107,13 @@ it:
     timeline_destroyed: "Timeline eliminata con successo"
   
   # Titolo dell'applicazione
-  app_name: "Timeline" 
+  app_name: "Timeline"
+
+  activerecord:
+    errors:
+      models:
+        event:
+          attributes:
+            end_date:
+              blank: "non può essere lasciato vuoto"
+              invalid: "non è valida" 

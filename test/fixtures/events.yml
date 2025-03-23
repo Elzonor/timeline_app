@@ -1,18 +1,23 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
+# Eventi di test
+
 one:
-  name: Past Event
-  description: A past event
-  start_date: <%= Date.yesterday %>
+  name: "Evento di un giorno"
+  description: "Questo è un evento che dura un giorno"
+  start_date: <%= Date.today %>
+  end_date: <%= Date.today %>
+  event_type: "closed"
+  event_duration: "1-day"
   timeline: one
-  event_type: open
-  event_duration: multi-day
+  color: "#00A3D7"
 
 two:
-  name: Future Event
-  description: A future event
-  start_date: <%= Date.tomorrow %>
-  end_date: <%= Date.tomorrow + 1.day %>
+  name: "Evento multi-giorno"
+  description: "Questo è un evento che dura più giorni"
+  start_date: <%= Date.today %>
+  end_date: <%= Date.today + 2.days %>
+  event_type: "closed"
+  event_duration: "multi-day"
   timeline: one
-  event_type: closed
-  event_duration: multi-day
+  color: "#00A3D7"

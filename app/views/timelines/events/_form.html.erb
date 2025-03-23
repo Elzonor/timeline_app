@@ -34,23 +34,45 @@
         <%= radio_button_tag :duration_type, '1-day', event.event_duration == '1-day' || event.new_record?, 
             class: 'duration-radio', id: 'duration_type_single' %>
         <label for="duration_type_single"><%= t('labels.duration.one_day') %></label>
+        <div class="date-container single-day-container">
+          <%# Posiziona i campi data qui se è un evento di un giorno %>
+          <% if event.event_duration == '1-day' || event.new_record? %>
+            <div id="date-fields-container" class="date-range-fields" style="display: flex;">
+              <div class="date-field">
+                <label><%= t('labels.duration.from') %></label>
+                <%= form.date_field :start_date, class: 'multi-day-start date-field', placeholder: 'Choose date...', 
+                    data: { controller: 'datepicker' } %>
+              </div>
+              <div class="date-field">
+                <label><%= t('labels.duration.to') %></label>
+                <%= form.date_field :end_date, class: 'multi-day-end date-field', placeholder: 'Choose date...', 
+                    data: { controller: 'datepicker' } %>
+              </div>
+            </div>
+          <% end %>
+        </div>
       </div>
 
       <div class="duration-option">
         <%= radio_button_tag :duration_type, 'multi-day', event.event_duration == 'multi-day',
             class: 'duration-radio', id: 'duration_type_multi' %>
         <label for="duration_type_multi"><%= t('labels.duration.multiple_days') %></label>
-        <div class="date-range-fields" style="display: flex;">
-          <div class="date-field">
-            <label><%= t('labels.duration.from') %></label>
-            <%= form.date_field :start_date, class: 'multi-day-start date-field', placeholder: 'Choose date...', 
-                data: { controller: 'datepicker' } %>
-          </div>
-          <div class="date-field">
-            <label><%= t('labels.duration.to') %></label>
-            <%= form.date_field :end_date, class: 'multi-day-end date-field', placeholder: 'Choose date...', 
-                data: { controller: 'datepicker' } %>
-          </div>
+        <div class="date-container multi-day-container">
+          <%# Posiziona i campi data qui se è un evento multi-giorno %>
+          <% if event.event_duration == 'multi-day' %>
+            <div id="date-fields-container" class="date-range-fields" style="display: flex;">
+              <div class="date-field">
+                <label><%= t('labels.duration.from') %></label>
+                <%= form.date_field :start_date, class: 'multi-day-start date-field', placeholder: 'Choose date...', 
+                    data: { controller: 'datepicker' } %>
+              </div>
+              <div class="date-field">
+                <label><%= t('labels.duration.to') %></label>
+                <%= form.date_field :end_date, class: 'multi-day-end date-field', placeholder: 'Choose date...', 
+                    data: { controller: 'datepicker' } %>
+              </div>
+            </div>
+          <% end %>
         </div>
       </div>
     </div>
@@ -84,23 +106,46 @@
       const multiDayEnd = document.querySelector('.multi-day-end');
       const singleDayRadio = document.querySelector('#duration_type_single');
       const multiDayRadio = document.querySelector('#duration_type_multi');
+      const dateFieldsContainer = document.querySelector('#date-fields-container');
+      const singleDayContainer = document.querySelector('.single-day-container');
+      const multiDayContainer = document.querySelector('.multi-day-container');
+
+      function moveDateFields(targetContainer) {
+        // Sposta i campi data nel contenitore appropriato
+        if (dateFieldsContainer.parentElement !== targetContainer) {
+          targetContainer.appendChild(dateFieldsContainer);
+        }
+      }
+
+      function handleRadioChange() {
+        if (singleDayRadio.checked) {
+          moveDateFields(singleDayContainer);
+        } else {
+          moveDateFields(multiDayContainer);
+        }
+      }
 
       // Imposta lo stato iniziale
       function setInitialState() {
         // Se è un nuovo evento, seleziona "1-day" come default
         if (!multiDayStart.value) {
           singleDayRadio.checked = true;
-          return;
-        }
-
-        // Per eventi esistenti, seleziona in base a event_duration
-        const currentDurationType = document.querySelector('#current_duration_type').value;
-        if (currentDurationType === 'multi-day') {
-          multiDayRadio.checked = true;
         } else {
-          singleDayRadio.checked = true;
+          // Per eventi esistenti, seleziona in base a event_duration
+          const currentDurationType = document.querySelector('#current_duration_type').value;
+          if (currentDurationType === 'multi-day') {
+            multiDayRadio.checked = true;
+          } else {
+            singleDayRadio.checked = true;
+          }
         }
+        // Sposta i campi data nella posizione corretta
+        handleRadioChange();
       }
+
+      // Aggiungi event listener per i radio button
+      singleDayRadio.addEventListener('change', handleRadioChange);
+      multiDayRadio.addEventListener('change', handleRadioChange);
 
       // Inizializza lo stato
       setInitialState();

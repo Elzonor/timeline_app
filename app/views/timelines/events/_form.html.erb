@@ -27,18 +27,18 @@
 
   <div id="event-duration" class="form-data-block">
     <%# Campo nascosto per mantenere retrocompatibilità %>
-    <%= hidden_field_tag :current_duration_type, event.end_date && event.start_date != event.end_date ? 'multi-day' : '1-day' %>
+    <%= hidden_field_tag :current_duration_type, event.event_duration %>
 
     <div class="field duration-type">
       <div class="duration-option">
-        <%= radio_button_tag :duration_type, '1-day', event.end_date.nil? || event.start_date == event.end_date, 
-            class: 'duration-radio', id: 'duration_type_single', disabled: true %>
+        <%= radio_button_tag :duration_type, '1-day', event.event_duration == '1-day' || event.new_record?, 
+            class: 'duration-radio', id: 'duration_type_single' %>
         <label for="duration_type_single"><%= t('labels.duration.one_day') %></label>
       </div>
 
       <div class="duration-option">
-        <%= radio_button_tag :duration_type, 'multi-day', event.end_date && event.start_date != event.end_date,
-            class: 'duration-radio', id: 'duration_type_multi', disabled: true %>
+        <%= radio_button_tag :duration_type, 'multi-day', event.event_duration == 'multi-day',
+            class: 'duration-radio', id: 'duration_type_multi' %>
         <label for="duration_type_multi"><%= t('labels.duration.multiple_days') %></label>
         <div class="date-range-fields" style="display: flex;">
           <div class="date-field">
@@ -82,14 +82,23 @@
     document.addEventListener('DOMContentLoaded', function() {
       const multiDayStart = document.querySelector('.multi-day-start');
       const multiDayEnd = document.querySelector('.multi-day-end');
+      const singleDayRadio = document.querySelector('#duration_type_single');
+      const multiDayRadio = document.querySelector('#duration_type_multi');
 
       // Imposta lo stato iniziale
       function setInitialState() {
-        // Seleziona il radio button appropriato in base alle date
-        if (multiDayStart.value && (!multiDayEnd.value || multiDayStart.value === multiDayEnd.value)) {
-          document.querySelector('input[value="1-day"]').checked = true;
-        } else if (multiDayStart.value && multiDayEnd.value) {
-          document.querySelector('input[value="multi-day"]').checked = true;
+        // Se è un nuovo evento, seleziona "1-day" come default
+        if (!multiDayStart.value) {
+          singleDayRadio.checked = true;
+          return;
+        }
+
+        // Per eventi esistenti, seleziona in base a event_duration
+        const currentDurationType = document.querySelector('#current_duration_type').value;
+        if (currentDurationType === 'multi-day') {
+          multiDayRadio.checked = true;
+        } else {
+          singleDayRadio.checked = true;
         }
       }
 

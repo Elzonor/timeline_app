@@ -19,7 +19,8 @@ module Timelines
 
     def create
       @event = @timeline.events.new(event_params)
-
+      process_duration_type
+      
       respond_to do |format|
         if @event.save
           format.html { redirect_to timeline_path(@timeline), notice: t('messages.event_created') }
@@ -32,6 +33,8 @@ module Timelines
     end
 
     def update
+      process_duration_type
+      
       respond_to do |format|
         if @event.update(event_params)
           format.html { redirect_to timeline_path(@timeline), notice: t('messages.event_updated') }
@@ -61,7 +64,22 @@ module Timelines
       end
 
       def event_params
-        params.require(:event).permit(:name, :description, :color, :start_date, :end_date)
+        params.require(:event).permit(:name, :description, :color, :start_date, :end_date, :event_type, :event_duration)
+      end
+      
+      # Processa il parametro duration_type e imposta event_type e event_duration
+      def process_duration_type
+        return unless params[:duration_type].present?
+        
+        if params[:duration_type] == '1-day'
+          @event.event_duration = '1-day'
+          @event.end_date = @event.start_date if @event.start_date.present?
+        elsif params[:duration_type] == 'multi-day'
+          @event.event_duration = 'multi-day'
+        end
+        
+        # Imposta event_type su 'closed' se c'è una data di fine, altrimenti 'open'
+        @event.event_type = @event.end_date.present? ? 'closed' : 'open'
       end
   end
 end 

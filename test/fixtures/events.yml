@@ -7,8 +7,8 @@ one:
   start_date: <%= Date.yesterday %>
   end_date: <%= Date.yesterday %>
   timeline: one
-  event_type: single_day
-  event_duration: one_day
+  event_type: closed
+  event_duration: 1-day
 
 two:
   name: Evento di più giorni
@@ -17,5 +17,5 @@ two:
   start_date: <%= Date.tomorrow %>
   end_date: <%= Date.tomorrow + 1.day %>
   timeline: one
-  event_type: multi_day
-  event_duration: multi_day
+  event_type: closed
+  event_duration: multi-day

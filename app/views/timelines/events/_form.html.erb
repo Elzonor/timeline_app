@@ -35,7 +35,7 @@
             class: 'duration-radio', id: 'duration_type_single' %>
         <label for="duration_type_single"><%= t('labels.duration.one_day') %></label>
         <div class="date-container single-day-container">
-          <%# Posiziona i campi data qui se è un evento di un giorno %>
+          <%# Contenitore dei campi data - mostrato qui se è un evento di un giorno %>
           <% if event.event_duration == '1-day' || event.new_record? %>
             <div id="date-fields-container" class="date-range-fields" style="display: flex;">
               <div class="date-field">
@@ -58,7 +58,7 @@
             class: 'duration-radio', id: 'duration_type_multi' %>
         <label for="duration_type_multi"><%= t('labels.duration.multiple_days') %></label>
         <div class="date-container multi-day-container">
-          <%# Posiziona i campi data qui se è un evento multi-giorno %>
+          <%# Contenitore dei campi data - mostrato qui se è un evento multi-giorno %>
           <% if event.event_duration == 'multi-day' %>
             <div id="date-fields-container" class="date-range-fields" style="display: flex;">
               <div class="date-field">
@@ -112,7 +112,7 @@
 
       function moveDateFields(targetContainer) {
         // Sposta i campi data nel contenitore appropriato
-        if (dateFieldsContainer.parentElement !== targetContainer) {
+        if (dateFieldsContainer && dateFieldsContainer.parentElement !== targetContainer) {
           targetContainer.appendChild(dateFieldsContainer);
         }
       }
@@ -125,30 +125,9 @@
         }
       }
 
-      // Imposta lo stato iniziale
-      function setInitialState() {
-        // Se è un nuovo evento, seleziona "1-day" come default
-        if (!multiDayStart.value) {
-          singleDayRadio.checked = true;
-        } else {
-          // Per eventi esistenti, seleziona in base a event_duration
-          const currentDurationType = document.querySelector('#current_duration_type').value;
-          if (currentDurationType === 'multi-day') {
-            multiDayRadio.checked = true;
-          } else {
-            singleDayRadio.checked = true;
-          }
-        }
-        // Sposta i campi data nella posizione corretta
-        handleRadioChange();
-      }
-
       // Aggiungi event listener per i radio button
       singleDayRadio.addEventListener('change', handleRadioChange);
       multiDayRadio.addEventListener('change', handleRadioChange);
-
-      // Inizializza lo stato
-      setInitialState();
     });
   </script>
 <% end %>

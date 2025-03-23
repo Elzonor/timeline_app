@@ -3,51 +3,73 @@ require "application_system_test_case"
 class EventsTest < ApplicationSystemTestCase
   setup do
     @timeline = timelines(:one)
-    @event = events(:one)  # evento 1-day
-    @multi_day_event = events(:two)  # evento multi-day
+    @one_day_event = events(:one)
+    @multi_day_event = events(:two)
   end
 
-  test "i campi data sono posizionati correttamente per un nuovo evento" do
-    visit new_timeline_event_path(@timeline)
+  test "visiting the index" do
+    visit timeline_path(@timeline)
+    assert_selector "h1", text: @timeline.name
+  end
+
+  test "creating a Event" do
+    visit timeline_path(@timeline)
+    click_on "Aggiungi evento"
+
+    fill_in "event[name]", with: "Nuovo Evento"
+    fill_in "event[description]", with: "Descrizione evento"
+    fill_in "event[color]", with: "#000000"
+    choose "Un giorno"
+    fill_in "event[start_date]", with: Date.current
+    fill_in "event[end_date]", with: Date.current
+
+    click_on "Crea evento"
+
+    assert_text "Evento creato"
+  end
+
+  test "updating a Event" do
+    visit timeline_path(@timeline)
+    within("#event_#{@one_day_event.id}") do
+      click_on "Modifica"
+    end
+
+    fill_in "event[name]", with: "Evento Aggiornato"
+    click_on "Aggiorna evento"
+
+    assert_text "Evento aggiornato"
+  end
+
+  test "destroying a Event" do
+    visit timeline_path(@timeline)
+    within("#event_#{@one_day_event.id}") do
+      accept_confirm do
+        click_on "elimina evento"
+      end
+    end
+
+    assert_text "Evento eliminato"
+  end
+
+  test "campi data sono posizionati correttamente nel form di modifica per evento di un giorno" do
+    visit edit_timeline_event_path(@timeline, @one_day_event)
     
-    # Verifica che il radio button "1-day" sia selezionato di default
-    assert_selector "#duration_type_single[checked]"
-    
-    # Verifica che i campi data siano nel contenitore single-day
     within(".single-day-container") do
       assert_selector "#date-fields-container"
     end
-    
-    # Quando si seleziona "multi-day"
-    find("#duration_type_multi").click
-    
-    # Verifica che i campi data si spostino nel contenitore multi-day
     within(".multi-day-container") do
-      assert_selector "#date-fields-container"
+      assert_no_selector "#date-fields-container"
     end
   end
 
-  test "i campi data sono posizionati correttamente per un evento esistente 1-day" do
-    visit edit_timeline_event_path(@timeline, @event)
-    
-    # Verifica che il radio button "1-day" sia selezionato
-    assert_selector "#duration_type_single[checked]"
-    
-    # Verifica che i campi data siano nel contenitore single-day
-    within(".single-day-container") do
-      assert_selector "#date-fields-container"
-    end
-  end
-
-  test "i campi data sono posizionati correttamente per un evento esistente multi-day" do
+  test "campi data sono posizionati correttamente nel form di modifica per evento di più giorni" do
     visit edit_timeline_event_path(@timeline, @multi_day_event)
     
-    # Verifica che il radio button "multi-day" sia selezionato
-    assert_selector "#duration_type_multi[checked]"
-    
-    # Verifica che i campi data siano nel contenitore multi-day
     within(".multi-day-container") do
       assert_selector "#date-fields-container"
+    end
+    within(".single-day-container") do
+      assert_no_selector "#date-fields-container"
     end
   end
 end

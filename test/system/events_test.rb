@@ -20,7 +20,6 @@ class EventsTest < ApplicationSystemTestCase
     fill_in "event[description]", with: "Descrizione evento"
     fill_in "event[color]", with: "#000000"
     
-    # Usa gli ID per i radio button
     find("#duration_type_single").click
     
     fill_in "event[start_date]", with: Date.current
@@ -67,20 +66,16 @@ class EventsTest < ApplicationSystemTestCase
   test "campi data sono posizionati correttamente nel form di modifica per evento di un giorno" do
     visit edit_timeline_event_path(@timeline, @one_day_event)
     
-    # Aspetta che il JavaScript sposti i campi data nel contenitore corretto
     sleep 0.5
     assert_selector "#date-fields-container", count: 1
-    # Verifica che il radio button per eventi di un giorno sia selezionato
     assert_selector "#duration_type_single[checked]"
   end
 
   test "campi data sono posizionati correttamente nel form di modifica per evento di più giorni" do
     visit edit_timeline_event_path(@timeline, @multi_day_event)
     
-    # Aspetta che il JavaScript sposti i campi data nel contenitore corretto
     sleep 0.5
     assert_selector "#date-fields-container", count: 1
-    # Verifica che il radio button per eventi di più giorni sia selezionato
     assert_selector "#duration_type_multi[checked]"
   end
 end

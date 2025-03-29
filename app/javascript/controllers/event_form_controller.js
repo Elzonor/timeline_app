@@ -1,35 +1,91 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Gestisce lo spostamento dei campi data tra i contenitori single-day e multi-day
 export default class extends Controller {
-  static targets = ["dateFieldsContainer", "singleDayContainer", "multiDayContainer", "singleDayRadio", "multiDayRadio"]
+  static targets = [
+    "form",
+    "singleDayRadio", 
+    "multiDayRadio",
+    "dateFields",
+    "singleDayContainer",
+    "multiDayContainer",
+    "startDate",
+    "endDate",
+    "submitButton",
+    "deleteButton"
+  ]
+
+  static values = {
+    durationType: { type: String, default: "single" },
+    currentDurationType: String
+  }
 
   connect() {
-    // Inizializzazione all'avvio del controller
-    this.updateFieldsPosition()
+    // Inizializzazione del form
+    this.currentDurationTypeValue = this.element.querySelector("#current_duration_type").value
+    this.durationTypeValue = this.singleDayRadioTarget.checked ? "single" : "multi"
+    this.updateFormState()
   }
 
-  // Chiamata quando cambia la selezione dei radio button
-  toggleDateFields() {
-    this.updateFieldsPosition()
+  // Gestione cambio tipo durata
+  toggleDurationType(event) {
+    this.durationTypeValue = event.currentTarget.value === "1-day" ? "single" : "multi"
+    this.updateFormState()
   }
 
-  // Aggiorna la posizione dei campi data in base al radio button selezionato
-  updateFieldsPosition() {
-    if (!this.hasDateFieldsContainerTarget) return
-    
-    // Verifica quale radio button è selezionato
-    if (this.hasSingleDayRadioTarget && this.singleDayRadioTarget.checked) {
-      this.moveDateFields(this.singleDayContainerTarget)
-    } else if (this.hasMultiDayRadioTarget && this.multiDayRadioTarget.checked) {
-      this.moveDateFields(this.multiDayContainerTarget)
+  // Aggiornamento stato del form
+  updateFormState() {
+    this.moveDateFields()
+    this.toggleEndDateVisibility()
+    this.validateDates()
+  }
+
+  // Spostamento dei campi data
+  moveDateFields() {
+    const targetContainer = this.durationTypeValue === "single" 
+      ? this.singleDayContainerTarget 
+      : this.multiDayContainerTarget
+
+    if (this.dateFieldsTarget.parentElement !== targetContainer) {
+      targetContainer.appendChild(this.dateFieldsTarget)
     }
   }
 
-  // Sposta i campi data nel contenitore specificato
-  moveDateFields(targetContainer) {
-    if (this.dateFieldsContainerTarget.parentElement !== targetContainer) {
-      targetContainer.appendChild(this.dateFieldsContainerTarget)
+  // Gestione visibilità campo end_date
+  toggleEndDateVisibility() {
+    const endDateField = this.endDateTarget.closest('.date-field')
+    if (this.durationTypeValue === "single") {
+      endDateField.classList.add("hidden")
+    } else {
+      endDateField.classList.remove("hidden")
+    }
+  }
+
+  // Validazione date
+  validateDates() {
+    const startDate = this.startDateTarget.value
+    const endDate = this.endDateTarget.value
+
+    if (this.durationTypeValue === "single") {
+      this.endDateTarget.value = startDate
+    } else {
+      // Se stiamo passando da single a multi e le date sono uguali, resettiamo end_date
+      if (this.currentDurationTypeValue === "1-day" && endDate === startDate) {
+        this.endDateTarget.value = ""
+      }
+    }
+  }
+
+  // Gestione submit form
+  submitForm(event) {
+    if (this.durationTypeValue === "single") {
+      this.endDateTarget.value = this.startDateTarget.value
+    }
+  }
+
+  // Gestione eliminazione evento
+  deleteEvent(event) {
+    if (!confirm("Sei sicuro di voler eliminare questo evento?")) {
+      event.preventDefault()
     }
   }
 } 

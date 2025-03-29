@@ -1,7 +1,8 @@
 <%= form_with(model: [@timeline, event], local: true, 
               html: { class: 'events-form', 
                       data: { controller: "event-form",
-                              action: "submit->event-form#submitForm" },
+                             event_form_target: "form",
+                             action: "submit->event-form#submitForm" },
                       novalidate: true }) do |form| %>
   <% if event.errors.any? %>
     <div id="error_explanation">
@@ -16,7 +17,6 @@
   <% end %>
   
   <div id="event-description" class="form-data-block">
-
     <div class="field">
       <%= form.label :name, t('labels.name') %>
       <%= form.text_field :name, autocomplete: "off" %>
@@ -26,7 +26,6 @@
       <%= form.label :description, t('labels.description') %>
       <%= form.text_area :description %>
     </div>
-
   </div>
 
   <div id="event-duration" class="form-data-block">
@@ -51,56 +50,83 @@
 
       <div class="duration-option">
         <%= radio_button_tag :duration_type, 'multi-day', event.event_duration == 'multi-day',
-            class: 'duration-radio', id: 'duration_type_multi' %>
+            class: 'duration-radio', 
+            id: 'duration_type_multi',
+            data: { 
+              event_form_target: "multiDayRadio",
+              action: "change->event-form#toggleDurationType"
+            } %>
         <label for="duration_type_multi"><%= t('labels.duration.multiple_days') %></label>
-        <div class="multi-day-container-option date-container">
+        <div class="multi-day-container-option date-container" 
+             data-event-form-target="multiDayContainer">
           <%# I campi data verranno spostati qui tramite JavaScript se viene selezionato "Dura più giorni" %>
         </div>
       </div>
 
       <%# Contenitore dei campi data - lo posizioniamo direttamente nel contenitore appropriato %>
       <div id="date-fields-container" class="date-range-fields" 
-           data-event-form-target="dateFields" style="display: flex;">
+           data-event-form-target="dateFields">
         <div class="date-field">
           <label><%= t('labels.duration.from') %></label>
           <%= form.date_field :start_date, 
-                               class: 'multi-day-start date-field', 
-                               data: { event_form_target: "startDate" },
-                               placeholder: 'Choose date...' %>
+                             class: 'multi-day-start date-field', 
+                             data: { event_form_target: "startDate" },
+                             placeholder: 'Choose date...' %>
         </div>
         <div class="date-field">
           <label><%= t('labels.duration.to') %></label>
           <%= form.date_field :end_date, 
-                               class: 'multi-day-end date-field', 
-                               data: { event_form_target: "endDate" },
-                               placeholder: 'Choose date...',
-                               required: false,
-                               novalidate: true %>
+                             class: 'multi-day-end date-field', 
+                             data: { event_form_target: "endDate" },
+                             placeholder: 'Choose date...' %>
         </div>
       </div>
     </div>
   </div>
 
   <div id="event-color" class="form-data-block">
-
     <div class="field color-picker">
       <%= form.label :color, t('labels.color') %>
       <%= form.color_field :color, value: event.color.present? ? event.color : "#00A3D7" %>
     </div>
-
   </div>
 
   <div class="actions">
-    <%= form.submit event.new_record? ? t('actions.create_event') : t('actions.update_event'), class: 'button' %>
+    <%= form.submit event.new_record? ? t('actions.create_event') : t('actions.update_event'), 
+                    class: 'button',
+                    data: { event_form_target: "submitButton" } %>
     oppure <%= link_to 'torna alla timeline', timeline_path(@timeline), class: 'back-link' %>
     <% unless event.new_record? %>
-      | <%= render 'timelines/events/delete_button', timeline: @timeline, event: event %>
+      | <%= button_to t('actions.delete_event'),
+                     timeline_event_path(@timeline, event),
+                     method: :delete,
+                     class: 'delete-link',
+                     form: { class: 'inline-form' },
+                     onclick: "return confirm('Sei sicuro di voler eliminare questo evento?')" %>
     <% end %>
   </div>
 
   <style>
     .hidden {
       display: none !important;
+    }
+    
+    .inline-form {
+      display: inline;
+    }
+    
+    .delete-link {
+      background: none;
+      border: none;
+      color: #dc3545;
+      text-decoration: underline;
+      cursor: pointer;
+      padding: 0;
+      font: inherit;
+    }
+    
+    .delete-link:hover {
+      color: #bd2130;
     }
   </style>
 

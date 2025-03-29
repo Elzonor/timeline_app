@@ -15,6 +15,7 @@ alwaysApply: true
   - Prefer iteration and modularization over code duplication.
   - Use descriptive variable and method names (e.g., user_signed_in?, calculate_total).
   - Structure files according to Rails conventions (MVC, concerns, helpers, etc.).
+  — Never write CSS code inside HTML
 
 
 ## Naming Conventions
@@ -44,7 +45,7 @@ alwaysApply: true
 
 ## UI and Styling
   - Use Hotwire (Turbo and Stimulus) for dynamic, SPA-like interactions.
-  - Implement responsive design with Tailwind CSS.
+  - Implement responsive design with SCSS.
   - Use Rails view helpers and partials to keep views DRY.
 
 

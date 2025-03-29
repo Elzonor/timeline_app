@@ -97,10 +97,10 @@
                     data: { event_form_target: "submitButton" } %>
     oppure <%= link_to 'torna alla timeline', timeline_path(@timeline), class: 'back-link' %>
     <% unless event.new_record? %>
-      | <%= button_to t('actions.delete_event'),
+      | <%= button_to "elimina evento",
                      timeline_event_path(@timeline, event),
                      method: :delete,
-                     class: 'delete-link',
+                     class: 'delete-button',
                      form: { class: 'inline-form' },
                      onclick: "return confirm('Sei sicuro di voler eliminare questo evento?')" %>
     <% end %>
@@ -115,18 +115,19 @@
       display: inline;
     }
     
-    .delete-link {
+    .delete-button {
       background: none;
       border: none;
-      color: #dc3545;
-      text-decoration: underline;
-      cursor: pointer;
       padding: 0;
       font: inherit;
+      cursor: pointer;
+      color: #dc2626;
+      text-decoration: none;
     }
     
-    .delete-link:hover {
-      color: #bd2130;
+    .delete-button:hover {
+      text-decoration: underline;
+      background: none !important;
     }
   </style>
 

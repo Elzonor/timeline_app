@@ -13,6 +13,7 @@ Le view sono responsabili della presentazione dei dati all'utente. Devono essere
 - Delega la logica di presentazione ai **Helper** o **Presenter**
 - Implementa **i18n** per tutti i testi
 - Evita logica di business nelle view
+- Mai inserire regole CSS all'interno delle view per la **graficizzazione** degli elementi, spostale sempre in fogli di stile esterni
 
 ## Struttura Standard
 ```erb

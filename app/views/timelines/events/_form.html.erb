@@ -94,12 +94,7 @@
     <%= form.submit event.new_record? ? t('actions.create_event') : t('actions.update_event'), class: 'button' %>
     oppure <%= link_to 'torna alla timeline', timeline_path(@timeline), class: 'back-link' %>
     <% unless event.new_record? %>
-      | <%= link_to 'elimina evento', timeline_event_path(@timeline, event), 
-                data: { 
-                  turbo_method: :delete, 
-                  turbo_confirm: t('messages.confirm')
-                },
-                style: "color: red;" %>
+      | <%= render 'timelines/events/delete_button', timeline: @timeline, event: event %>
     <% end %>
   </div>
 

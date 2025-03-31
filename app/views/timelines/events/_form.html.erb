@@ -96,13 +96,13 @@
       <%= form.submit event.new_record? ? t('actions.create_event') : t('actions.update_event'), 
                       class: 'button',
                       data: { event_form_target: "submitButton" } %>
-      oppure <%= link_to 'torna alla timeline', timeline_path(@timeline), class: 'back-link' %>
+      oppure <%= link_to t('actions.cancel_and_return_to_timeline'), timeline_path(@timeline), class: 'back-link' %>
     </div>
   <% end %>
 
   <% unless event.new_record? %>
     <div class="delete-action">
-      <%= button_to "elimina evento",
+      <%= button_to "Elimina evento",
                    timeline_event_path(@timeline, event),
                    method: :delete,
                    class: 'delete-button',

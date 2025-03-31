@@ -66,7 +66,7 @@ it:
   
   # Etichette dei campi
   labels:
-    name: "Nome"
+    name: "Evento"
     description: "Note"
     start_date: "Da"
     end_date: "A"
@@ -80,7 +80,7 @@ it:
   
   # Pulsanti e azioni
   actions:
-    update_event: "Aggiorna evento"
+    update_event: "Aggiorna evento e torna alla timeline"
     create_event: "Crea evento"
     add_event: "Aggiungi evento"
     edit_event: "Modifica evento"
@@ -92,6 +92,7 @@ it:
     show: "Visualizza"
     edit: "Modifica"
     home: "Tutte le Timeline"
+    cancel_and_return_to_timeline: "annulla e torna alla timeline"
   
   # Messaggi
   messages:

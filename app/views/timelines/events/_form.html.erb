@@ -1,254 +1,265 @@
-<%= form_with(model: [@timeline, event], local: true, 
+<div class="form-container">
+  <%= form_with(model: [@timeline, event], local: true, 
               html: { class: 'events-form', 
                       data: { controller: "event-form",
                              event_form_target: "form",
                              action: "submit->event-form#submitForm" },
                       novalidate: true }) do |form| %>
-  <% if event.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(event.errors.count, "error") %> prohibited this event from being saved:</h2>
+    <% if event.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(event.errors.count, "error") %> prohibited this event from being saved:</h2>
 
-      <ul>
-      <% event.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+        <ul>
+        <% event.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
+    
+    <div id="event-description" class="form-data-block">
+      <div class="field">
+        <%= form.label :name, t('labels.name') %>
+        <%= form.text_field :name, autocomplete: "off" %>
+      </div>
+
+      <div class="field">
+        <%= form.label :description, t('labels.description') %>
+        <%= form.text_area :description %>
+      </div>
+    </div>
+
+    <div id="event-duration" class="form-data-block">
+      <%# Campo nascosto per mantenere retrocompatibilità %>
+      <%= hidden_field_tag :current_duration_type, event.event_duration %>
+
+      <div class="field duration-type">
+        <div class="duration-option">
+          <%= radio_button_tag :duration_type, '1-day', event.event_duration == '1-day' || event.new_record?, 
+              class: 'duration-radio', 
+              id: 'duration_type_single',
+              data: { 
+                event_form_target: "singleDayRadio",
+                action: "change->event-form#toggleDurationType"
+              } %>
+          <label for="duration_type_single"><%= t('labels.duration.one_day') %></label>
+          <div class="single-day-container-option date-container" 
+               data-event-form-target="singleDayContainer">
+            <%# I campi data verranno spostati qui tramite JavaScript se viene selezionato "Un giorno" %>
+          </div>
+        </div>
+
+        <div class="duration-option">
+          <%= radio_button_tag :duration_type, 'multi-day', event.event_duration == 'multi-day',
+              class: 'duration-radio', 
+              id: 'duration_type_multi',
+              data: { 
+                event_form_target: "multiDayRadio",
+                action: "change->event-form#toggleDurationType"
+              } %>
+          <label for="duration_type_multi"><%= t('labels.duration.multiple_days') %></label>
+          <div class="multi-day-container-option date-container" 
+               data-event-form-target="multiDayContainer">
+            <%# I campi data verranno spostati qui tramite JavaScript se viene selezionato "Dura più giorni" %>
+          </div>
+        </div>
+
+        <%# Contenitore dei campi data - lo posizioniamo direttamente nel contenitore appropriato %>
+        <div id="date-fields-container" class="date-range-fields" 
+             data-event-form-target="dateFields">
+          <div class="date-field">
+            <label><%= t('labels.duration.from') %></label>
+            <%= form.date_field :start_date, 
+                               class: 'multi-day-start date-field', 
+                               data: { event_form_target: "startDate" },
+                               placeholder: 'Choose date...' %>
+          </div>
+          <div class="date-field">
+            <label><%= t('labels.duration.to') %></label>
+            <%= form.date_field :end_date, 
+                               class: 'multi-day-end date-field', 
+                               data: { event_form_target: "endDate" },
+                               placeholder: 'Choose date...' %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="event-color" class="form-data-block">
+      <div class="field color-picker">
+        <%= form.label :color, t('labels.color') %>
+        <%= form.color_field :color, value: event.color.present? ? event.color : "#00A3D7" %>
+      </div>
+    </div>
+
+    <div class="actions">
+      <%= form.submit event.new_record? ? t('actions.create_event') : t('actions.update_event'), 
+                      class: 'button',
+                      data: { event_form_target: "submitButton" } %>
+      oppure <%= link_to 'torna alla timeline', timeline_path(@timeline), class: 'back-link' %>
     </div>
   <% end %>
+
+  <% unless event.new_record? %>
+    <div class="delete-action">
+      <%= button_to "elimina evento",
+                   timeline_event_path(@timeline, event),
+                   method: :delete,
+                   class: 'delete-button',
+                   form: { class: 'inline-form' },
+                   onclick: "return confirm('Sei sicuro di voler eliminare questo evento?')" %>
+    </div>
+  <% end %>
+</div>
+
+<style>
+  .hidden {
+    display: none !important;
+  }
   
-  <div id="event-description" class="form-data-block">
-    <div class="field">
-      <%= form.label :name, t('labels.name') %>
-      <%= form.text_field :name, autocomplete: "off" %>
-    </div>
+  .inline-form {
+    display: inline;
+  }
+  
+  .delete-button {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    color: #dc2626;
+    text-decoration: none;
+  }
+  
+  .delete-button:hover {
+    text-decoration: underline;
+    background: none !important;
+  }
+  
+  .delete-action {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e5e7eb;
+  }
+</style>
 
-    <div class="field">
-      <%= form.label :description, t('labels.description') %>
-      <%= form.text_area :description %>
-    </div>
-  </div>
-
-  <div id="event-duration" class="form-data-block">
-    <%# Campo nascosto per mantenere retrocompatibilità %>
-    <%= hidden_field_tag :current_duration_type, event.event_duration %>
-
-    <div class="field duration-type">
-      <div class="duration-option">
-        <%= radio_button_tag :duration_type, '1-day', event.event_duration == '1-day' || event.new_record?, 
-            class: 'duration-radio', 
-            id: 'duration_type_single',
-            data: { 
-              event_form_target: "singleDayRadio",
-              action: "change->event-form#toggleDurationType"
-            } %>
-        <label for="duration_type_single"><%= t('labels.duration.one_day') %></label>
-        <div class="single-day-container-option date-container" 
-             data-event-form-target="singleDayContainer">
-          <%# I campi data verranno spostati qui tramite JavaScript se viene selezionato "Un giorno" %>
-        </div>
-      </div>
-
-      <div class="duration-option">
-        <%= radio_button_tag :duration_type, 'multi-day', event.event_duration == 'multi-day',
-            class: 'duration-radio', 
-            id: 'duration_type_multi',
-            data: { 
-              event_form_target: "multiDayRadio",
-              action: "change->event-form#toggleDurationType"
-            } %>
-        <label for="duration_type_multi"><%= t('labels.duration.multiple_days') %></label>
-        <div class="multi-day-container-option date-container" 
-             data-event-form-target="multiDayContainer">
-          <%# I campi data verranno spostati qui tramite JavaScript se viene selezionato "Dura più giorni" %>
-        </div>
-      </div>
-
-      <%# Contenitore dei campi data - lo posizioniamo direttamente nel contenitore appropriato %>
-      <div id="date-fields-container" class="date-range-fields" 
-           data-event-form-target="dateFields">
-        <div class="date-field">
-          <label><%= t('labels.duration.from') %></label>
-          <%= form.date_field :start_date, 
-                             class: 'multi-day-start date-field', 
-                             data: { event_form_target: "startDate" },
-                             placeholder: 'Choose date...' %>
-        </div>
-        <div class="date-field">
-          <label><%= t('labels.duration.to') %></label>
-          <%= form.date_field :end_date, 
-                             class: 'multi-day-end date-field', 
-                             data: { event_form_target: "endDate" },
-                             placeholder: 'Choose date...' %>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="event-color" class="form-data-block">
-    <div class="field color-picker">
-      <%= form.label :color, t('labels.color') %>
-      <%= form.color_field :color, value: event.color.present? ? event.color : "#00A3D7" %>
-    </div>
-  </div>
-
-  <div class="actions">
-    <%= form.submit event.new_record? ? t('actions.create_event') : t('actions.update_event'), 
-                    class: 'button',
-                    data: { event_form_target: "submitButton" } %>
-    oppure <%= link_to 'torna alla timeline', timeline_path(@timeline), class: 'back-link' %>
-    <% unless event.new_record? %>
-      | <%= button_to "elimina evento",
-                     timeline_event_path(@timeline, event),
-                     method: :delete,
-                     class: 'delete-button',
-                     form: { class: 'inline-form' },
-                     onclick: "return confirm('Sei sicuro di voler eliminare questo evento?')" %>
-    <% end %>
-  </div>
-
-  <style>
-    .hidden {
-      display: none !important;
-    }
+<script>
+  // Funzione per spostare i campi data nel contenitore appropriato
+  function moveDateFields(targetContainerSelector) {
+    const dateFieldsContainer = document.getElementById('date-fields-container');
+    const targetContainer = document.querySelector(targetContainerSelector);
     
-    .inline-form {
-      display: inline;
+    if (dateFieldsContainer && targetContainer) {
+      targetContainer.appendChild(dateFieldsContainer);
     }
+  }
+  
+  // Funzione per gestire la visualizzazione del campo end_date
+  function toggleEndDateField(isSingleDay) {
+    // Selezioniamo correttamente il campo end_date usando un selettore più specifico
+    const endDateField = document.querySelector('.date-field:has(input[name="event[end_date]"])');
+    // Fallback nel caso in cui :has non sia supportato da alcuni browser
+    const endDateFieldFallback = document.querySelector('input[name="event[end_date]"]')?.closest('.date-field');
     
-    .delete-button {
-      background: none;
-      border: none;
-      padding: 0;
-      font: inherit;
-      cursor: pointer;
-      color: #dc2626;
-      text-decoration: none;
-    }
+    const endDateContainer = endDateField || endDateFieldFallback;
     
-    .delete-button:hover {
-      text-decoration: underline;
-      background: none !important;
-    }
-  </style>
-
-  <script>
-    // Funzione per spostare i campi data nel contenitore appropriato
-    function moveDateFields(targetContainerSelector) {
-      const dateFieldsContainer = document.getElementById('date-fields-container');
-      const targetContainer = document.querySelector(targetContainerSelector);
-      
-      if (dateFieldsContainer && targetContainer) {
-        targetContainer.appendChild(dateFieldsContainer);
+    if (endDateContainer) {
+      // Utilizziamo una classe CSS per nascondere l'elemento
+      if (isSingleDay) {
+        endDateContainer.classList.add('hidden');
+      } else {
+        endDateContainer.classList.remove('hidden');
       }
     }
+  }
+  
+  // Sincronizza end_date con start_date quando "Dura un giorno" è selezionato
+  function setupFormSubmitHandler() {
+    const form = document.querySelector('.events-form');
+    if (!form) return;
     
-    // Funzione per gestire la visualizzazione del campo end_date
-    function toggleEndDateField(isSingleDay) {
-      // Selezioniamo correttamente il campo end_date usando un selettore più specifico
-      const endDateField = document.querySelector('.date-field:has(input[name="event[end_date]"])');
-      // Fallback nel caso in cui :has non sia supportato da alcuni browser
-      const endDateFieldFallback = document.querySelector('input[name="event[end_date]"]')?.closest('.date-field');
-      
-      const endDateContainer = endDateField || endDateFieldFallback;
-      
-      if (endDateContainer) {
-        // Utilizziamo una classe CSS per nascondere l'elemento
-        if (isSingleDay) {
-          endDateContainer.classList.add('hidden');
-        } else {
-          endDateContainer.classList.remove('hidden');
-        }
-      }
-    }
-    
-    // Sincronizza end_date con start_date quando "Dura un giorno" è selezionato
-    function setupFormSubmitHandler() {
-      const form = document.querySelector('.events-form');
-      if (!form) return;
-      
-      form.addEventListener('submit', function(event) {
-        const singleDayRadio = document.getElementById('duration_type_single');
-        const multiDayRadio = document.getElementById('duration_type_multi');
-        const startDateField = document.querySelector('input[name="event[start_date]"]');
-        const endDateField = document.querySelector('input[name="event[end_date]"]');
-        const currentDurationType = document.getElementById('current_duration_type');
-        
-        if (!startDateField || !endDateField) return;
-        
-        if (singleDayRadio && singleDayRadio.checked) {
-          // Se "Dura un giorno" è selezionato, impostiamo end_date = start_date
-          if (startDateField.value) {
-            endDateField.value = startDateField.value;
-          }
-        } else if (multiDayRadio && multiDayRadio.checked) {
-          // Se l'evento era originariamente 1-day e stiamo passando a multi-day
-          // ci assicuriamo che end_date possa essere vuoto
-          if (currentDurationType && currentDurationType.value === '1-day' && 
-              endDateField.value === startDateField.value) {
-            endDateField.value = '';
-          }
-        }
-      });
-    }
-
-    // Aggiunge i listener per i radio button
-    document.addEventListener('DOMContentLoaded', function() {
+    form.addEventListener('submit', function(event) {
       const singleDayRadio = document.getElementById('duration_type_single');
       const multiDayRadio = document.getElementById('duration_type_multi');
+      const startDateField = document.querySelector('input[name="event[start_date]"]');
+      const endDateField = document.querySelector('input[name="event[end_date]"]');
+      const currentDurationType = document.getElementById('current_duration_type');
       
-      if (!singleDayRadio || !multiDayRadio) return;
-      
-      // Sposta i campi data e gestisci il campo end_date in base alla selezione iniziale
-      if (singleDayRadio.checked) {
-        moveDateFields('.single-day-container-option');
-        toggleEndDateField(true);
-      } else if (multiDayRadio.checked) {
-        moveDateFields('.multi-day-container-option');
-        toggleEndDateField(false);
-      }
-      
-      // Aggiungi listener per lo spostamento quando cambia la selezione
-      singleDayRadio.addEventListener('change', function() {
-        if (this.checked) {
-          moveDateFields('.single-day-container-option');
-          toggleEndDateField(true);
-        }
-      });
-      
-      multiDayRadio.addEventListener('change', function() {
-        if (this.checked) {
-          moveDateFields('.multi-day-container-option');
-          toggleEndDateField(false);
-          
-          // Se l'evento era di tipo 1-day, svuota il campo end_date
-          const currentDurationType = document.getElementById('current_duration_type');
-          const endDateField = document.querySelector('input[name="event[end_date]"]');
-          const startDateField = document.querySelector('input[name="event[start_date]"]');
-          
-          if (currentDurationType && currentDurationType.value === '1-day' && 
-              endDateField && startDateField && 
-              endDateField.value === startDateField.value) {
-            endDateField.value = '';
-          }
-        }
-      });
-    });
-    
-    // Poiché DOMContentLoaded potrebbe non attivarsi con Turbo, eseguiamo anche codice immediato
-    (function() {
-      const singleDayRadio = document.getElementById('duration_type_single');
-      const multiDayRadio = document.getElementById('duration_type_multi');
+      if (!startDateField || !endDateField) return;
       
       if (singleDayRadio && singleDayRadio.checked) {
+        // Se "Dura un giorno" è selezionato, impostiamo end_date = start_date
+        if (startDateField.value) {
+          endDateField.value = startDateField.value;
+        }
+      } else if (multiDayRadio && multiDayRadio.checked) {
+        // Se l'evento era originariamente 1-day e stiamo passando a multi-day
+        // ci assicuriamo che end_date possa essere vuoto
+        if (currentDurationType && currentDurationType.value === '1-day' && 
+            endDateField.value === startDateField.value) {
+          endDateField.value = '';
+        }
+      }
+    });
+  }
+
+  // Aggiunge i listener per i radio button
+  document.addEventListener('DOMContentLoaded', function() {
+    const singleDayRadio = document.getElementById('duration_type_single');
+    const multiDayRadio = document.getElementById('duration_type_multi');
+    
+    if (!singleDayRadio || !multiDayRadio) return;
+    
+    // Sposta i campi data e gestisci il campo end_date in base alla selezione iniziale
+    if (singleDayRadio.checked) {
+      moveDateFields('.single-day-container-option');
+      toggleEndDateField(true);
+    } else if (multiDayRadio.checked) {
+      moveDateFields('.multi-day-container-option');
+      toggleEndDateField(false);
+    }
+    
+    // Aggiungi listener per lo spostamento quando cambia la selezione
+    singleDayRadio.addEventListener('change', function() {
+      if (this.checked) {
         moveDateFields('.single-day-container-option');
         toggleEndDateField(true);
-      } else if (multiDayRadio && multiDayRadio.checked) {
+      }
+    });
+    
+    multiDayRadio.addEventListener('change', function() {
+      if (this.checked) {
         moveDateFields('.multi-day-container-option');
         toggleEndDateField(false);
+        
+        // Se l'evento era di tipo 1-day, svuota il campo end_date
+        const currentDurationType = document.getElementById('current_duration_type');
+        const endDateField = document.querySelector('input[name="event[end_date]"]');
+        const startDateField = document.querySelector('input[name="event[start_date]"]');
+        
+        if (currentDurationType && currentDurationType.value === '1-day' && 
+            endDateField && startDateField && 
+            endDateField.value === startDateField.value) {
+          endDateField.value = '';
+        }
       }
-      
-      // Configuriamo il gestore dell'invio del form
-      setupFormSubmitHandler();
-    })();
-  </script>
-<% end %>
+    });
+  });
+  
+  // Poiché DOMContentLoaded potrebbe non attivarsi con Turbo, eseguiamo anche codice immediato
+  (function() {
+    const singleDayRadio = document.getElementById('duration_type_single');
+    const multiDayRadio = document.getElementById('duration_type_multi');
+    
+    if (singleDayRadio && singleDayRadio.checked) {
+      moveDateFields('.single-day-container-option');
+      toggleEndDateField(true);
+    } else if (multiDayRadio && multiDayRadio.checked) {
+      moveDateFields('.multi-day-container-option');
+      toggleEndDateField(false);
+    }
+    
+    // Configuriamo il gestore dell'invio del form
+    setupFormSubmitHandler();
+  })();
+</script>

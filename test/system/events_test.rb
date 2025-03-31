@@ -83,4 +83,29 @@ class EventsTest < ApplicationSystemTestCase
     # Verifica che il radio button per eventi di più giorni sia selezionato
     assert_selector "#duration_type_multi[checked]"
   end
+
+  test "variazione durata da 1-day a multi-day" do
+    visit edit_timeline_event_path(@timeline, @one_day_event)
+    find("#duration_type_multi").click
+    fill_in "event[end_date]", with: Date.current + 2
+    click_on "Aggiorna evento"
+    assert_text "Evento aggiornato"
+    assert_selector "#duration_type_multi[checked]"
+  end
+
+  test "variazione colore da verde a blu" do
+    visit edit_timeline_event_path(@timeline, @one_day_event)
+    fill_in "event[color]", with: "#0000FF"
+    click_on "Aggiorna evento"
+    assert_text "Evento aggiornato"
+    assert_selector "[style='background-color: #0000FF;']"
+  end
+
+  test "eliminazione evento con conferma" do
+    visit edit_timeline_event_path(@timeline, @one_day_event)
+    page.accept_confirm do
+      click_on "elimina evento"
+    end
+    assert_text "Evento eliminato"
+  end
 end

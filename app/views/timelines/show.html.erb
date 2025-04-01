@@ -51,11 +51,14 @@
           # Ordina gli eventi per data di inizio
           sorted_events = @timeline.events.sort_by(&:start_date)
           
-          # Inizializza i gruppi
+          # Separa gli eventi in 1-day e multi-day
+          single_day_events, multi_day_events = sorted_events.partition { |event| event.event_duration == '1-day' }
+          
+          # Inizializza i gruppi solo per gli eventi multi-day
           groups = []
           current_group = []
           
-          sorted_events.each do |event|
+          multi_day_events.each do |event|
             if current_group.empty?
               # Se non ci sono eventi nel gruppo corrente, inizia un nuovo gruppo
               current_group << event
@@ -101,6 +104,11 @@
             group.each do |event|
               event_to_group_by_view_type[view_type][event.id] = group_index
             end
+          end
+          
+          # Assegna un gruppo separato per ogni evento 1-day
+          single_day_events.each_with_index do |event, index|
+            event_to_group_by_view_type[view_type][event.id] = groups.size + index
           end
         end
         
@@ -381,15 +389,15 @@
                   # Ottieni l'indice del gruppo dell'evento
                   group_id = event_to_group_by_view_type[@view_type][event.id]
                   
-                  # Ottieni l'indice fisso dell'evento all'interno del suo gruppo
-                  relative_index = event_to_index_in_group_by_view_type[@view_type][event.id]
-                  
                   # Verifica se l'evento dura solo 1 giorno
-                  is_single_day_event = event.end_date && event.start_date && (event.end_date.to_date - event.start_date.to_date).to_i == 0
+                  is_single_day_event = event.event_duration == '1-day'
+                  
+                  # Ottieni l'indice fisso dell'evento all'interno del suo gruppo
+                  # Per gli eventi 1-day, usa sempre indice 0
+                  relative_index = is_single_day_event ? 0 : event_to_index_in_group_by_view_type[@view_type][event.id]
                   
                   # Calcola la posizione left della linea dell'evento
-                  # Se è il primo evento del gruppo (relative_index = 0), deve essere attaccato alla linea verticale (left = 0)
-                  # Altrimenti, si sposta verso destra in base all'indice relativo
+                  # Per gli eventi 1-day non calcoliamo left_position perché non hanno linea
                   unless is_single_day_event
                     left_position = relative_index == 0 ? 0 : relative_index * 7
                   end

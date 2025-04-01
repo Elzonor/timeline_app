@@ -184,7 +184,7 @@ input[type="submit"] {
   align-items: center;
   background: #f1f1f1;
   padding: 4px;
-  border-radius: 100px;
+  border-radius: 8px;
   width: fit-content;
   
   span {
@@ -193,7 +193,7 @@ input[type="submit"] {
   
   .view-option {
     padding: 8px 16px;
-    border-radius: 100px;
+    border-radius: 4px;
     transition: all 0.2s ease;
     color: #666;
     font-size: 0.9rem;

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_20_113918) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_01_160637) do
   create_table "events", force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -29,10 +29,20 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_20_113918) do
     t.index ["timeline_id"], name: "index_events_on_timeline_id"
   end
 
+  create_table "timeline_preferences", force: :cascade do |t|
+    t.integer "timeline_id", null: false
+    t.string "view_type", default: "weeks", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["timeline_id"], name: "index_timeline_preferences_on_timeline_id", unique: true
+  end
+
   create_table "timelines", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.integer "event_id"
   end
+
+  add_foreign_key "timeline_preferences", "timelines"
 end

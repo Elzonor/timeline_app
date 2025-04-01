@@ -2,6 +2,7 @@ class Timeline < ApplicationRecord
 	include DurationCalculator
 	
 	has_many :events, dependent: :destroy
+	has_one :preference, class_name: 'TimelinePreference', dependent: :destroy
 
 	validates :name, presence: true
 
@@ -14,5 +15,9 @@ class Timeline < ApplicationRecord
 		end_date = [end_date, Date.current].compact.max if events.where(end_date: nil).exists?
 
 		calculate_duration(start_date, end_date, events)
+	end
+
+	def preferred_view_type
+		preference&.view_type || 'weeks'
 	end
 end

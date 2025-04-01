@@ -15,7 +15,16 @@ class TimelinesController < ApplicationController
   # GET /timelines/1.json
   def show
     @view = params[:view] || 'days'
-    @view_type = params[:view_type] || 'weeks'
+    @view_type = params[:view_type]
+    
+    if @view_type.present?
+      # Se viene specificato un view_type nei params, aggiorna/crea la preferenza
+      @timeline.preference&.destroy
+      @timeline.create_preference(view_type: @view_type)
+    else
+      # Altrimenti usa la preferenza salvata o il default
+      @view_type = @timeline.preferred_view_type
+    end
     
     if @timeline.events.loaded?
       load_and_process_events

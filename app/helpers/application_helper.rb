@@ -32,7 +32,7 @@ module ApplicationHelper
     if event.event_duration == '1-day'
       content_tag(:span, "— #{l(event.start_date, format: '%d %b')}", class: 'font-normal')
     else
-      duration_text = event.duration == 1 ? "1 giorno" : "#{number_with_delimiter(event.duration, delimiter: '.')} giorni"
+      duration_text = DurationFormatter.format_duration(event.duration)
       
       if event.event_type == 'open'
         content_tag(:span, "— #{l(event.start_date, format: '%d %b')} - ... (#{duration_text})", class: 'font-normal')

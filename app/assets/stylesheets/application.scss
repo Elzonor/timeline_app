@@ -250,9 +250,8 @@ input[type="submit"] {
   color: $text-color;
   font-size: 0.9rem;
   white-space: nowrap;
-  font-family: 'Fira Mono', monospace;
+  font-family: 'Fira Code', monospace;
   position: relative;
-  font-weight: bold;
   
   // Allineamento verticale con la data
   display: flex;
@@ -277,7 +276,7 @@ input[type="submit"] {
   color: $text-color;
   font-size: 0.9rem;
   white-space: nowrap;
-  font-family: 'Fira Mono', monospace;
+  font-family: 'Fira Code', monospace;
   position: relative;
   
   // Allineamento verticale con la data
@@ -327,7 +326,7 @@ input[type="submit"] {
   color: $text-color;
   font-size: 0.9rem;
   white-space: nowrap;
-  font-family: 'Fira Mono', monospace;
+  font-family: 'Fira Code', monospace;
   position: relative;
   margin-right: 2px;
 }
@@ -390,7 +389,7 @@ input[type="submit"] {
   padding-left: 1rem;
   margin-bottom: 3px;
   margin-top: -8px;
-  font-weight: bold;
+  font-weight: 500;
   padding-bottom: 8px;
 }
 

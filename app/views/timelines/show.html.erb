@@ -450,7 +450,7 @@
                   <%= link_to edit_timeline_event_path(@timeline, event), 
                               style: "color: #{event.color};",
                               class: "event-title-link" do %>
-                    <%= event.name %>
+                    <%= event.name %> <%= format_event_dates(event) %>
                   <% end %>
                 </div>
               <% end %>

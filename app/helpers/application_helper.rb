@@ -8,7 +8,7 @@ module ApplicationHelper
     
     # Pagina di visualizzazione di una timeline
     if controller_name == 'timelines' && action_name == 'show' && @timeline.present?
-      view_type = params[:view_type] || 'weeks'
+      view_type = @timeline.preferred_view_type
       return "#{@timeline.name} - #{view_type.capitalize}"
     end
     

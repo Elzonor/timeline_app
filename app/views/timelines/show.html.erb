@@ -314,7 +314,7 @@
           # Aggiorna l'ultimo anno e mese mostrati
           last_year_shown = current_year if is_first_of_year
           last_month_shown = current_month if is_first_of_month
-      %>
+        %>
         
         <div class="time-unit-year <%= is_gap_unit ? 'time-unit-gap' : '' %>">
           <% if is_first_non_gap_of_year %>
@@ -466,6 +466,8 @@
           </div>
         <% end %>
       <% end %>
+    <% else %>
+      <p><%= t('messages.no_events') %></p>
     <% end %>
   </div>
 <% else %>

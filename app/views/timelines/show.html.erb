@@ -426,7 +426,7 @@
                 %>
                 
                 <% if event_ends_in_time_unit %>
-                  <div class="event-title-line" 
+                  <div class="event-title-line <%= event.start_date > Date.current ? 'future' : '' %>" 
                        style="background-color: <%= event.color %>; 
                               left: <%= is_single_day_event ? 0 : left_position + 5 %>px;
                               width: calc(100% - <%= is_single_day_event ? 0 : left_position + 5 %>px);
@@ -454,7 +454,7 @@
               %>
               
               <% if event_ends_in_time_unit %>
-                <div class="event-title">
+                <div class="event-title <%= event.start_date > Date.current ? 'future' : '' %>">
                   <%= link_to edit_timeline_event_path(@timeline, event), 
                               style: "color: #{event.color};",
                               class: "event-title-link" do %>

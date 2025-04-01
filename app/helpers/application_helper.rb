@@ -29,14 +29,14 @@ module ApplicationHelper
   def format_event_dates(event)
     return unless event.start_date
     
-    duration_text = event.duration == 1 ? "1 giorno" : "#{event.duration} giorni"
+    duration_text = event.duration == 1 ? "1 giorno" : "#{number_with_delimiter(event.duration, delimiter: '.')} giorni"
     
     if event.event_duration == '1-day'
-      content_tag(:span, "(#{duration_text}, #{l(event.start_date, format: '%d %b')})", class: 'font-normal')
+      content_tag(:span, "— #{duration_text}, #{l(event.start_date, format: '%d %b')}", class: 'font-normal')
     elsif event.event_type == 'open'
-      content_tag(:span, "(#{duration_text}, #{l(event.start_date, format: '%d %b')} - ...)", class: 'font-normal')
+      content_tag(:span, "— #{duration_text}, #{l(event.start_date, format: '%d %b')} - ...", class: 'font-normal')
     else
-      content_tag(:span, "(#{duration_text}, #{l(event.start_date, format: '%d %b')} - #{l(event.end_date, format: '%d %b')})", class: 'font-normal')
+      content_tag(:span, "— #{duration_text}, #{l(event.start_date, format: '%d %b')} - #{l(event.end_date, format: '%d %b')}", class: 'font-normal')
     end
   end
 end

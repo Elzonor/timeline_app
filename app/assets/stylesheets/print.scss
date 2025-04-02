@@ -1,0 +1,113 @@
+@media print {
+  // Nascondiamo elementi non necessari in stampa
+  .actions,
+  .view-switch-container,
+  #notice {
+    display: none !important;
+  }
+
+  // Ottimizziamo per formato A4
+  body {
+    margin: 0;
+    padding: 14.4mm;
+    width: 210mm;
+    height: 297mm;
+  }
+
+  // Modifichiamo l'URL mostrato in stampa
+  @page {
+    margin-bottom: 1cm;
+    
+    @bottom-left {
+      content: "www.timelinez.com";
+    }
+  }
+
+  // Ripristiniamo il logo ma ottimizziamo per la stampa
+  .navbar {
+    margin-bottom: 2cm;
+    
+    .navbar-logo {
+      height: auto;
+      max-width: 180px;
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+    }
+  }
+
+  // Stili per la timeline in stampa
+  .visual-timeline {
+    page-break-inside: avoid;
+    margin: 0;
+    width: 100%;
+    
+    // Assicuriamoci che le linee siano visibili
+    .time-unit-line,
+    .event-line,
+    .event-title-line,
+    .end-of-time-unit-line,
+    .day-line {
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+    }
+
+    // Rimuoviamo lo spazio tra le time-unit
+    .time-unit-year,
+    .time-unit-month,
+    .time-unit-date,
+    .time-unit-lines,
+    .time-unit-events {
+      min-height: 21px !important;
+    }
+
+    // Assicuriamoci che le unità gap siano visibili correttamente
+    .time-unit-gap {
+      min-height: 21px !important;
+
+      .time-unit-line {
+        border-right: 2px dashed #CCCCCC !important;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+      }
+    }
+  }
+
+  // Miglioriamo la leggibilità del testo
+  .event-title {
+    page-break-inside: avoid;
+    padding-bottom: 0;
+    margin-bottom: 0;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+    
+    a {
+      text-decoration: none;
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+    }
+  }
+
+  // Assicuriamoci che i colori degli eventi siano visibili
+  .event-line,
+  .event-title-line {
+    opacity: 1 !important;
+  }
+
+  // Ottimizziamo la visualizzazione delle date
+  .time-unit-date-text {
+    color: #000;
+  }
+
+  // Miglioriamo la leggibilità del titolo
+  h1 {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+    margin-bottom: 1cm;
+  }
+
+  // Miglioriamo la leggibilità dei dettagli della timeline
+  .timeline-duration {
+    color: #000;
+    margin-bottom: 1cm;
+  }
+} 

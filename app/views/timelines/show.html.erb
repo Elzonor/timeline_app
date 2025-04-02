@@ -437,7 +437,7 @@
             <% end %>
           </div>
           <div class="time-unit-events">
-            <% @ordered_events.sort_by { |event| event.created_at }.reverse.each do |event| %>
+            <% @ordered_events.each do |event| %>
               <% event_end = event.end_date || Date.current %>
               <% 
                 # Verifica se l'evento termina nell'unità di tempo corrente

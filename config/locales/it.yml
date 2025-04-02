@@ -46,8 +46,8 @@ it:
   timeline:
     span_text: "Questa timeline si estende per %{weeks} e %{months}."
     span_text_with_days:
-      one: "1 evento distribuito su %{days}, %{weeks}, %{months} e %{years}."
-      other: "%{count} eventi distribuiti su %{days}, %{weeks}, %{months} e %{years}."
+      one: "%{count_formatted} evento che copre %{days}, %{weeks} e %{months}, nell'arco di %{years}."
+      other: "%{count_formatted} eventi che coprono %{days}, %{weeks} e %{months}, nell'arco di %{years}."
     view_by: "Visualizza per"
     view_types:
       days: "Giorni"

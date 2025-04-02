@@ -6,7 +6,8 @@
   <% details = @timeline.duration_details %>
   <p class="timeline-duration">
     <%= t('timeline.span_text_with_days',
-         count: number_with_delimiter(@timeline.events.count, delimiter: '.'),
+         count: @timeline.events.count,
+         count_formatted: number_with_delimiter(@timeline.events.count, delimiter: '.'),
          days: pluralize(number_with_delimiter(details[:days], delimiter: '.'), t('duration.days.one'), t('duration.days.other')),
          weeks: pluralize(number_with_delimiter(details[:weeks], delimiter: '.'), t('duration.weeks.one'), t('duration.weeks.other')),
          months: pluralize(number_with_delimiter(details[:months], delimiter: '.'), t('duration.months.one'), t('duration.months.other')),

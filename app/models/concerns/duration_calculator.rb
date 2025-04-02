@@ -26,7 +26,7 @@ module DurationCalculator
         days << current_date
         weeks << current_date.beginning_of_week
         months << current_date.beginning_of_month
-        years << current_date.beginning_of_year
+        years << date.beginning_of_year
         current_date += 1.day
       end
     end
@@ -68,10 +68,19 @@ module DurationCalculator
       weeks: weeks.size,
       months: months.size,
       years: years.size,
+      total_years: calculate_total_years(start_date_to_use, end_date_to_use),
       day_dates: all_days.to_a.sort,
       week_dates: all_weeks.to_a.sort,
       month_dates: all_months.to_a.sort,
       year_dates: all_years.to_a.sort
     }
+  end
+
+  private
+
+  def calculate_total_years(start_date, end_date)
+    # Calcoliamo gli anni totali contando gli anni distinti attraversati
+    # Se la timeline va da settembre 2023 a febbraio 2025, deve contare 3 anni (2023, 2024, 2025)
+    start_date.year.upto(end_date.year).count
   end
 end 

@@ -42,10 +42,10 @@ gem 'rails-html-sanitizer', '>= 1.4.4'
 gem 'loofah', '>= 2.19.1'
 gem 'addressable', '>= 2.8.1'
 gem 'tzinfo', '>= 1.2.10'
-gem 'nokogiri', '>= 1.15.5'
+gem 'nokogiri', '>= 1.18.7'
 gem 'websocket-extensions', '>= 0.1.5'
-gem 'net-imap', '>= 0.5.6'
-gem 'uri', '>= 0.13.0'
+gem 'net-imap', '~> 0.5.6'
+gem 'uri', '>= 0.13.2'
 
 group :development, :test do
 	# Use sqlite3 as the database for Active Record

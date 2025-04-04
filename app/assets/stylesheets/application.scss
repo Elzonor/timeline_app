@@ -28,6 +28,9 @@ $accent-color: #007bff;
 $timeline-standard-color: #222;
 $timeline-gap-color: #CCCCCC;
 
+// Variabile per l'opacità degli elementi futuri
+$future-element-opacity: 0.34;
+
 // Stili base
 body {
   font-family: 'Fira Sans', sans-serif;
@@ -306,6 +309,10 @@ input[type="submit"] {
   top: 0;
   bottom: 0;
   width: 5px;
+  
+  &.future {
+    opacity: $future-element-opacity;
+  }
 }
 
 .timeline-week {
@@ -384,7 +391,7 @@ input[type="submit"] {
   height: 1px;
   
   &.future {
-    opacity: 0.34;
+    opacity: $future-element-opacity;
   }
 }
 
@@ -397,7 +404,7 @@ input[type="submit"] {
   padding-bottom: 8px;
   
   &.future {
-    opacity: 0.34;
+    opacity: $future-element-opacity;
   }
 }
 

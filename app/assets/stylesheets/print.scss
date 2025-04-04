@@ -87,10 +87,13 @@
     }
   }
 
-  // Assicuriamoci che i colori degli eventi siano visibili
+  // Assicuriamoci che i colori degli eventi siano visibili mantenendo l'opacità per gli elementi futuri
   .event-line,
-  .event-title-line {
-    opacity: 1 !important;
+  .event-title-line,
+  .event-title {
+    &:not(.future) {
+      opacity: 1 !important;
+    }
   }
 
   // Ottimizziamo la visualizzazione delle date

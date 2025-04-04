@@ -403,13 +403,17 @@
                   unless is_single_day_event
                     left_position = relative_index == 0 ? 0 : relative_index * 7
                   end
+
+                  # Calcola lo z-index basato sulla posizione nell'array ordinato
+                  # Usiamo il numero totale di eventi meno l'indice per dare z-index più alti agli eventi più recenti
+                  z_index = @ordered_events.length - index
                 %>
                 
                 <% unless is_single_day_event %>
                   <div class="event-line <%= event.start_date > Date.current ? 'future' : '' %>" 
                        style="background-color: <%= event.color %>; 
                               left: <%= left_position %>px;
-                              z-index: <%= (event.end_date || Date.current).to_time.to_i %>;"></div>
+                              z-index: <%= z_index %>;"></div>
                 <% end %>
                 
                 <% 
@@ -432,7 +436,7 @@
                        style="background-color: <%= event.color %>; 
                               left: <%= is_single_day_event ? 0 : left_position + 5 %>px;
                               width: calc(100% - <%= is_single_day_event ? 0 : left_position + 5 %>px);
-                              z-index: <%= (event.end_date || Date.current).to_time.to_i %>;"></div>
+                              z-index: <%= z_index %>;"></div>
                 <% end %>
               <% end %>
             <% end %>

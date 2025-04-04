@@ -114,22 +114,26 @@ class TimelinesController < ApplicationController
 
     def sort_events_by_recency(events)
       events.sort do |a, b|
-        # Se entrambi gli eventi sono nel futuro, ordina per data di inizio
         if a.start_date > Date.current && b.start_date > Date.current
+          # Se entrambi sono nel futuro, ordina per data di inizio più recente
           b.start_date <=> a.start_date
-        # Se solo uno è nel futuro, quello va prima
         elsif a.start_date > Date.current
+          # Se solo A è nel futuro, A va prima
           -1
         elsif b.start_date > Date.current
+          # Se solo B è nel futuro, B va prima
           1
-        # Per gli eventi passati o presenti, mantieni la logica esistente
         elsif a.end_date.nil? && b.end_date.nil?
+          # Se entrambi sono aperti (e non nel futuro), ordina per data di inizio più recente
           b.start_date <=> a.start_date
         elsif a.end_date.nil?
-          1
-        elsif b.end_date.nil?
+          # Se solo A è aperto (e non nel futuro), A va prima
           -1
+        elsif b.end_date.nil?
+          # Se solo B è aperto (e non nel futuro), B va prima
+          1
         else
+          # Se entrambi sono chiusi, mantieni la logica esistente
           if a.end_date == b.end_date
             b.start_date <=> a.start_date
           else

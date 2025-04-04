@@ -44,6 +44,8 @@ gem 'addressable', '>= 2.8.1'
 gem 'tzinfo', '>= 1.2.10'
 gem 'nokogiri', '>= 1.15.5'
 gem 'websocket-extensions', '>= 0.1.5'
+gem 'net-imap', '>= 0.5.6'
+gem 'uri', '>= 0.13.0'
 
 group :development, :test do
 	# Use sqlite3 as the database for Active Record

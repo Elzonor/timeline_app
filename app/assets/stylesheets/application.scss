@@ -12,7 +12,8 @@
 // *= require_tree .
 // *= require_self
 
-// Import di tutti i file SCSS nella directory
+// Import di Bootstrap e altri file SCSS
+@import "bootstrap_custom";
 @import "scaffolds";
 @import "events";
 @import "timelines";
@@ -452,7 +453,8 @@ a.event-title-link:hover {
 } 
 
 h1 {
-  padding: 8px 0 21px;
+  font-weight: 800;
+  padding: 34px 0 21px;
   margin: 0;
 }
 

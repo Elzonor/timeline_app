@@ -9,6 +9,7 @@ gem 'rails', '~> 8.0.1'
 gem 'puma', '~> 6.4'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 6.0'
+gem 'bootstrap', '~> 5.3.2'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes

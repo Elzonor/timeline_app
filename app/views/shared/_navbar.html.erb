@@ -1,7 +1,29 @@
-<div class="navbar">
-  <div class="navbar-left">
-    <%= link_to timelines_path do %>
-      <%= image_tag "timelinez_logo.svg", alt: "Timelinez Logo", class: "navbar-logo" %>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark rounded">
+  <div class="container-fluid">
+    <%= link_to timelines_path, class: "navbar-brand text-white" do %>
+      <%= image_tag "timelinez_logo_light.svg", alt: "Timelinez Logo", height: 30, class: "d-inline-block align-text-top" %>
     <% end %>
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <%= link_to timelines_path, class: "nav-link text-white #{current_page?(timelines_path) ? 'active' : ''}" do %>
+            Le mie timeline
+          <% end %>
+        </li>
+      </ul>
+      
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <%= link_to "#", class: "nav-link text-white" do %>
+            Login
+          <% end %>
+        </li>
+      </ul>
+    </div>
   </div>
-</div> 
+</nav> 

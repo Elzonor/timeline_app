@@ -84,10 +84,21 @@
       min-height: 21px !important;
 
       .time-unit-line {
-        border-right: 2px dashed #CCCCCC !important;
+        border-right: 2px dashed #222 !important;
         print-color-adjust: exact;
         -webkit-print-color-adjust: exact;
       }
+    }
+
+    // Manteniamo le opacità per gli elementi futuri
+    .time-unit-line.future,
+    .end-of-time-unit-line.future {
+      opacity: 0.13 !important;
+    }
+
+    .event-line.is-future,
+    .event-title-line.is-future {
+      opacity: 0.34 !important;
     }
   }
 
@@ -98,21 +109,23 @@
     margin-bottom: 0;
     print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
-    
-    a {
-      text-decoration: none;
-      print-color-adjust: exact;
-      -webkit-print-color-adjust: exact;
+
+    &.future .event-title-link {
+      opacity: 0.34 !important;
     }
   }
 
-  // Assicuriamoci che i colori degli eventi siano visibili mantenendo l'opacità per gli elementi futuri
-  .event-line,
-  .event-title-line,
-  .event-title {
-    &:not(.future) {
-      opacity: 1 !important;
-    }
+  // Manteniamo le opacità per event-duration e il separatore
+  .event-duration {
+    opacity: 0.55 !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .event-duration-separator {
+    opacity: 0.34 !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
   }
 
   // Ottimizziamo la visualizzazione delle date

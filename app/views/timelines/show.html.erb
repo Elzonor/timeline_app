@@ -17,10 +17,6 @@
 <% end %>
 
 <div class="actions">
-  <%= link_to timelines_path, class: 'icon-link' do %>
-    <i class="fas fa-arrow-left"></i> <%= t('actions.back_to_timelines') %>
-  <% end %> | 
-  <%= link_to t('actions.edit_timeline'), edit_timeline_path(@timeline) %> |
   <%= link_to t('actions.add_event'), new_timeline_event_path(@timeline) %>
 </div>
 
@@ -346,7 +342,7 @@
             </div>
             <% is_future = time_unit > Date.current %>
             <div class="time-unit-line <%= is_future ? 'future' : '' %>"></div>
-            <div class="end-of-time-unit-line" style="background-color: <%= is_future ? '#CCC' : '#222' %>;"></div>
+            <div class="end-of-time-unit-line <%= is_future ? 'future' : '' %>"></div>
           </div>
           <div class="time-unit-lines time-unit-gap"></div>
           <div class="time-unit-events time-unit-gap"></div>
@@ -366,7 +362,7 @@
             </div>
             <% is_future = time_unit > Date.current %>
             <div class="time-unit-line <%= is_future ? 'future' : '' %>"></div>
-            <div class="end-of-time-unit-line" style="background-color: <%= is_future ? '#CCC' : '#222' %>;"></div>
+            <div class="end-of-time-unit-line <%= is_future ? 'future' : '' %>"></div>
           </div>
           <div class="time-unit-lines">
             <% @ordered_events.each_with_index do |event, index| %>
@@ -410,7 +406,7 @@
                 %>
                 
                 <% unless is_single_day_event %>
-                  <div class="event-line <%= event.start_date > Date.current ? 'future' : '' %>" 
+                  <div class="event-line <%= event.start_date > Date.current || time_unit > Date.current ? 'is-future' : '' %>" 
                        style="background-color: <%= event.color %>; 
                               left: <%= left_position %>px;
                               z-index: <%= z_index %>;"></div>
@@ -432,7 +428,7 @@
                 %>
                 
                 <% if event_ends_in_time_unit %>
-                  <div class="event-title-line <%= event.start_date > Date.current ? 'future' : '' %>" 
+                  <div class="event-title-line <%= event.start_date > Date.current || time_unit > Date.current ? 'is-future' : '' %>" 
                        style="background-color: <%= event.color %>; 
                               left: <%= is_single_day_event ? 0 : left_position + 5 %>px;
                               width: calc(100% - <%= is_single_day_event ? 0 : left_position + 5 %>px);
@@ -461,10 +457,30 @@
               
               <% if event_ends_in_time_unit %>
                 <div class="event-title <%= event.start_date > Date.current ? 'future' : '' %>">
-                  <%= link_to edit_timeline_event_path(@timeline, event), 
-                              style: "color: #{event.color};",
-                              class: "event-title-link" do %>
-                    <%= event.name %> <%= format_event_dates(event) %>
+                  <%= link_to event.name,
+                            edit_timeline_event_path(@timeline, event),
+                            style: "color: #{event.color};",
+                            class: "event-title-link" %>
+                  
+                  <% if event.start_date %>
+                    <span class="event-duration-separator"> — </span>
+                    <% duration_content = capture do %>
+                      <% if event.event_duration == '1-day' %>
+                        <%= l(event.start_date, format: '%d %b') %>
+                      <% else %>
+                        <% duration_text = DurationFormatter.format_duration(event.duration) %>
+                        <% if event.event_type == 'open' %>
+                          <%= l(event.start_date, format: '%d %b') %> - ... (<%= duration_text %>)
+                        <% else %>
+                          <%= l(event.start_date, format: '%d %b') %>-<%= l(event.end_date, format: '%d %b') %> (<%= duration_text %>)
+                        <% end %>
+                      <% end %>
+                      <i class="fas fa-edit ms-1"></i>
+                    <% end %>
+                    
+                    <%= link_to duration_content,
+                              edit_timeline_event_path(@timeline, event),
+                              class: "event-duration" %>
                   <% end %>
                 </div>
               <% end %>

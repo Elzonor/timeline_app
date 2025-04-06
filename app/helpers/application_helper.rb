@@ -30,14 +30,14 @@ module ApplicationHelper
     return unless event.start_date
     
     if event.event_duration == '1-day'
-      content_tag(:span, "— #{l(event.start_date, format: '%d %b')}", class: 'font-normal')
+      content_tag(:span, "— #{l(event.start_date, format: '%d %b')}", class: 'event-duration')
     else
       duration_text = DurationFormatter.format_duration(event.duration)
       
       if event.event_type == 'open'
-        content_tag(:span, "— #{l(event.start_date, format: '%d %b')} - ... (#{duration_text})", class: 'font-normal')
+        content_tag(:span, "— #{l(event.start_date, format: '%d %b')} - ... (#{duration_text})", class: 'event-duration')
       else
-        content_tag(:span, "— #{l(event.start_date, format: '%d %b')}-#{l(event.end_date, format: '%d %b')} (#{duration_text})", class: 'font-normal')
+        content_tag(:span, "— #{l(event.start_date, format: '%d %b')}-#{l(event.end_date, format: '%d %b')} (#{duration_text})", class: 'event-duration')
       end
     end
   end

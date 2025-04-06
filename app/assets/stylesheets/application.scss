@@ -25,7 +25,7 @@
 }
 
 // Variabili
-$text-color: #666;
+$text-color: #222;
 $hover-bg: #f5f5f5;
 $border-color: #CCC;
 $accent-color: #007bff;
@@ -34,12 +34,13 @@ $accent-color: #007bff;
 $timeline-standard-color: #222;
 $timeline-gap-color: #CCCCCC;
 
-// Variabile per l'opacità degli elementi futuri
-$future-element-opacity: 0.34;
+// Variabili per l'opacità degli elementi futuri
+$future-time-unit-opacity: 0.13;
+$future-event-opacity: 0.34;
 
 // Stili base
 body {
-  font-family: 'Fira Sans', sans-serif;
+  font-family: 'Fira Sans', sans-serif !important;
   padding-top: 70px; // Spazio per la navbar fissa
 }
 
@@ -50,12 +51,23 @@ body {
   -webkit-backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   width: 100%;
+  font-family: 'Fira Sans', sans-serif !important;
   
   // Centra il contenuto della navbar
   > .container-fluid {
     max-width: 1320px;
     margin: 0 auto;
     padding: 0 15px;
+  }
+
+  // Forza Fira Sans su tutti gli elementi della navbar
+  .navbar-nav,
+  .nav-link,
+  .navbar-brand,
+  .dropdown-menu,
+  .dropdown-item {
+    font-family: 'Fira Sans', sans-serif !important;
+    font-size: 0.89rem;
   }
 }
 
@@ -206,13 +218,13 @@ input[type="submit"] {
   display: flex;
   justify-content: flex-start;
   width: 100%;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2.5rem;
 }
 
 .view-switch {
   display: flex;
   align-items: center;
-  background: #f1f1f1;
+  background: rgba(0, 0,0, 0.05);
   padding: 4px;
   border-radius: 8px;
   width: fit-content;
@@ -336,8 +348,8 @@ input[type="submit"] {
   bottom: 0;
   width: 5px;
   
-  &.future {
-    opacity: $future-element-opacity;
+  &.is-future {
+    opacity: $future-event-opacity;
   }
 }
 
@@ -386,17 +398,23 @@ input[type="submit"] {
   height: 100%;
   
   &.future {
-    background-color: $timeline-gap-color;
+    background-color: $timeline-standard-color;
+    opacity: $future-time-unit-opacity;
   }
 }
 
 .end-of-time-unit-line {
   position: absolute;
-  right: 0;
+  right: 2px;
   top: 0;
-  width: 8px;
+  width: 5px;
   height: 1px;
   background-color: $timeline-standard-color;
+  
+  &.future {
+    background-color: $timeline-standard-color;
+    opacity: $future-time-unit-opacity;
+  }
 }
 
 .events-container {
@@ -416,8 +434,8 @@ input[type="submit"] {
   top: 0;
   height: 1px;
   
-  &.future {
-    opacity: $future-element-opacity;
+  &.is-future {
+    opacity: $future-event-opacity;
   }
 }
 
@@ -428,10 +446,11 @@ input[type="submit"] {
   margin-top: -8px;
   font-weight: 500;
   padding-bottom: 8px;
-  
-  &.future {
-    opacity: $future-element-opacity;
-  }
+
+}
+
+.event-title.future .event-title-link {
+  opacity: 0.34;
 }
 
 .event-title-link {
@@ -459,7 +478,7 @@ a.event-title-link:hover {
   
   .time-unit-line {
     border-left: none;
-    border-right: 2px dashed $timeline-gap-color;
+    border-right: 2px dashed $timeline-standard-color;
     background: none;
     background-color: transparent !important;
     width: 0;
@@ -478,14 +497,21 @@ a.event-title-link:hover {
 } 
 
 h1 {
-  font-weight: 800;
+  font-weight: 700;
   padding: 0px 0 21px;
   margin: 0;
 }
 
-.font-normal {
-  color: #AAA;
-  // font-family: 'Fira Sans Mono', monospace !important;
+.event-duration {
+  color: $text-color;
+  font-size: 0.89em;
+  font-weight: normal;
+  opacity: 0.55;
+}
+
+.event-duration-separator {
+  color: $text-color;
+  opacity: 0.34;
   font-size: 0.89em;
   font-weight: normal;
 }

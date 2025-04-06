@@ -28,6 +28,11 @@
             <span class="fas fa-cog"></span> <%= t('shared.navbar.config') %>
           <% end %>
         </li>
+        <li class="nav-item">
+          <%= link_to "#", class: "nav-link text-white" do %>
+            <span class="fas fa-sign-in-alt"></span> <%= t('shared.navbar.login') %>
+          <% end %>
+        </li>
         <li class="nav-item dropdown">
           <button class="nav-link dropdown-toggle text-white border-0 bg-transparent" data-bs-toggle="dropdown" aria-expanded="false">
             <span class="fas fa-globe"></span> <%= I18n.locale.to_s.upcase %>
@@ -44,11 +49,6 @@
               <% end %>
             </li>
           </ul>
-        </li>
-        <li class="nav-item">
-          <%= link_to "#", class: "nav-link text-white" do %>
-            <span class="fas fa-sign-in-alt"></span> <%= t('shared.navbar.login') %>
-          <% end %>
         </li>
       </ul>
     </div>

@@ -40,12 +40,33 @@ $future-element-opacity: 0.34;
 // Stili base
 body {
   font-family: 'Fira Sans', sans-serif;
+  padding-top: 70px; // Spazio per la navbar fissa
+}
+
+// Stili per la navbar traslucida
+.glass-nav {
+  background: rgba(34, 51, 68, 0.66) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 100%;
+  
+  // Centra il contenuto della navbar
+  > .container-fluid {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 0 15px;
+  }
 }
 
 // Stili per il logo nella navbar
 .navbar-brand img {
   height: 30px;
   width: auto;
+}
+
+.navbar.bg-dark {
+  background-color: #0D4949 !important;
 }
 
 .navigation-bar a {
@@ -458,7 +479,7 @@ a.event-title-link:hover {
 
 h1 {
   font-weight: 800;
-  padding: 34px 0 21px;
+  padding: 0px 0 21px;
   margin: 0;
 }
 

@@ -190,3 +190,52 @@ L'implementazione della gestione del fuso orario segue un approccio incrementale
 Per garantire prestazioni ottimali anche con grandi quantità di dati, l'applicazione implementa diverse strategie di ottimizzazione. Le query per il calcolo delle durate sono ottimizzate per minimizzare il carico sul database, mentre le relazioni tra timeline ed eventi sono gestite in modo efficiente per ridurre il numero di query necessarie.
 
 L'implementazione di touch: true garantisce aggiornamenti efficienti dei timestamp, mentre il ricalcolo dei gruppi di eventi è ottimizzato per mantenere le prestazioni anche con timeline complesse.
+
+## Internazionalizzazione (i18n)
+L'applicazione implementa un sistema completo di internazionalizzazione che permette agli utenti di utilizzare l'interfaccia nella loro lingua preferita. Attualmente sono supportate due lingue:
+- Italiano (lingua predefinita)
+- Inglese
+
+### Gestione delle Lingue
+- Il cambio lingua è accessibile attraverso un menu dropdown nella navbar
+- La selezione della lingua persiste tra le sessioni attraverso il parametro `locale` nell'URL
+- Il sistema utilizza il locale predefinito (italiano) quando non viene specificata una preferenza
+
+### Struttura delle Traduzioni
+Le traduzioni sono organizzate in file YAML separati per ogni lingua supportata (`config/locales/it.yml` e `config/locales/en.yml`) e coprono:
+
+1. **Formattazione Date e Orari**
+   - Formati personalizzati per timeline
+   - Nomi dei mesi (completi e abbreviati)
+   - Pattern di date specifici per diverse visualizzazioni
+
+2. **Gestione Eventi**
+   - Etichette dei campi
+   - Messaggi di validazione
+   - Testi per la durata degli eventi
+   - Messaggi di conferma e feedback
+
+3. **Interfaccia Timeline**
+   - Titoli e intestazioni
+   - Opzioni di visualizzazione
+   - Messaggi di sistema
+   - Pulsanti e azioni
+
+4. **Elementi di Navigazione**
+   - Menu della navbar
+   - Breadcrumb
+   - Pulsanti di azione
+   - Link di navigazione
+
+### Implementazione Tecnica
+- Utilizzo del middleware Rails i18n per la gestione delle traduzioni
+- Supporto per il fallback delle traduzioni mancanti
+- Gestione automatica del locale attraverso il parametro URL
+- Persistenza della preferenza linguistica tra le pagine
+
+### Estensibilità
+Il sistema è progettato per supportare facilmente l'aggiunta di nuove lingue attraverso:
+- Una struttura modulare dei file di traduzione
+- Un sistema di fallback robusto
+- Una gestione centralizzata delle stringhe localizzate
+- Un'interfaccia utente facilmente estensibile per nuove opzioni linguistiche

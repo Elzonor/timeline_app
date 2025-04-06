@@ -117,4 +117,14 @@ it:
           attributes:
             end_date:
               blank: "non può essere lasciato vuoto"
-              invalid: "non è valida" 
+              invalid: "non è valida"
+
+  shared:
+    navbar:
+      timelines: "Le mie timeline"
+      news: "Novità"
+      config: "Configurazione"
+      login: "Accedi"
+      languages:
+        it: "Italiano"
+        en: "Inglese" 

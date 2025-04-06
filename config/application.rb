@@ -9,10 +9,12 @@ Bundler.require(*Rails.groups)
 module TimelineApp
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 7.0
+    config.load_defaults 7.1
 
-    # Set Italian as default locale
+    # Configurazione i18n
+    config.i18n.available_locales = [:it, :en]
     config.i18n.default_locale = :it
+    config.i18n.fallbacks = true
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers

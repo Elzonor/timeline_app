@@ -31,6 +31,10 @@
 
 en:
   hello: "Hello world"
+  time:
+    formats:
+      short: "%Y-%m-%d"
+      long: "%Y-%m-%d %H:%M:%S"
   date:
     formats:
       short: "%d-%m-%Y"
@@ -44,3 +48,115 @@ en:
       year: "%Y"
       day: "%-d %b %Y"
       day_no_year: "%-d %b"
+    abbr_month_names:
+      [~, Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec]
+    month_names:
+      [~, January, February, March, April, May, June, July, August, September, October, November, December]
+      
+  # Event count handling
+  events_count:
+    one: "event"
+    other: "events"
+  
+  # Duration handling
+  duration:
+    days:
+      one: "day"
+      other: "days"
+    weeks:
+      one: "week"
+      other: "weeks"
+    months:
+      one: "month"
+      other: "months"
+    years:
+      one: "year"
+      other: "years"
+    span_text: "over %{weeks} and %{months}"
+  
+  # Timeline duration
+  timeline:
+    span_text: "This timeline spans %{weeks} and %{months}."
+    span_text_with_days:
+      one: "%{count_formatted} event covering %{days}, %{weeks} and %{months}, over %{total_years}."
+      other: "%{count_formatted} events covering %{days}, %{weeks} and %{months}, over %{total_years}."
+    view_by: "View by"
+    view_types:
+      days: "Days"
+      weeks: "Weeks"
+      months: "Months"
+      years: "Years"
+  
+  # Titles and headers
+  titles:
+    timelines: "My Timelines"
+    new_timeline: "New Timeline"
+    edit_timeline: "Edit Timeline"
+    events: "Events"
+    new_event: "New Event"
+    edit_event: "Edit Event"
+  
+  # Field labels
+  labels:
+    name: "Event"
+    description: "Notes"
+    start_date: "From"
+    end_date: "To"
+    ongoing: "Ongoing"
+    color: "Color"
+    duration:
+      one_day: "One day duration"
+      multiple_days: "Multiple days duration"
+      from: "from"
+      to: "to"
+  
+  # Buttons and actions
+  actions:
+    update_event: "Update event and return to timeline"
+    create_event: "Create event"
+    add_event: "Add event"
+    edit_event: "Edit event"
+    edit_timeline: "Edit"
+    back_to_timeline: "Back to Timeline"
+    back_to_timelines: "Back to my timelines"
+    back_to_event: "Back to event"
+    back: "Back"
+    show: "View"
+    edit: "Edit"
+    home: "All Timelines"
+    cancel_and_return_to_timeline: "cancel and return to timeline"
+  
+  # Messages
+  messages:
+    no_events: "No events present."
+    confirm: "Are you sure?"
+    timeline_errors: "prevented the timeline from being saved:"
+    event_errors: "prevented the event from being saved:"
+    event_created: "Event created"
+    event_updated: "Event updated"
+    event_deleted: "Event deleted"
+    timeline_created: "Timeline successfully created"
+    timeline_updated: "Timeline successfully updated"
+    timeline_destroyed: "Timeline successfully deleted"
+  
+  # Application title
+  app_name: "Timeline"
+
+  activerecord:
+    errors:
+      models:
+        event:
+          attributes:
+            end_date:
+              blank: "cannot be blank"
+              invalid: "is invalid"
+
+  shared:
+    navbar:
+      timelines: "My Timelines"
+      news: "News"
+      config: "Settings"
+      login: "Sign In"
+      languages:
+        it: "Italian"
+        en: "English"

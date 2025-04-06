@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark rounded fixed-top glass-nav">
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top glass-nav">
   <div class="container-fluid">
     <%= link_to timelines_path, class: "navbar-brand text-white" do %>
       <%= image_tag "timelinez_logo_light.svg", alt: "Timelinez Logo", height: 30, class: "d-inline-block align-text-top" %>
@@ -12,7 +12,7 @@
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
           <%= link_to timelines_path, class: "nav-link text-white #{current_page?(timelines_path) ? 'active' : ''}" do %>
-            Le mie timeline
+            <%= t('shared.navbar.timelines') %>
           <% end %>
         </li>
       </ul>
@@ -20,7 +20,34 @@
       <ul class="navbar-nav">
         <li class="nav-item">
           <%= link_to "#", class: "nav-link text-white" do %>
-            Login
+            <span class="fas fa-bell"></span> <%= t('shared.navbar.news') %>
+          <% end %>
+        </li>
+        <li class="nav-item">
+          <%= link_to "#", class: "nav-link text-white" do %>
+            <span class="fas fa-cog"></span> <%= t('shared.navbar.config') %>
+          <% end %>
+        </li>
+        <li class="nav-item dropdown">
+          <button class="nav-link dropdown-toggle text-white border-0 bg-transparent" data-bs-toggle="dropdown" aria-expanded="false">
+            <span class="fas fa-globe"></span> <%= I18n.locale.to_s.upcase %>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li>
+              <%= link_to url_for(locale: :it), class: "dropdown-item#{' active' if I18n.locale == :it}" do %>
+                <% if I18n.locale == :it %><span class="fas fa-check me-2"></span><% end %><%= t('shared.navbar.languages.it') %>
+              <% end %>
+            </li>
+            <li>
+              <%= link_to url_for(locale: :en), class: "dropdown-item#{' active' if I18n.locale == :en}" do %>
+                <% if I18n.locale == :en %><span class="fas fa-check me-2"></span><% end %><%= t('shared.navbar.languages.en') %>
+              <% end %>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <%= link_to "#", class: "nav-link text-white" do %>
+            <span class="fas fa-sign-in-alt"></span> <%= t('shared.navbar.login') %>
           <% end %>
         </li>
       </ul>

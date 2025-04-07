@@ -522,6 +522,12 @@ h1 {
   color: $timeline-standard-color;
 }
 
+@media print {
+  .fa-edit {
+    display: none !important;
+  }
+}
+
 .event-duration-separator {
   color: $text-color;
   opacity: 0.34;

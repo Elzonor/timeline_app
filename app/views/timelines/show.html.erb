@@ -17,7 +17,9 @@
 <% end %>
 
 <div class="actions">
-  <%= link_to t('actions.add_event'), new_timeline_event_path(@timeline) %>
+  <%= link_to new_timeline_event_path(@timeline), class: 'btn btn-primary text-white' do %>
+    <i class="fas fa-plus"></i> <%= t('actions.add_event') %>
+  <% end %>
 </div>
 
 <% if @timeline.events.any? %>

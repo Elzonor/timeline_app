@@ -237,7 +237,7 @@ input[type="submit"] {
     padding: 8px 16px;
     border-radius: 4px;
     transition: all 0.2s ease;
-    color: #666;
+    // color: #666;
     font-size: 0.9rem;
     
     &:hover {
@@ -285,11 +285,17 @@ input[type="submit"] {
   }
 }
 
+.time-unit-year,
+.time-unit-month,
+.time-unit-date, {
+  color: $text-color;
+  opacity: 0.66;
+}
+
 .time-unit-year {
   text-align: right;
   padding-right: 0.5rem;
   padding-left: 0.5rem;
-  color: $text-color;
   font-size: 0.8rem;
   white-space: nowrap;
   font-family: 'Fira Code', monospace;
@@ -315,7 +321,6 @@ input[type="submit"] {
   text-align: right;
   padding-right: 0.5rem;
   padding-left: 0.5rem;
-  color: $text-color;
   font-size: 0.8rem;
   white-space: nowrap;
   font-family: 'Fira Code', monospace;
@@ -369,7 +374,6 @@ input[type="submit"] {
   text-align: right;
   padding-right: 1rem;
   padding-left: 0.5rem;
-  color: $text-color;
   font-size: 0.8rem;
   white-space: nowrap;
   font-family: 'Fira Code', monospace;
@@ -453,6 +457,10 @@ input[type="submit"] {
   opacity: 0.34;
 }
 
+.event-title.future .event-duration {
+  opacity: 0.55 !important;
+}
+
 .event-title-link {
   text-decoration: none;
   background: transparent;
@@ -507,6 +515,11 @@ h1 {
   font-size: 0.89em;
   font-weight: normal;
   opacity: 0.55;
+}
+
+.event-duration a:link,
+.event-duration a:visited {
+  color: $timeline-standard-color;
 }
 
 .event-duration-separator {

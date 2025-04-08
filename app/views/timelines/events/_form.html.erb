@@ -6,26 +6,25 @@
                              action: "submit->event-form#submitForm" },
                       novalidate: true }) do |form| %>
     <% if event.errors.any? %>
-      <div id="error_explanation">
-        <h2><%= pluralize(event.errors.count, "error") %> prohibited this event from being saved:</h2>
-
-        <ul>
-        <% event.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
+      <div class="alert alert-danger" role="alert">
+        <h4 class="alert-heading"><%= pluralize(event.errors.count, "error") %> prohibited this event from being saved:</h4>
+        <ul class="mb-0">
+          <% event.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
         </ul>
       </div>
     <% end %>
     
     <div id="event-description" class="form-data-block">
-      <div class="field">
-        <%= form.label :name, t('labels.name') %>
-        <%= form.text_field :name, autocomplete: "off" %>
+      <div class="field mb-3">
+        <%= form.label :name, t('labels.name'), class: "form-label" %>
+        <%= form.text_field :name, class: "form-control", autocomplete: "off" %>
       </div>
 
-      <div class="field">
-        <%= form.label :description, t('labels.description') %>
-        <%= form.text_area :description %>
+      <div class="field mb-3">
+        <%= form.label :description, t('labels.description'), class: "form-label" %>
+        <%= form.text_area :description, class: "form-control", rows: 3 %>
       </div>
     </div>
 
@@ -34,50 +33,55 @@
       <%= hidden_field_tag :current_duration_type, event.event_duration %>
 
       <div class="field duration-type">
-        <div class="duration-option">
-          <%= radio_button_tag :duration_type, '1-day', event.event_duration == '1-day' || event.new_record?, 
-              class: 'duration-radio', 
-              id: 'duration_type_single',
-              data: { 
-                event_form_target: "singleDayRadio",
-                action: "change->event-form#toggleDurationType"
-              } %>
-          <label for="duration_type_single"><%= t('labels.duration.one_day') %></label>
-          <div class="single-day-container-option date-container" 
+        <div class="duration-option mb-3">
+          <div class="form-check">
+            <%= radio_button_tag :duration_type, '1-day', event.event_duration == '1-day' || event.new_record?, 
+                class: 'form-check-input duration-radio', 
+                id: 'duration_type_single',
+                data: { 
+                  event_form_target: "singleDayRadio",
+                  action: "change->event-form#toggleDurationType"
+                } %>
+            <label class="form-check-label" for="duration_type_single">
+              <%= t('labels.duration.one_day') %>
+            </label>
+          </div>
+          <div class="single-day-container-option date-container ms-4 mt-2" 
                data-event-form-target="singleDayContainer">
-            <%# I campi data verranno spostati qui tramite JavaScript se viene selezionato "Un giorno" %>
           </div>
         </div>
 
-        <div class="duration-option">
-          <%= radio_button_tag :duration_type, 'multi-day', event.event_duration == 'multi-day',
-              class: 'duration-radio', 
-              id: 'duration_type_multi',
-              data: { 
-                event_form_target: "multiDayRadio",
-                action: "change->event-form#toggleDurationType"
-              } %>
-          <label for="duration_type_multi"><%= t('labels.duration.multiple_days') %></label>
-          <div class="multi-day-container-option date-container" 
+        <div class="duration-option mb-3">
+          <div class="form-check">
+            <%= radio_button_tag :duration_type, 'multi-day', event.event_duration == 'multi-day',
+                class: 'form-check-input duration-radio', 
+                id: 'duration_type_multi',
+                data: { 
+                  event_form_target: "multiDayRadio",
+                  action: "change->event-form#toggleDurationType"
+                } %>
+            <label class="form-check-label" for="duration_type_multi">
+              <%= t('labels.duration.multiple_days') %>
+            </label>
+          </div>
+          <div class="multi-day-container-option date-container ms-4 mt-2" 
                data-event-form-target="multiDayContainer">
-            <%# I campi data verranno spostati qui tramite JavaScript se viene selezionato "Dura più giorni" %>
           </div>
         </div>
 
-        <%# Contenitore dei campi data - lo posizioniamo direttamente nel contenitore appropriato %>
         <div id="date-fields-container" class="date-range-fields" 
              data-event-form-target="dateFields">
-          <div class="date-field">
-            <label><%= t('labels.duration.from') %></label>
+          <div class="date-field mb-3">
+            <label class="form-label"><%= t('labels.duration.from') %></label>
             <%= form.date_field :start_date, 
-                               class: 'multi-day-start date-field', 
+                               class: 'form-control multi-day-start', 
                                data: { event_form_target: "startDate" },
                                placeholder: 'Choose date...' %>
           </div>
-          <div class="date-field">
-            <label><%= t('labels.duration.to') %></label>
+          <div class="date-field mb-3">
+            <label class="form-label"><%= t('labels.duration.to') %></label>
             <%= form.date_field :end_date, 
-                               class: 'multi-day-end date-field', 
+                               class: 'form-control multi-day-end', 
                                data: { event_form_target: "endDate" },
                                placeholder: 'Choose date...' %>
           </div>
@@ -86,27 +90,31 @@
     </div>
 
     <div id="event-color" class="form-data-block">
-      <div class="field color-picker">
-        <%= form.label :color, t('labels.color') %>
-        <%= form.color_field :color, value: event.color.present? ? event.color : "#00A3D7" %>
+      <div class="field color-picker mb-3">
+        <%= form.label :color, t('labels.color'), class: "form-label" %>
+        <%= form.color_field :color, 
+                            value: event.color.present? ? event.color : "#00A3D7",
+                            class: "form-control form-control-color" %>
       </div>
     </div>
 
     <div class="actions">
       <%= form.submit event.new_record? ? t('actions.create_event') : t('actions.update_event'), 
-                      class: 'button',
+                      class: 'btn btn-success hover:btn-success',
                       data: { event_form_target: "submitButton" } %>
-      oppure <%= link_to t('actions.cancel_and_return_to_timeline'), timeline_path(@timeline), class: 'back-link' %>
+      oppure <%= link_to t('actions.cancel_and_return_to_timeline'), 
+                    timeline_path(@timeline), 
+                    class: 'btn btn-link text-decoration-none' %>
     </div>
   <% end %>
 
   <% unless event.new_record? %>
-    <div class="delete-action">
+    <div class="delete-action mt-4 pt-4 border-top">
       <%= button_to "Elimina evento",
                    timeline_event_path(@timeline, event),
                    method: :delete,
-                   class: 'delete-button',
-                   form: { class: 'inline-form' },
+                   class: 'btn btn-outline-danger',
+                   form: { class: 'd-inline' },
                    onclick: "return confirm('Sei sicuro di voler eliminare questo evento?')" %>
     </div>
   <% end %>
@@ -116,30 +124,18 @@
   .hidden {
     display: none !important;
   }
-  
-  .inline-form {
-    display: inline;
+
+  <%# TODO: Rimuovere questi stili una volta completata la migrazione da SimpleCSS a Bootstrap.
+            Questi stili sono stati aggiunti temporaneamente per gestire il conflitto tra SimpleCSS e Bootstrap
+            nella visualizzazione del pulsante principale. %>
+  .btn-success {
+    background-color: #198754 !important;
+    color: #fff !important;
   }
-  
-  .delete-button {
-    background: none;
-    border: none;
-    padding: 0;
-    font: inherit;
-    cursor: pointer;
-    color: #dc2626;
-    text-decoration: none;
-  }
-  
-  .delete-button:hover {
-    text-decoration: underline;
-    background: none !important;
-  }
-  
-  .delete-action {
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid #e5e7eb;
+
+  .btn-success:hover {
+    background-color: #157347 !important;
+    color: #fff !important;
   }
 </style>
 

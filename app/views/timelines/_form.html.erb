@@ -1,22 +1,33 @@
 <%= form_with(model: timeline, local: true) do |form| %>
   <% if timeline.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(timeline.errors.count, "error") %> prohibited this timeline from being saved:</h2>
-
-      <ul>
-      <% timeline.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
+    <div class="alert alert-danger" role="alert">
+      <h4 class="alert-heading"><%= pluralize(timeline.errors.count, "error") %> prohibited this timeline from being saved:</h4>
+      <ul class="mb-0">
+        <% timeline.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
       </ul>
     </div>
   <% end %>
 
-  <div class="field">
-    <%= form.label :name %>
-    <%= form.text_field :name %>
+  <div class="field mb-3">
+    <%= form.label :name, t('labels.name'), class: "form-label" %>
+    <%= form.text_field :name, class: "form-control" %>
   </div>
 
   <div class="actions">
-    <%= form.submit %>
+    <%= form.submit class: 'btn btn-primary' %>
+    oppure <%= link_to t('actions.cancel'), timelines_path, class: 'btn btn-link text-decoration-none' %>
+  </div>
+<% end %>
+
+<% unless timeline.new_record? %>
+  <div class="delete-action mt-4 pt-4 border-top">
+    <%= button_to t('actions.delete'),
+                timeline_path(timeline),
+                method: :delete,
+                class: 'btn btn-outline-danger',
+                form: { class: 'd-inline' },
+                data: { turbo_confirm: t('messages.confirm') } %>
   </div>
 <% end %>

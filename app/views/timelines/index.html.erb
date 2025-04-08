@@ -1,38 +1,48 @@
-<p id="notice"><%= notice %></p>
-
-<h1><%= t('titles.timelines') %></h1>
-
-<div class="actions">
-  <%= link_to new_timeline_path, class: 'btn btn-primary text-white' do %>
-    <i class="fas fa-plus"></i> <%= t('titles.new_timeline') %>
-  <% end %>
-</div>
-
-<div class="grid">
-  <div class="header">
-    <div><%= t('labels.name') %></div>
-    <div></div>
-    <div></div>
+<% if notice %>
+  <div class="alert alert-success alert-dismissible fade show" role="alert">
+    <%= notice %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>
+<% end %>
 
-  <% @timelines.each do |timeline| %>
-    <div class="row">
-      <div>
-        <%= link_to timeline_path(timeline) do %>
-          <strong><%= timeline.name %></strong> (<%= timeline.events.count %> <%= t('events_count', count: timeline.events.count) %>)
+<div class="container mt-4">
+  <div class="row">
+    <div class="col">
+      <h1 class="mb-4"><%= t('titles.timelines') %></h1>
+
+      <div class="actions mb-4">
+        <%= link_to new_timeline_path, class: 'btn btn-primary text-white' do %>
+          <i class="fas fa-plus me-1"></i><%= t('titles.new_timeline') %>
         <% end %>
       </div>
-      <div><%= link_to edit_timeline_path(timeline), class: 'icon-link icon-edit' do %>
-        <i class="fas fa-edit"></i>
-      <% end %></div>
-      <div><%= link_to timeline, 
-              data: { 
-                turbo_method: :delete,
-                turbo_confirm: t('messages.confirm')
-              },
-              class: 'icon-link icon-delete' do %>
-        <i class="fas fa-trash"></i>
-      <% end %></div>
+
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <tbody>
+            <% @timelines.each do |timeline| %>
+              <tr class="py-3 border-top-0">
+                <td class="py-3">
+                  <%= link_to timeline_path(timeline), class: "text-decoration-none" do %>
+                    <strong><%= timeline.name %></strong>
+                  <% end %>
+                </td>
+                <td class="py-3 text-center">
+                  <span class="badge bg-light text-secondary">
+                    <%= timeline.events.count %> <%= t('events_count', count: timeline.events.count) %>
+                  </span>
+                </td>
+                <td class="text-end py-3">
+                  <%= link_to edit_timeline_path(timeline), 
+                            class: 'text-secondary text-decoration-none',
+                            title: t('actions.edit') do %>
+                    <i class="fas fa-edit"></i>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
     </div>
-  <% end %>
+  </div>
 </div>

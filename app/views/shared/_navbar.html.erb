@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark fixed-top glass-nav">
+<nav class="navbar navbar-expand-lg navbar-dark glass-nav rounded">
   <div class="container-fluid">
     <%= link_to timelines_path, class: "navbar-brand text-white" do %>
       <%= image_tag "timelinez_logo_light.svg", alt: "Timelinez Logo", height: 30, class: "d-inline-block align-text-top" %>
@@ -12,7 +12,7 @@
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
           <%= link_to timelines_path, class: "nav-link text-white #{current_page?(timelines_path) ? 'active' : ''}" do %>
-            <%= t('shared.navbar.timelines') %>
+           <span class="fa-solid fa-clock"></span> <%= t('shared.navbar.timelines') %>
           <% end %>
         </li>
       </ul>
@@ -26,11 +26,6 @@
         <li class="nav-item">
           <%= link_to "#", class: "nav-link text-white" do %>
             <span class="fas fa-cog"></span> <%= t('shared.navbar.config') %>
-          <% end %>
-        </li>
-        <li class="nav-item">
-          <%= link_to "#", class: "nav-link text-white" do %>
-            <span class="fas fa-sign-in-alt"></span> <%= t('shared.navbar.login') %>
           <% end %>
         </li>
         <li class="nav-item dropdown">
@@ -49,6 +44,11 @@
               <% end %>
             </li>
           </ul>
+        </li>
+        <li class="nav-item">
+          <%= link_to "#", class: "btn btn-outline-light ms-2" do %>
+            <span class="fas fa-sign-in-alt"></span> <%= t('shared.navbar.login') %>
+          <% end %>
         </li>
       </ul>
     </div>

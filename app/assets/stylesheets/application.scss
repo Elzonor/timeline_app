@@ -41,23 +41,26 @@ $future-event-opacity: 0.34;
 // Stili base
 body {
   font-family: 'Fira Sans', sans-serif !important;
-  padding-top: 70px; // Spazio per la navbar fissa
+  padding-top: 0px; // Spazio per la navbar fissa
 }
 
 // Stili per la navbar traslucida
 .glass-nav {
-  background: rgba(34, 51, 68, 0.66w) !important;
+  background: rgba(34, 51, 68, 0.66) !important;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   width: 100%;
-  font-family: 'Fira Sans', sans-serif !important;
-  
+  font-family: 'Fira Sans', sans-serif !important;  
   // Centra il contenuto della navbar
   > .container-fluid {
     max-width: 1320px;
     margin: 0 auto;
     padding: 0 15px;
+  }
+
+  .rounded.glass-nav {
+    border-radius: 16px !important;
   }
 
   // Forza Fira Sans su tutti gli elementi della navbar

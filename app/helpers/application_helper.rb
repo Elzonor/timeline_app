@@ -1,7 +1,7 @@
 module ApplicationHelper
   # Restituisce il titolo completo della pagina in base al contesto
   def page_title
-    base_title = "TIMELINEZ"
+    base_title = "Timelinez"
     
     # Pagina principale (index delle timeline)
     return base_title if controller_name == 'timelines' && action_name == 'index'

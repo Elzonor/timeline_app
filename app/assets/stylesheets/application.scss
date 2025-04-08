@@ -41,37 +41,44 @@ $future-event-opacity: 0.34;
 // Stili base
 body {
   font-family: 'Fira Sans', sans-serif !important;
-  padding-top: 0px; // Spazio per la navbar fissa
+  padding-top: 76px; // Spazio per la navbar fissa
 }
 
 // Stili per la navbar traslucida
 .glass-nav {
-  background: rgba(34, 51, 68, 0.66) !important;
+  background: rgba(250, 250, 250, 0.66) !important;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  width: 100%;
-  font-family: 'Fira Sans', sans-serif !important;  
-  // Centra il contenuto della navbar
-  > .container-fluid {
-    max-width: 1320px;
-    margin: 0 auto;
-    padding: 0 15px;
-  }
+  border: 1px solid rgba(240, 240, 240, 0.66);
+  width: calc(100% - 32px); // Riduciamo la larghezza per mantenere spazio dai bordi
+  font-family: 'Fira Sans', sans-serif !important;
+  max-width: 1320px;
+  margin: 0 auto;
+  box-shadow: 0 0 13px 0 rgba(0, 0, 0, 0.08 );
+}
 
-  .rounded.glass-nav {
-    border-radius: 16px !important;
-  }
+.glass-nav.fixed-top {
+  left: 50%;
+  transform: translateX(-50%);
+  top: 21px;
+}
 
-  // Forza Fira Sans su tutti gli elementi della navbar
-  .navbar-nav,
-  .nav-link,
-  .navbar-brand,
-  .dropdown-menu,
-  .dropdown-item {
-    font-family: 'Fira Sans', sans-serif !important;
-    font-size: 0.89rem;
-  }
+.glass-nav > .container-fluid {
+  padding: 0 15px;
+}
+
+.rounded.glass-nav {
+  border-radius: 16px !important;
+}
+
+// Forza Fira Sans su tutti gli elementi della navbar
+.navbar-nav,
+.nav-link,
+.navbar-brand,
+.dropdown-menu,
+.dropdown-item {
+  font-family: 'Fira Sans', sans-serif !important;
+  font-size: 0.89rem;
 }
 
 // Stili per il logo nella navbar
@@ -290,7 +297,7 @@ input[type="submit"] {
 
 .time-unit-year,
 .time-unit-month,
-.time-unit-date, {
+.time-unit-date {
   color: $text-color;
   opacity: 0.66;
 }
@@ -536,4 +543,16 @@ h1 {
   opacity: 0.34;
   font-size: 0.89em;
   font-weight: normal;
+}
+
+// Media query per schermi molto stretti
+@media (max-width: 576px) {
+  .glass-nav {
+    width: calc(100% - 24px); // Spazio leggermente ridotto su mobile
+  }
+}
+
+// Stile per il pulsante outline-dark con testo chiaro in hover
+.btn-outline-dark.hover-light:hover {
+  color: #fff !important;
 }

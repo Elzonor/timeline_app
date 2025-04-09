@@ -11,6 +11,11 @@ $spacing-small: 0.5rem;
 $spacing-medium: 1rem;
 $spacing-large: 2rem;
 
+// Utility classes
+.hidden {
+  display: none !important;
+}
+
 // Stili per il form degli eventi
 .events-form {
   // Stili specifici per il form degli eventi

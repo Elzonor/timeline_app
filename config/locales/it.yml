@@ -96,13 +96,13 @@ it:
   
   # Messaggi
   messages:
-    no_events: "Nessun evento presente."
+    no_events: "Nessun evento ancora presente 🥱"
     confirm: "Sei sicuro?"
     timeline_errors: "hanno impedito il salvataggio della timeline:"
     event_errors: "hanno impedito il salvataggio dell'evento:"
-    event_created: "Evento creato"
-    event_updated: "Evento aggiornato"
-    event_deleted: "Evento eliminato"
+    event_created: "L'evento è stato creato 😊"
+    event_updated: "L'evento è stato aggiornato 😊"
+    event_deleted: "L'evento è stato eliminato 😊"
     timeline_created: "La tua nuova timeline è pronta! Adesso puoi aggiungere nuovi eventi in qualsiasi momento 😊"
     timeline_updated: "La tua timeline è stata aggiornata 😊"
     timeline_destroyed: "La tua timeline è stata eliminata 😊"

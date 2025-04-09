@@ -9,8 +9,11 @@
       <% end %>
 
       <div class="card">
-        <div class="card-header" style="background-color: <%= @event.color %>20">
-          <h1 class="card-title mb-0" style="color: <%= @event.color %>"><%= @event.name %></h1>
+        <div class="card-header p-3" data-color="<%= @event.color %>">
+          <div class="d-flex align-items-center">
+            <div class="color-indicator me-3" style="width: 4px; height: 24px; background-color: <%= @event.color %>;"></div>
+            <h1 class="card-title mb-0 fw-bold"><%= @event.name %></h1>
+          </div>
         </div>
         
         <div class="card-body">

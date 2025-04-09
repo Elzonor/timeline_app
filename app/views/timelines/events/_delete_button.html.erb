@@ -1,8 +1,7 @@
-<%= link_to 'elimina evento',
-             timeline_event_path(@timeline, event),
-             data: {
-               "turbo-method": "delete",
-               "turbo-confirm": t('messages.confirm')
-             },
-             class: "delete-button",
-             style: "color: red;" %> 
+<%= button_to timeline_event_path(@timeline, event),
+             method: :delete,
+             class: "btn btn-outline-danger btn-sm",
+             form: { class: "d-inline-block" },
+             data: { turbo_confirm: t('messages.confirm') } do %>
+  <i class="fas fa-trash me-1"></i><%= t('actions.delete') %>
+<% end %> 

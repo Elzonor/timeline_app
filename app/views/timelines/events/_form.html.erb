@@ -19,12 +19,26 @@
     <div id="event-description" class="form-data-block">
       <div class="field mb-3">
         <%= form.label :name, t('labels.name'), class: "form-label" %>
-        <%= form.text_field :name, class: "form-control", autocomplete: "off" %>
+        <%= form.text_field :name, 
+                           class: "form-control #{'is-invalid' if event.errors[:name].any?}", 
+                           autocomplete: "off" %>
+        <% if event.errors[:name].any? %>
+          <div class="invalid-feedback">
+            <%= event.errors[:name].join(', ') %>
+          </div>
+        <% end %>
       </div>
 
       <div class="field mb-3">
         <%= form.label :description, t('labels.description'), class: "form-label" %>
-        <%= form.text_area :description, class: "form-control", rows: 3 %>
+        <%= form.text_area :description, 
+                          class: "form-control #{'is-invalid' if event.errors[:description].any?}", 
+                          rows: 3 %>
+        <% if event.errors[:description].any? %>
+          <div class="invalid-feedback">
+            <%= event.errors[:description].join(', ') %>
+          </div>
+        <% end %>
       </div>
     </div>
 

@@ -1,5 +1,11 @@
-<h1>New Timeline</h1>
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-12 col-lg-10 offset-lg-1">
+      <h1 class="mb-4"><%= t('titles.new_timeline') %></h1>
 
-<%= render 'form', timeline: @timeline %>
+      <%= render 'form', timeline: @timeline %>
 
-<%= link_to 'Back', timelines_path %>
+      <%= link_to t('actions.back'), timelines_path, class: 'btn btn-link text-decoration-none' %>
+    </div>
+  </div>
+</div>

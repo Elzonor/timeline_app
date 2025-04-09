@@ -1,3 +1,10 @@
 <div id="no-notice-spacer"></div>
 
-<%= render 'form', event: @event %>
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-12 col-lg-10 offset-lg-1">
+      <h1 class="mb-4"><%= t('titles.new_event') %></h1>
+      <%= render 'form', event: @event %>
+    </div>
+  </div>
+</div>

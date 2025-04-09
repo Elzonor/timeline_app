@@ -1,23 +1,48 @@
-<p id="notice"><%= notice %></p>
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-12 col-lg-10 offset-lg-1">
+      <% if notice %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <%= notice %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      <% end %>
 
-<h1 style="color: <%= @event.color %>;"><%= @event.name %></h1>
+      <div class="card">
+        <div class="card-header" style="background-color: <%= @event.color %>20">
+          <h1 class="card-title mb-0" style="color: <%= @event.color %>"><%= @event.name %></h1>
+        </div>
+        
+        <div class="card-body">
+          <div class="mb-4">
+            <h5 class="text-muted mb-2"><%= t('labels.description') %></h5>
+            <p class="mb-0"><%= @event.description.presence || t('messages.no_description') %></p>
+          </div>
 
-<div class="actions">
-  <i class="fas fa-arrow-left"> </i> <%= link_to t('actions.back_to_timeline'), timeline_path(@timeline) %> |
-  <%= link_to t('actions.edit'), edit_timeline_event_path(@timeline, @event) %>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <h5 class="text-muted mb-2"><%= t('labels.start_date') %></h5>
+              <p class="mb-0"><%= l(@event.start_date, format: :long) if @event.start_date %></p>
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <h5 class="text-muted mb-2"><%= t('labels.end_date') %></h5>
+              <p class="mb-0"><%= l(@event.end_date, format: :long) if @event.end_date %></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-footer bg-transparent">
+          <div class="d-flex gap-2">
+            <%= link_to timeline_path(@timeline), class: 'btn btn-outline-secondary' do %>
+              <i class="fas fa-arrow-left me-1"></i><%= t('actions.back_to_timeline') %>
+            <% end %>
+            <%= link_to edit_timeline_event_path(@timeline, @event), class: 'btn btn-primary' do %>
+              <i class="fas fa-edit me-1"></i><%= t('actions.edit') %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-
-<p>
-  <strong><%= t('labels.description') %>:</strong>
-  <%= @event.description %>
-</p>
-
-<p>
-  <strong><%= t('labels.start_date') %>:</strong>
-  <%= @event.start_date %>
-</p>
-
-<p>
-  <strong><%= t('labels.end_date') %>:</strong>
-  <%= @event.end_date %>
-</p>

@@ -103,9 +103,9 @@ it:
     event_created: "Evento creato"
     event_updated: "Evento aggiornato"
     event_deleted: "Evento eliminato"
-    timeline_created: "Timeline creata con successo"
-    timeline_updated: "Timeline aggiornata con successo"
-    timeline_destroyed: "Timeline eliminata con successo"
+    timeline_created: "La tua nuova timeline è pronta! Adesso puoi aggiungere nuovi eventi in qualsiasi momento 😊"
+    timeline_updated: "La tua timeline è stata aggiornata 😊"
+    timeline_destroyed: "La tua timeline è stata eliminata 😊"
   
   # Titolo dell'applicazione
   app_name: "Timeline"

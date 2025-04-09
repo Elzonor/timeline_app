@@ -556,3 +556,7 @@ h1 {
 .btn-outline-dark.hover-light:hover {
   color: #fff !important;
 }
+
+.table-responsive table tbody tr:hover {
+  background-color: red !important;
+}

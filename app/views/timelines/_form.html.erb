@@ -1,7 +1,7 @@
 <%= form_with(model: timeline, local: true) do |form| %>
   <% if timeline.errors.any? %>
     <div class="alert alert-danger" role="alert">
-      <h4 class="alert-heading"><%= pluralize(timeline.errors.count, "error") %> prohibited this timeline from being saved:</h4>
+      <h4 class="alert-heading"><%= pluralize(timeline.errors.count, "error") %> <%= t('messages.timeline_errors') %></h4>
       <ul class="mb-0">
         <% timeline.errors.full_messages.each do |message| %>
           <li><%= message %></li>
@@ -16,8 +16,8 @@
   </div>
 
   <div class="actions">
-    <%= form.submit class: 'btn btn-primary' %>
-    oppure <%= link_to t('actions.cancel'), timelines_path, class: 'btn btn-link text-decoration-none' %>
+    <%= form.submit timeline.new_record? ? t('form.submit.timeline') : t('form.submit.timeline_update'), class: 'btn btn-primary' %>
+    <%= t('form.or') %> <%= link_to t('actions.cancel'), timelines_path, class: 'btn btn-link text-decoration-none' %>
   </div>
 <% end %>
 

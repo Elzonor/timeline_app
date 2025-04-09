@@ -110,6 +110,13 @@ it:
   # Titolo dell'applicazione
   app_name: "Timeline"
 
+  # Form
+  form:
+    or: "oppure"
+    submit:
+      timeline: "Salva timeline"
+      timeline_update: "Aggiorna timeline"
+
   activerecord:
     errors:
       models:

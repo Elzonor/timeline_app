@@ -114,7 +114,7 @@
 
     <div class="actions">
       <%= form.submit event.new_record? ? t('actions.create_event') : t('actions.update_event'), 
-                      class: 'btn btn-success hover:btn-success',
+                      class: 'btn btn-primary',
                       data: { event_form_target: "submitButton" } %>
       oppure <%= link_to t('actions.cancel_and_return_to_timeline'), 
                     timeline_path(@timeline), 

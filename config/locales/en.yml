@@ -142,6 +142,13 @@ en:
   # Application title
   app_name: "Timeline"
 
+  # Form
+  form:
+    or: "or"
+    submit:
+      timeline: "Save timeline"
+      timeline_update: "Update timeline"
+
   activerecord:
     errors:
       models:

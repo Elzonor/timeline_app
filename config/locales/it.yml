@@ -58,7 +58,7 @@ it:
   # Titoli e intestazioni
   titles:
     timelines: "Le mie timeline"
-    new_timeline: "Nuova Timeline"
+    new_timeline: "Crea nuova timeline"
     edit_timeline: "Modifica Timeline"
     events: "Eventi"
     new_event: "Nuovo Evento"

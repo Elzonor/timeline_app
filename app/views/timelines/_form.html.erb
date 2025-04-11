@@ -11,13 +11,13 @@
   <% end %>
 
   <div class="field mb-3">
-    <%= form.label :name, t('labels.name'), class: "form-label" %>
+    <%= form.label :name, t('labels.timeline_name'), class: "form-label" %>
     <%= form.text_field :name, class: "form-control" %>
   </div>
 
   <div class="actions">
     <%= form.submit timeline.new_record? ? t('form.submit.timeline') : t('form.submit.timeline_update'), class: 'btn btn-primary' %>
-    <%= t('form.or') %> <%= link_to t('actions.cancel'), timelines_path, class: 'btn btn-link' %>
+    <span class="ms-3"><%= t('form.or') %></span> <%= link_to t('actions.cancel_timeline_creation'), timelines_path, class: 'btn btn-link' %>
   </div>
 <% end %>
 

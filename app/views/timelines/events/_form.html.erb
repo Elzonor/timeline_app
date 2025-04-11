@@ -18,7 +18,7 @@
     
     <div id="event-description" class="form-data-block">
       <div class="field mb-3">
-        <%= form.label :name, t('labels.name'), class: "form-label" %>
+        <%= form.label :name, t('labels.event_name'), class: "form-label" %>
         <%= form.text_field :name, 
                            class: "form-control #{'is-invalid' if event.errors[:name].any?}", 
                            autocomplete: "off" %>

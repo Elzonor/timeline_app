@@ -5,6 +5,14 @@ $table-hover-bg: rgba(0, 0, 0, 0.02);
 // Aggiungi altre variabili custom qui se necessario
 
 // Importa Bootstrap
-@import "bootstrap";
+// @import "bootstrap";
 
 // Sovrascrivi classi Bootstrap qui se necessario 
+
+h1 {
+  font-weight: 700;
+}
+
+a.btn:hover {
+    text-decoration: none !important;
+}

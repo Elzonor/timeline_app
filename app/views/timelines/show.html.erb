@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container-fluid mt-4">
   <div class="row">
     <div class="col-12">
       <% if notice %>
@@ -10,14 +10,14 @@
     </div>
   </div>
 
-  <div class="row mb-4">
+  <div class="row">
     <div class="col-12">
       <h1><%= @timeline.name %></h1>
     </div>
   </div>
 
   <% if @timeline.duration_details %>
-    <div class="row mb-4">
+    <div class="row mb-3">
       <div class="col-12">
         <% details = @timeline.duration_details %>
         <p class="timeline-duration">

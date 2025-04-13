@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_13_135237) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_13_135650) do
   create_table "events", force: :cascade do |t|
     t.string "name"
     t.text "description"
@@ -42,7 +42,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_13_135237) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.integer "event_id"
-    t.index ["name"], name: "index_timelines_on_name", unique: true
+    t.index "LOWER(name)", name: "index_timelines_on_name_case_insensitive", unique: true
   end
 
   add_foreign_key "timeline_preferences", "timelines"

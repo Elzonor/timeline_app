@@ -4,7 +4,7 @@ class Timeline < ApplicationRecord
 	has_many :events, dependent: :destroy
 	has_one :preference, class_name: 'TimelinePreference', dependent: :destroy
 
-	validates :name, presence: true, uniqueness: true
+	validates :name, presence: true, uniqueness: { case_sensitive: false, message: :timeline_name_exists }
 
 	def duration_details
 		return nil if events.empty?

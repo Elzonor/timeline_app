@@ -142,6 +142,7 @@ it:
             name:
               blank: "non può essere vuoto"
               taken: "è già stato utilizzato"
+              timeline_name_exists: "è già stato utilizzato per un'altra timeline"
         event:
           attributes:
             name:

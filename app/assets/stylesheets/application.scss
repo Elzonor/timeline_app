@@ -537,6 +537,7 @@ a.event-title-link:hover {
 
 // Stili per il layout vuoto della timeline
 .empty-state-container {
+  background-color: rgba(0, 0, 0, 0.02);
   border: 2px dashed rgba(0, 0, 0, 0.21);
   display: flex;
   justify-content: center;

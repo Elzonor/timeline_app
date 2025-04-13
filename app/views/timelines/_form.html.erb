@@ -23,7 +23,7 @@
 
 <% unless timeline.new_record? %>
   <div class="delete-action mt-4 pt-4 border-top">
-    <%= button_to t('actions.delete'),
+    <%= button_to t('actions.delete_timeline'),
                 timeline_path(timeline),
                 method: :delete,
                 class: 'btn btn-outline-danger',

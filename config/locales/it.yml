@@ -96,6 +96,7 @@ it:
     home: "Tutte le Timeline"
     cancel_and_return_to_timeline: "torna alla timeline senza salvare"
     cancel_timeline_creation: "torna alla lista delle tue timeline senza salvare"
+    delete_timeline: "Elimina timeline"
   
   # Messaggi
   messages:

@@ -7,7 +7,7 @@
   </div>
 
   <div class="actions">
-    <%= form.submit timeline.new_record? ? t('form.submit.timeline') : t('form.submit.timeline_update'), class: 'btn btn-primary' %>
+    <%= form.submit timeline.new_record? ? t('form.submit.timeline') : t('form.submit.timeline_update'), class: 'btn btn-primary my-3' %>
     <%= render 'shared/form_separator' %>
     <%= render 'shared/cancel_link',
                text_key: 'actions.cancel_timeline_creation',

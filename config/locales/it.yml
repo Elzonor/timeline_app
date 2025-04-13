@@ -97,11 +97,14 @@ it:
     cancel_and_return_to_timeline: "torna alla timeline senza salvare"
     cancel_timeline_creation: "torna alla lista delle tue timeline senza salvare"
     delete_timeline: "Elimina timeline"
+    delete_event: "Elimina evento"
   
   # Messaggi
   messages:
     no_events: "Nessun evento ancora presente 🥱"
     confirm: "Sei sicuro?"
+    confirm_delete_timeline: "Sei sicuro di voler eliminare questa timeline? Tutti gli eventi associati verranno eliminati definitivamente..."
+    confirm_delete_event: "Sei sicuro di voler eliminare questo evento dalla timeline? Questa azione è irreversibile..."
     timeline_errors: "hanno impedito il salvataggio della timeline:"
     event_errors: "hanno impedito il salvataggio dell'evento:"
     event_created: "L'evento è stato creato 😊"

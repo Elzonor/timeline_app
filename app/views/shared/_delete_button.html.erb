@@ -1,0 +1,15 @@
+<%# Partial riutilizzabile per i pulsanti di eliminazione
+    Parametri:
+    - resource: la risorsa da eliminare (timeline o event)
+    - path: il percorso per l'eliminazione
+    - message_key: la chiave del messaggio di conferma (confirm_delete_timeline o confirm_delete_event)
+%>
+
+<div class="delete-action mt-4 pt-4 border-top">
+  <%= button_to t("actions.delete_#{resource}"),
+              path,
+              method: :delete,
+              class: 'btn btn-outline-danger',
+              form: { class: 'd-inline' },
+              onclick: "return confirm('#{t("messages.#{message_key}")}')" %>
+</div> 

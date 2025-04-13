@@ -1,10 +1,14 @@
 <div class="container mt-4">
   <div class="row">
-    <div class="col">
+    <div class="col-12">
       <h1 class="mb-4"><%= t('titles.edit_timeline') %></h1>
-
+      
       <%= render 'form', timeline: @timeline %>
-
+      
+      <%= render 'shared/delete_button',
+                 resource: 'timeline',
+                 path: timeline_path(@timeline),
+                 message_key: 'confirm_delete_timeline' %>
     </div>
   </div>
 </div>

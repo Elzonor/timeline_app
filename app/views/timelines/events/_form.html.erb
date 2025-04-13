@@ -123,14 +123,10 @@
   <% end %>
 
   <% unless event.new_record? %>
-    <div class="delete-action mt-4 pt-4 border-top">
-      <%= button_to "Elimina evento",
-                   timeline_event_path(@timeline, event),
-                   method: :delete,
-                   class: 'btn btn-outline-danger',
-                   form: { class: 'd-inline' },
-                   onclick: "return confirm('Sei sicuro di voler eliminare questo evento?')" %>
-    </div>
+    <%= render 'shared/delete_button',
+               resource: 'event',
+               path: timeline_event_path(@timeline, event),
+               message_key: 'confirm_delete_event' %>
   <% end %>
 </div>
 

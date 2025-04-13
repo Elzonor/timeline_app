@@ -116,6 +116,7 @@
       <%= form.submit event.new_record? ? t('actions.create_event') : t('actions.update_event'), 
                       class: 'btn btn-primary',
                       data: { event_form_target: "submitButton" } %>
+      <%= render 'shared/form_separator' %>
       <%= render 'shared/cancel_link',
                  text_key: 'actions.cancel_and_return_to_timeline',
                  path: timeline_path(@timeline) %>

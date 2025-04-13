@@ -26,8 +26,10 @@
         </div>
 
         <div class="actions">
-          <%= link_to new_timeline_event_path(@timeline), class: 'btn btn-primary text-white text-nowrap' do %>
-            <i class="fas fa-plus"></i> <%= t('actions.add_event') %>
+          <% if @timeline.events.any? %>
+            <%= link_to new_timeline_event_path(@timeline), class: 'btn btn-primary text-white text-nowrap' do %>
+              <i class="fas fa-plus"></i> <%= t('actions.add_event') %>
+            <% end %>
           <% end %>
         </div>
       </div>

@@ -95,7 +95,8 @@ it:
     edit: "Modifica"
     home: "Tutte le Timeline"
     cancel_and_return_to_timeline: "non salvare e torna alla timeline"
-    cancel_timeline_creation: "non salvare e torna alla lista delle tue timeline"
+    cancel_timeline_creation: "non salvare e torna alle tue timeline"
+    cancel_and_back: "non salvare e torna indietro"
     delete_timeline: "Elimina timeline"
     delete_event: "Elimina evento"
   

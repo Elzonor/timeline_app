@@ -1,14 +1,19 @@
 <%# Layout per timeline vuota %>
 <div class="empty-state-container">
-  <div class="empty-state-content">
+  <div class="empty-state-content py-4">
     <div class="empty-state-text">
-      <h2>Ancora nessun evento per questa timeline...</h2>
-      <p>...crea il primo evento per iniziare a costruire la tua timeline 🤩</p>
+      <h2>Ancora nessun evento per questa timeline... 😊</h2>
+      <p>Crea il primo evento per iniziare a costruire la tua timeline!</p>
     </div>
     <div class="empty-state-action">
       <%= link_to new_timeline_event_path(@timeline), class: 'btn btn-primary text-white text-nowrap' do %>
         <i class="fas fa-plus"></i> <%= t('actions.add_event') %>
       <% end %>
+      <div class="my-3"><%= render 'shared/form_separator' %></div>
+      <div><%= render 'shared/cancel_link',
+                 text_key: 'actions.back_to_timelines',
+                 path: timelines_path,
+                 css_class: 'link-primary text-lowercase' %></div>
     </div>
   </div>
-</div> 
+</div>

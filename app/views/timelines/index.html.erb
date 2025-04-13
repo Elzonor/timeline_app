@@ -14,25 +14,40 @@
       </div>
 
       <div class="table-responsive">
-        <table class="table table-hover align-middle">
+        <style>
+          .btn-link:hover .fa-edit {
+            color: var(--bs-link-color) !important;
+          }
+          .btn-link {
+            text-decoration: none;
+          }
+          .btn-link:hover {
+            text-decoration: none;
+          }
+          .fa-edit {
+            font-weight: 600;
+          }
+        </style>
+        <table class="table align-middle">
           <tbody>
             <% @timelines.each do |timeline| %>
               <tr class="py-3 border-top-0">
-                <td class="py-3">
-                  <%= link_to timeline_path(timeline), class: "d-block text-break" do %>
-                    <strong><%= timeline.name %></strong>
+                <td class="py-3 position-relative" colspan="2">
+                  <%= link_to timeline_path(timeline), class: "d-block text-break stretched-link" do %>
+                    <div class="d-flex align-items-center justify-content-between">
+                      <strong><%= timeline.name %></strong>
+                      <span class="badge bg-light text-secondary ms-3">
+                        <%= timeline.events.count %> <%= t('events_count', count: timeline.events.count) %>
+                      </span>
+                    </div>
                   <% end %>
                 </td>
-                <td class="py-3 text-center">
-                  <span class="badge bg-light text-secondary">
-                    <%= timeline.events.count %> <%= t('events_count', count: timeline.events.count) %>
-                  </span>
-                </td>
-                <td class="text-end py-3">
+                <td class="text-end p-0 position-relative">
                   <%= link_to edit_timeline_path(timeline), 
-                            class: 'text-secondary text-decoration-none d-inline-flex align-items-center',
+                            class: 'btn btn-link btn-sm d-flex align-items-center justify-content-center w-100 h-100 px-4 py-3',
+                            style: 'min-height: 100%',
                             title: t('actions.edit') do %>
-                    <i class="fas fa-edit"></i>
+                    <i class="fas fa-edit text-secondary"></i>
                   <% end %>
                 </td>
               </tr>

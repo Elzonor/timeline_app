@@ -95,7 +95,7 @@
 
     <div class="actions">
       <%= form.submit event.new_record? ? t('actions.create_event') : t('actions.update_event'), 
-                      class: 'btn btn-primary my-3',
+                      class: 'btn btn-primary my-2',
                       data: { event_form_target: "submitButton" } %>
       <%= render 'shared/form_separator' %>
       <%= render 'shared/cancel_link',

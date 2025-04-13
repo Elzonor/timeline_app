@@ -170,7 +170,7 @@ it:
     navbar:
       timelines: "Le mie timeline"
       news: "Novità"
-      config: "Impostazioni"
+      config: "Preferenze"
       login: "Entra"
       languages:
         it: "Italiano"

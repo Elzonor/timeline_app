@@ -126,6 +126,12 @@ en:
     home: "All Timelines"
     cancel_and_return_to_timeline: "cancel and return to timeline"
   
+  # Error handling
+  errors:
+    count:
+      one: "error has"
+      other: "errors have"
+  
   # Messages
   messages:
     no_events: "No events present."
@@ -150,8 +156,17 @@ en:
       timeline_update: "Update timeline"
 
   activerecord:
+    attributes:
+      timeline:
+        name: "Title"
     errors:
+      format: '"%{attribute}" %{message}'
       models:
+        timeline:
+          attributes:
+            name:
+              blank: "cannot be blank"
+              taken: "has already been taken"
         event:
           attributes:
             end_date:

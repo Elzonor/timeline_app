@@ -5,16 +5,7 @@
                              event_form_target: "form",
                              action: "submit->event-form#submitForm" },
                       novalidate: true }) do |form| %>
-    <% if event.errors.any? %>
-      <div class="alert alert-danger" role="alert">
-        <h4 class="alert-heading"><%= pluralize(event.errors.count, "error") %> prohibited this event from being saved:</h4>
-        <ul class="mb-0">
-          <% event.errors.full_messages.each do |message| %>
-            <li><%= message %></li>
-          <% end %>
-        </ul>
-      </div>
-    <% end %>
+    <%= render 'shared/form_errors', resource: event, resource_name: 'event' %>
     
     <div id="event-description" class="form-data-block">
       <div class="field mb-3">
@@ -22,11 +13,6 @@
         <%= form.text_field :name, 
                            class: "form-control #{'is-invalid' if event.errors[:name].any?}", 
                            autocomplete: "off" %>
-        <% if event.errors[:name].any? %>
-          <div class="invalid-feedback">
-            <%= event.errors[:name].join(', ') %>
-          </div>
-        <% end %>
       </div>
 
       <div class="field mb-3">
@@ -34,11 +20,6 @@
         <%= form.text_area :description, 
                           class: "form-control #{'is-invalid' if event.errors[:description].any?}", 
                           rows: 3 %>
-        <% if event.errors[:description].any? %>
-          <div class="invalid-feedback">
-            <%= event.errors[:description].join(', ') %>
-          </div>
-        <% end %>
       </div>
     </div>
 

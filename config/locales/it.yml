@@ -90,6 +90,7 @@ it:
     back_to_timeline: "Torna alla Timeline"
     back_to_timelines: "Torna alle mie timeline"
     back_to_event: "Torna all'evento"
+    back_to_your_timelines: "Torna alle tue timeline"
     back: "Indietro"
     show: "Visualizza"
     edit: "Modifica"
@@ -100,14 +101,21 @@ it:
     delete_timeline: "Elimina timeline"
     delete_event: "Elimina evento"
   
+  # Gestione errori
+  errors:
+    count:
+      one: "errore ha"
+      other: "errori hanno"
+  
   # Messaggi
   messages:
-    no_events: "Nessun evento ancora presente 🥱"
+    no_events_title: "Nessun evento ancora presente..."
+    no_events_subtitle: "...crea il primo evento per iniziare a costruire la tua timeline! 🤩"
     confirm: "Sei sicuro?"
     confirm_delete_timeline: "Sei sicuro di voler eliminare questa timeline? Tutti gli eventi associati verranno eliminati. Questa azione è irreversibile..."
     confirm_delete_event: "Sei sicuro di voler eliminare questo evento dalla timeline? Questa azione è irreversibile..."
-    timeline_errors: "hanno impedito il salvataggio della timeline:"
-    event_errors: "hanno impedito il salvataggio dell'evento:"
+    timeline_errors: "impedito il salvataggio della timeline:"
+    event_errors: "impedito il salvataggio dell'evento:"
     event_created: "L'evento è stato creato 😊"
     event_updated: "L'evento è stato aggiornato 😊"
     event_deleted: "L'evento è stato eliminato 😊"
@@ -127,12 +135,35 @@ it:
 
   activerecord:
     errors:
+      format: '"%{attribute}" %{message}'
       models:
+        timeline:
+          attributes:
+            name:
+              blank: "non può essere vuoto"
+              taken: "è già stato utilizzato"
         event:
           attributes:
-            end_date:
-              blank: "non può essere lasciato vuoto"
+            name:
+              blank: "non può essere vuoto"
+            description:
+              blank: "non può essere vuoto"
+            start_date:
+              blank: "non può essere vuoto"
               invalid: "non è valida"
+            end_date:
+              blank: "non può essere vuoto"
+              invalid: "non è valida"
+              after_start_date: "deve essere successiva alla data di inizio"
+    attributes:
+      timeline:
+        name: "Titolo"
+      event:
+        name: "Titolo"
+        description: "Descrizione"
+        start_date: "Data di inizio"
+        end_date: "Data di fine"
+        color: "Colore"
 
   shared:
     navbar:

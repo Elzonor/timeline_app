@@ -1,0 +1,24 @@
+<%# Visualizzazione errori generali del form %>
+<% if resource.errors.any? %>
+  <div class="alert alert-danger" role="alert">
+    <h4 class="alert-heading">
+      <%= resource.errors.count %> <%= t('errors.count', count: resource.errors.count) %> 
+      <%= t("messages.#{resource_name}_errors") %>
+    </h4>
+    <ul class="mb-0">
+      <% resource.errors.each do |error| %>
+        <li>
+          "<%= t("activerecord.attributes.#{resource_name}.#{error.attribute}") %>" 
+          <%= error.message %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%# Helper per visualizzare errori specifici di un campo %>
+<% if local_assigns[:field] && resource.errors[field].any? %>
+  <div class="invalid-feedback">
+    <%= resource.errors[field].join(', ') %>
+  </div>
+<% end %> 

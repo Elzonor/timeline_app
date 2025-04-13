@@ -1,18 +1,9 @@
 <%= form_with(model: timeline, local: true) do |form| %>
-  <% if timeline.errors.any? %>
-    <div class="alert alert-danger" role="alert">
-      <h4 class="alert-heading"><%= pluralize(timeline.errors.count, "error") %> <%= t('messages.timeline_errors') %></h4>
-      <ul class="mb-0">
-        <% timeline.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+  <%= render 'shared/form_errors', resource: timeline, resource_name: 'timeline' %>
 
   <div class="field mb-3">
     <%= form.label :name, t('labels.timeline_name'), class: "form-label" %>
-    <%= form.text_field :name, class: "form-control" %>
+    <%= form.text_field :name, class: "form-control #{'is-invalid' if timeline.errors[:name].any?}" %>
   </div>
 
   <div class="actions">

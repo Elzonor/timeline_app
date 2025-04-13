@@ -61,7 +61,7 @@ it:
     new_timeline: "Crea una nuova timeline"
     edit_timeline: "Modifica timeline"
     events: "Eventi"
-    new_event: "Aggiungi un nuovo evento"
+    new_event: "Aggiungi evento"
     edit_event: "Modifica evento"
   
   # Etichette dei campi
@@ -83,7 +83,7 @@ it:
   # Pulsanti e azioni
   actions:
     update_event: "Salva modifiche e torna alla timeline"
-    create_event: "Crea evento"
+    create_event: "Salva evento e torna alla timeline"
     add_event: "Aggiungi evento"
     edit_event: "Modifica evento"
     edit_timeline: "Modifica"
@@ -95,7 +95,7 @@ it:
     edit: "Modifica"
     home: "Tutte le Timeline"
     cancel_and_return_to_timeline: "torna alla timeline senza salvare"
-    cancel_timeline_creation: "torna alla lista delle timeline senza salvare"
+    cancel_timeline_creation: "torna alla lista delle tue timeline senza salvare"
   
   # Messaggi
   messages:
@@ -117,8 +117,8 @@ it:
   form:
     or: "oppure"
     submit:
-      timeline: "Salva e vai alla timeline"
-      timeline_update: "Aggiorna e vai alla timeline"
+      timeline: "Salva e vai alla timeline appena creata"
+      timeline_update: "Salva e torna alla timeline"
 
   activerecord:
     errors:

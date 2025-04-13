@@ -94,8 +94,8 @@ it:
     show: "Visualizza"
     edit: "Modifica"
     home: "Tutte le Timeline"
-    cancel_and_return_to_timeline: "torna alla timeline senza salvare"
-    cancel_timeline_creation: "torna alla lista delle tue timeline senza salvare"
+    cancel_and_return_to_timeline: "non salvare e torna alla timeline"
+    cancel_timeline_creation: "non salvare e torna alla lista delle tue timeline"
     delete_timeline: "Elimina timeline"
     delete_event: "Elimina evento"
   
@@ -103,7 +103,7 @@ it:
   messages:
     no_events: "Nessun evento ancora presente 🥱"
     confirm: "Sei sicuro?"
-    confirm_delete_timeline: "Sei sicuro di voler eliminare questa timeline? Tutti gli eventi associati verranno eliminati definitivamente..."
+    confirm_delete_timeline: "Sei sicuro di voler eliminare questa timeline? Tutti gli eventi associati verranno eliminati. Questa azione è irreversibile..."
     confirm_delete_event: "Sei sicuro di voler eliminare questo evento dalla timeline? Questa azione è irreversibile..."
     timeline_errors: "hanno impedito il salvataggio della timeline:"
     event_errors: "hanno impedito il salvataggio dell'evento:"
@@ -122,7 +122,7 @@ it:
     or: "oppure"
     submit:
       timeline: "Salva e vai alla timeline appena creata"
-      timeline_update: "Salva e torna alla timeline"
+      timeline_update: "Salva modifch e torna alla timeline"
 
   activerecord:
     errors:

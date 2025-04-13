@@ -26,7 +26,7 @@
         </div>
 
         <div class="actions">
-          <%= link_to new_timeline_event_path(@timeline), class: 'btn btn-primary text-white' do %>
+          <%= link_to new_timeline_event_path(@timeline), class: 'btn btn-primary text-white text-nowrap' do %>
             <i class="fas fa-plus"></i> <%= t('actions.add_event') %>
           <% end %>
         </div>
@@ -517,7 +517,7 @@
   <% else %>
     <div class="row">
       <div class="col-12">
-        <p><%= t('messages.no_events') %></p>
+        <%= render 'empty_state' %>
       </div>
     </div>
   <% end %>

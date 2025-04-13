@@ -534,3 +534,42 @@ a.event-title-link:hover {
 .table-responsive table tbody tr:hover {
   background-color: red !important;
 }
+
+// Stili per il layout vuoto della timeline
+.empty-state-container {
+  border: 2px dashed rgba(0, 0, 0, 0.21);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 300px;
+  padding: 2rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+}
+
+.empty-state-content {
+  text-align: center;
+}
+
+.empty-state-text {
+  margin-bottom: 2rem;
+
+  h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #343a40;
+  }
+
+  p {
+    font-size: 1.1rem;
+    color: #6c757d;
+    margin-bottom: 0;
+  }
+}
+
+.empty-state-action {
+  .btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 1.1rem;
+  }
+}

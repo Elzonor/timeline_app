@@ -17,7 +17,9 @@
 
   <div class="actions">
     <%= form.submit timeline.new_record? ? t('form.submit.timeline') : t('form.submit.timeline_update'), class: 'btn btn-primary' %>
-    <span class="mx-3"><%= t('form.or') %></span> <%= link_to t('actions.cancel_timeline_creation'), timelines_path, class: 'link-primary' %>
+    <%= render 'shared/cancel_link',
+               text_key: 'actions.cancel_timeline_creation',
+               path: timelines_path %>
   </div>
 <% end %>
 

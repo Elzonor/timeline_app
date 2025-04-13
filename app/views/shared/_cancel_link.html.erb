@@ -1,0 +1,14 @@
+<%# Partial riutilizzabile per i link di cancellazione nelle form
+    Parametri:
+    - text_key: la chiave di traduzione per il testo del link
+    - path: il percorso di destinazione
+    - css_class: classi CSS opzionali (default: 'btn btn-link text-decoration-none')
+    - container_class: classi CSS opzionali per il contenitore (default: 'd-inline-block')
+%>
+
+<div class="<%= local_assigns.fetch(:container_class, 'd-inline-block') %>">
+  <span class="mx-2 text-muted"><%= t('form.or') %></span>
+  <%= link_to t(text_key), 
+              path, 
+              class: local_assigns.fetch(:css_class, 'link-primary') %>
+</div> 
